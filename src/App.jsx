@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import { Error } from './Error';
 import { Games, GamesLoader } from './Games';
 import { Guide } from './Guide';
 import { Guides } from './Guides';
@@ -14,9 +15,11 @@ export default () => {
       element: <Root />,
       action: SearchAction,
 
+      errorElement: <Error />,
+
       children: [
         {
-          path: '/games',
+          path: '/games/:query',
           element: <Games />,
           loader: GamesLoader,
         },

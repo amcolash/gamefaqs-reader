@@ -1,22 +1,24 @@
 import React from 'react';
-import { useLoaderData, useLocation } from 'react-router-dom';
+import { useLoaderData, useLocation, useParams } from 'react-router-dom';
+import { searchGames } from './parser';
 
-export async function GamesLoader() {
-  const location = useLocation();
-  console.log(location);
+export async function GamesLoader({ params }) {
+  const { query } = params;
+  const games = await searchGames(query);
 
-  const games = await fetch('https://jsonplaceholder.typicode.com/posts').then((response) => response.json());
-  return { games };
+  return games;
 }
 
 export function Games() {
-  const location = useLocation();
-  const { games } = useLoaderData();
+  // const location = useLocation();
+  const games = useLoaderData();
+  const { query } = useParams();
 
   return (
     <div>
       <h2>Games List</h2>
-      <div>{JSON.stringify(location.state)}</div>
+      {/* <div>{JSON.stringify(location.state)}</div> */}
+      {query}
       <div>{JSON.stringify(games)}</div>
     </div>
   );
