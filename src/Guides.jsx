@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SERVER } from './util';
 
-import X from './icons/x-lg.svg';
+import ArrowLeft from './icons/arrow-left.svg';
 
 export function Guides(props) {
   const [guides, setGuides] = useState([]);
@@ -17,7 +17,7 @@ export function Guides(props) {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <h1 style={{ display: 'flex', width: '70%' }}>
         <button onClick={() => props.setGame()}>
-          <X className="icon" />
+          <ArrowLeft className="icon" />
         </button>
         <div style={{ width: '100%', textAlign: 'center' }}>Guides</div>
       </h1>
