@@ -75,6 +75,11 @@ cssRule('input', {
   },
 });
 
+cssRule('.icon', {
+  width: 20,
+  height: 20,
+});
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
