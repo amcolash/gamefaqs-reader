@@ -1,38 +1,39 @@
 import React, { useEffect, useState } from 'react';
 
-import { lastGuide, lastScroll, SERVER } from './util';
+import { lastGame, lastGuide, lastScroll } from './util';
 import { Guide } from './Guide';
+import { Games } from './Games';
+import { Guides } from './Guides';
 
 export function App() {
-  const [files, setFiles] = useState([]);
+  const [game, setGame] = useState(localStorage.getItem(lastGame));
   const [guide, setGuide] = useState(localStorage.getItem(lastGuide));
 
   useEffect(() => {
-    fetch(`${SERVER}/files`)
-      .then((res) => res.json())
-      .then((res) => setFiles(res));
-  }, []);
-
-  useEffect(() => {
-    if (!guide) {
+    if (guide) {
+      localStorage.setItem(lastGuide, guide);
+    } else {
       localStorage.removeItem(lastScroll);
       localStorage.removeItem(lastGuide);
     }
   }, [guide]);
 
+  useEffect(() => {
+    if (game) {
+      localStorage.setItem(lastGame, game);
+    } else {
+      localStorage.removeItem(lastGame);
+    }
+  }, [game]);
+
   return (
-    <div>
-      {guide ? (
-        <Guide guide={guide} setGuide={setGuide} />
+    <div style={{ padding: '1rem' }}>
+      {!game ? (
+        <Games setGame={setGame} />
+      ) : !guide ? (
+        <Guides game={game} setGuide={setGuide} setGame={setGame} />
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.75rem', padding: '2rem' }}>
-          <h1>Guides</h1>
-          {files.map((f) => (
-            <button onClick={() => setGuide(f)} key={f}>
-              {f}
-            </button>
-          ))}
-        </div>
+        <Guide game={game} guide={guide} setGuide={setGuide} />
       )}
     </div>
   );

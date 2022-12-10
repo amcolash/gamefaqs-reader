@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 export const SERVER = 'http://192.168.1.106:7000';
 
 const prefix = 'guide-viewer';
-export const lastGuide = `${prefix}-last`;
+export const lastGame = `${prefix}-game`;
+export const lastGuide = `${prefix}-guide`;
 export const lastScroll = `${prefix}-scroll`;
 export const lastZoom = `${prefix}-zoom`;
 

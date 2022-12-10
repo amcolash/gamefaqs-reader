@@ -5,7 +5,7 @@ const cors = require('cors');
 const express = require('express');
 const { readdirSync } = require('fs');
 const { JSDOM } = require('jsdom');
-const { join } = require('path');
+const { join, basename } = require('path');
 
 require('dotenv').config();
 
@@ -21,73 +21,81 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-app.use('/guides', express.static('guides'));
-app.get('/files', (req, res) => {
-  const dir = join(__dirname, '/guides');
-  const files = readdirSync(dir);
-
-  res.send(files);
-});
-
 app.get('/games/:search', async (req, res) => {
-  const url = `https://gamefaqs.gamespot.com/search?game=${req.params.search}`;
-  const data = await checkCache(url);
+  try {
+    const url = `https://gamefaqs.gamespot.com/search?game=${req.params.search}`;
+    const data = await checkCache(url);
 
-  const dom = new JSDOM(data);
-  const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
+    const dom = new JSDOM(data);
+    const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
 
-  const games = [];
-  results.forEach((r) => {
-    const title = r.querySelector('.sr_name').textContent.trim();
-    const [genre, year] = r.querySelector('.sr_info').textContent.split(', ');
-    const platforms = r.querySelector('.meta.float_r').textContent.split(', ');
-    const url = 'https://gamefaqs.gamespot.com' + r.querySelector('.log_search').getAttribute('href');
-    const id = url.split('/')[2];
+    const games = [];
+    results.forEach((r) => {
+      const title = r.querySelector('.sr_name').textContent.trim();
+      const [genre, year] = r.querySelector('.sr_info').textContent.split(', ');
+      const platforms = r.querySelector('.meta.float_r').textContent.split(', ');
+      const url = 'https://gamefaqs.gamespot.com' + r.querySelector('.log_search').getAttribute('href');
+      const id = basename(url);
 
-    const game = { title, genre, year: Number.parseInt(year), platforms, url, id };
-    games.push(game);
-  });
+      const game = { title, genre, year: Number.parseInt(year), platforms, url, id };
+      games.push(game);
+    });
 
-  res.send(games);
+    res.send(games);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
 });
 
 app.get('/guides/:id', async (req, res) => {
-  const url = `https://gamefaqs.gamespot.com/pc/${req.params.id}/faqs`;
-  const data = await checkCache(url);
+  try {
+    const url = `https://gamefaqs.gamespot.com/pc/${req.params.id}/faqs`;
+    const data = await checkCache(url);
 
-  const dom = new JSDOM(data);
-  const results = Array.from(dom.window.document.querySelectorAll('.gf_guides li'));
+    const dom = new JSDOM(data);
+    const mainGuideSection = dom.window.document.querySelector('.gf_guides');
+    const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
 
-  const guides = [];
-  results.forEach((r) => {
-    const platform = r.getAttribute('data-platform');
-    const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
+    const guides = [];
+    results.forEach((r) => {
+      const platform = r.getAttribute('data-platform');
+      const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
 
-    const info = r.querySelector('.float_l:first-child');
-    const title = info.querySelector('a.bold').textContent;
-    const url = info.querySelector('a.bold').getAttribute('href');
-    const id = url.split('/')[4];
-    const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
+      const info = r.querySelector('.float_l:first-child');
+      const title = info.querySelector('a.bold').textContent;
+      const url = info.querySelector('a.bold').getAttribute('href');
+      const id = basename(url);
+      const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
 
-    const meta = r.querySelector('.meta.float_r');
-    const [version, size, year] = meta.textContent.trim().split(', ');
+      const meta = r.querySelector('.meta.float_r');
+      const [version, size, year] = meta.textContent.trim().split(', ');
 
-    const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year) };
-    guides.push(guide);
-  });
+      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year) };
+      guides.push(guide);
+    });
 
-  res.send(guides);
+    res.send(guides);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
 });
 
 app.get('/guide/:gameId/:guideId', async (req, res) => {
-  const url = `https://gamefaqs.gamespot.com/pc/${req.params.gameId}/faqs/${req.params.guideId}`;
-  const data = await checkCache(url);
+  try {
+    const url = `https://gamefaqs.gamespot.com/pc/${req.params.gameId}/faqs/${req.params.guideId}`;
+    const data = await checkCache(url);
 
-  const dom = new JSDOM(data);
-  const sections = Array.from(dom.window.document.querySelectorAll('.faqtext pre'));
-  const guide = sections.map((s) => s.textContent).join('\n');
+    const dom = new JSDOM(data);
+    const sections = Array.from(dom.window.document.querySelectorAll('.faqtext pre'));
+    const guide = sections.map((s) => s.textContent).join('\n');
 
-  res.send(guide);
+    res.send(guide);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
 });
 
 async function checkCache(url) {

@@ -32,7 +32,7 @@ export function Guide(props) {
 
   useEffect(() => {
     const getGuide = async () => {
-      const url = `${SERVER}/guides/${guide}`;
+      const url = `${SERVER}/guide/${props.game}/${props.guide}`;
 
       const cache = await caches.open('guide-cache');
       const match = await cache.match(url);
@@ -49,8 +49,6 @@ export function Guide(props) {
 
       const scroll = localStorage.getItem(lastScroll);
       if (scroll) setTimeout(() => window.scrollTo(undefined, Number.parseInt(scroll)), 500);
-
-      localStorage.setItem(lastGuide, guide);
     };
 
     document.addEventListener('scroll', debouncedScroll);
