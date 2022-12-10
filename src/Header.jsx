@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import ArrowBarUp from './icons/arrow-bar-up.svg';
 import ArrowBarDown from './icons/arrow-bar-down.svg';

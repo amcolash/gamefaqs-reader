@@ -50,12 +50,16 @@ app.get('/games/:search', async (req, res) => {
 
 app.get('/guides/:id', async (req, res) => {
   try {
+    // Not sure if it should always be hardcoded to "pc", seems like it resolves ok?
     const url = `https://gamefaqs.gamespot.com/pc/${req.params.id}/faqs`;
     const data = await checkCache(url);
 
     const dom = new JSDOM(data);
     const mainGuideSection = dom.window.document.querySelector('.gf_guides');
     const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
+
+    const gameId = req.params.id;
+    const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
 
     const guides = [];
     results.forEach((r) => {
@@ -71,7 +75,7 @@ app.get('/guides/:id', async (req, res) => {
       const meta = r.querySelector('.meta.float_r');
       const [version, size, year] = meta.textContent.trim().split(', ');
 
-      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year) };
+      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle };
       guides.push(guide);
     });
 

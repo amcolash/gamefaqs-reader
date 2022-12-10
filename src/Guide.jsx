@@ -2,14 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
-import { debounce, lastGuide, lastScroll, lastZoom, SERVER, useDebounce } from './util';
+import { debounce, lastScroll, lastZoom, SERVER, useDebounce } from './util';
 
 import ArrowUp from './icons/arrow-up.svg';
 import { Header } from './Header';
 
 export function Guide(props) {
-  const guide = props.guide;
-
   const [guideContent, setGuideContent] = useState();
 
   const [search, setSearch] = useState('');
