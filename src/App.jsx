@@ -5,12 +5,20 @@ import { style } from 'typestyle';
 import ArrowUp from './icons/arrow-up.svg';
 import ArrowBarUp from './icons/arrow-bar-up.svg';
 import ArrowBarDown from './icons/arrow-bar-down.svg';
+import Dash from './icons/dash-lg.svg';
+import Plus from './icons/plus-lg.svg';
+import X from './icons/x-lg.svg';
 
 import { debounce, lastGuide, lastScroll, lastZoom, mod, SERVER, useDebounce } from './util';
 
 const zoomFactor = 0.2;
 
-const debouncedScroll = debounce(() => localStorage.setItem(lastScroll, window.scrollY));
+const debouncedScroll = debounce((e, setScrollTop) => {
+  setScrollTop(window.scrollY > 300);
+  localStorage.setItem(lastScroll, window.scrollY);
+});
+
+const icon = style({ width: 20, height: 20 });
 
 export function App() {
   const [files, setFiles] = useState([]);
@@ -26,25 +34,41 @@ export function App() {
   const previousZoom = localStorage.getItem(lastZoom) || '1';
   const [zoom, setZoom] = useState(Number.parseFloat(previousZoom));
 
+  const [scrollTop, setScrollTop] = useState(false);
+
   useEffect(() => {
     fetch(`${SERVER}/files`)
       .then((res) => res.json())
       .then((res) => setFiles(res));
 
-    document.addEventListener('scroll', debouncedScroll);
+    document.addEventListener('scroll', (e) => debouncedScroll(e, setScrollTop));
   }, []);
 
   useEffect(() => {
     if (guide) {
-      fetch(`${SERVER}/guides/${guide}`)
-        .then((res) => res.text())
-        .then((res) => setGuideContent(res))
-        .then(() => {
-          const scroll = localStorage.getItem(lastScroll);
-          if (scroll) setTimeout(() => window.scrollTo(undefined, Number.parseInt(scroll)), 500);
-        });
+      const getGuide = async () => {
+        const url = `${SERVER}/guides/${guide}`;
 
-      localStorage.setItem(lastGuide, guide);
+        const cache = await caches.open('guide-cache');
+        const match = await cache.match(url);
+
+        let content;
+        if (match) {
+          content = await match.text();
+        } else {
+          content = await fetch(url).then((res) => res.text());
+          cache.add(url, content);
+        }
+
+        setGuideContent(content);
+
+        const scroll = localStorage.getItem(lastScroll);
+        if (scroll) setTimeout(() => window.scrollTo(undefined, Number.parseInt(scroll)), 500);
+
+        localStorage.setItem(lastGuide, guide);
+      };
+
+      getGuide();
     } else {
       setGuideContent();
       setSearch('');
@@ -93,7 +117,9 @@ export function App() {
               borderBottom: '2px solid #33353d',
             }}
           >
-            <button onClick={() => setGuide()}>Close</button>
+            <button onClick={() => setGuide()} style={{ padding: '0 1rem' }}>
+              <X className={icon} />
+            </button>
 
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}>
               <input
@@ -110,10 +136,10 @@ export function App() {
                     {searchIndex + 1} / {searchLength}
                   </span>
                   <button onClick={() => setSearchIndex(mod(searchIndex - 1, searchLength))} style={{ padding: '0 1rem' }}>
-                    <ArrowBarUp style={{ width: 20, height: 20 }} />
+                    <ArrowBarUp className={icon} />
                   </button>
                   <button onClick={() => setSearchIndex(mod(searchIndex + 1, searchLength))} style={{ padding: '0 1rem' }}>
-                    <ArrowBarDown style={{ width: 20, height: 20 }} />
+                    <ArrowBarDown className={icon} />
                   </button>
                 </>
               )}
@@ -122,20 +148,22 @@ export function App() {
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
               {zoom.toFixed(1)}x
               <button disabled={zoom <= 1} onClick={() => setZoom(zoom - zoomFactor)} style={{ fontWeight: 'bold', padding: '0 1rem' }}>
-                -
+                <Dash className={icon} />
               </button>
               <button disabled={zoom >= 1.99} onClick={() => setZoom(zoom + zoomFactor)} style={{ fontWeight: 'bold', padding: '0 1rem' }}>
-                +
+                <Plus className={icon} />
               </button>
             </div>
           </header>
 
-          <button
-            style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0 1rem' }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
-            <ArrowUp style={{ width: 20, height: 20 }} />
-          </button>
+          {scrollTop && (
+            <button
+              style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0 1rem' }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <ArrowUp className={icon} />
+            </button>
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
             <Highlighter
@@ -150,7 +178,8 @@ export function App() {
           </div>
         </>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.75rem', padding: '2rem' }}>
+          <h1>Guides</h1>
           {files.map((f) => (
             <button onClick={() => setGuide(f)} key={f}>
               {f}
