@@ -1,19 +1,20 @@
+const cors = require('cors');
 const express = require('express');
-const fetch = require('node-fetch');
+const { readdirSync } = require('fs');
+const { join } = require('path');
+
 const app = express();
 const port = 7000;
 
-app.listen(port, () => {
+app.use(cors());
+app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-app.get('/search/:query', async (req, res) => {
-  const url = `https://gamefaqs.gamespot.com/search?game=${req.params.query}`;
-  console.log(url);
+app.use('/guides', express.static('guides'));
+app.get('/files', (req, res) => {
+  const dir = join(__dirname, '/guides');
+  const files = readdirSync(dir);
 
-  const data = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36' },
-  }).then((res) => res.text());
-
-  res.send(data);
+  res.send(files);
 });
