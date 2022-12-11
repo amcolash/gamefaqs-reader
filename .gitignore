@@ -105,3 +105,4 @@ dist
 
 dist/
 *.txt
+.cert

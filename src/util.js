@@ -1,4 +1,4 @@
-export const SERVER = 'http://192.168.1.106:7000';
+export const SERVER = import.meta.env.PROD ? 'https://192.168.1.101:8004' : 'https://192.168.1.106:8004';
 
 const prefix = 'guide-viewer';
 export const lastGame = `${prefix}-game`;
