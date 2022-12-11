@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { SERVER, useDebounce } from './util';
+import { useDebounce } from './hooks';
+import { SERVER } from './util';
 
 export function Games(props) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('chrono trigger');
   const debouncedSearch = useDebounce(search, 500);
 
   const [games, setGames] = useState([]);
@@ -34,15 +35,17 @@ export function Games(props) {
         />
       </div>
 
-      {games && games.map((g) => <Game key={g.id} {...g} setGame={props.setGame} />)}
+      {games && games.map((g) => <Game key={g.id} game={g} setGame={props.setGame} />)}
     </div>
   );
 }
 
 function Game(props) {
+  const game = props.game;
+
   return (
-    <button style={{ width: '70%' }} onClick={() => props.setGame(props.id)}>
-      {props.title} ({props.year})
+    <button style={{ width: '70%' }} onClick={() => props.setGame(game)}>
+      {game.title} ({game.year})
     </button>
   );
 }

@@ -7,7 +7,7 @@ export function Guides(props) {
   const [guides, setGuides] = useState([]);
 
   useEffect(() => {
-    const url = `${SERVER}/guides/${props.game}`;
+    const url = `${SERVER}/guides/${props.game.id}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => setGuides(data));
@@ -22,27 +22,25 @@ export function Guides(props) {
         <div style={{ width: '100%', textAlign: 'center' }}>Guides</div>
       </h1>
 
-      {guides && guides.map((g) => <Guide {...g} setGuide={props.setGuide} />)}
+      {guides && guides.map((g) => <Guide key={g.id} guide={g} setGuide={props.setGuide} />)}
     </div>
   );
 }
 
 function Guide(props) {
+  const guide = props.guide;
+
   return (
-    <button
-      key={props.id}
-      style={{ width: '70%', height: '4rem', justifyContent: 'space-around' }}
-      onClick={() => props.setGuide(props.id)}
-    >
+    <button key={guide.id} style={{ width: '70%', height: '4rem', justifyContent: 'space-around' }} onClick={() => props.setGuide(guide)}>
       <div style={{ textAlign: 'left' }}>
-        {props.title} [{props.platform}]
+        {guide.title} [{guide.platform}]
         <br />
-        By: {props.authors}
+        By: {guide.authors}
       </div>
       <div style={{ textAlign: 'right' }}>
-        ({props.year})
+        ({guide.year})
         <br />
-        {props.version}
+        {guide.version}
       </div>
     </button>
   );

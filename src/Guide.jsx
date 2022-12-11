@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
-import { debounce, lastScroll, lastZoom, SERVER, useDebounce } from './util';
+import { debounce, lastScroll, lastZoom, SERVER } from './util';
 
 import ArrowUp from './icons/arrow-up.svg';
 import { Header } from './Header';
+import { useDebounce } from './hooks';
 
 export function Guide(props) {
   const [guideContent, setGuideContent] = useState();
@@ -30,7 +31,7 @@ export function Guide(props) {
 
   useEffect(() => {
     const getGuide = async () => {
-      const url = `${SERVER}/guide/${props.game}/${props.guide}`;
+      const url = `${SERVER}/guide/${props.guide.gameId}/${props.guide.id}`;
 
       const cache = await caches.open('guide-cache');
       const match = await cache.match(url);
