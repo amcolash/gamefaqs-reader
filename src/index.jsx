@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { cssRule } from 'typestyle';
 import { App } from './App';
 
+import { loadServiceWorker } from './util';
+
 // Set css variables
 const variables = {
   '--background': '#0e131a',
@@ -12,6 +14,9 @@ const variables = {
 };
 
 Object.entries(variables).forEach((v) => document.body.style.setProperty(v[0], v[1]));
+
+// Load service worker
+loadServiceWorker();
 
 // Set up core styles
 cssRule('html', {
