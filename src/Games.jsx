@@ -23,7 +23,7 @@ export function Games(props) {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <h1>Games</h1>
 
-      <div style={{ width: '70%' }}>
+      <div style={{ width: '100%' }}>
         <label>Game Search</label>
         <br />
         <input
@@ -44,7 +44,7 @@ function GameItem(props) {
   const game = props.game;
 
   return (
-    <button style={{ width: '70%' }} onClick={() => props.setGame(game)}>
+    <button onClick={() => props.setGame(game)} style={{ width: '100%' }}>
       {game.title} ({game.year})
     </button>
   );

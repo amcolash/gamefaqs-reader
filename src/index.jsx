@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { cssRule } from 'typestyle';
+
 import { App } from './App';
 
 import { loadServiceWorker } from './util';
@@ -11,6 +12,7 @@ const variables = {
   '--primary': '#c5c5c5',
   '--secondary': '#24262e',
   '--header': '#3d4451',
+  '--maxWidth': '950px',
 };
 
 Object.entries(variables).forEach((v) => document.body.style.setProperty(v[0], v[1]));
@@ -78,6 +80,11 @@ cssRule('input', {
       color: 'var(--secondary)',
     },
   },
+});
+
+cssRule('#root', {
+  display: 'flex',
+  justifyContent: 'center',
 });
 
 cssRule('.icon', {

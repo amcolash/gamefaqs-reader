@@ -15,7 +15,7 @@ export function Guides(props) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
-      <h1 style={{ display: 'flex', width: '70%' }}>
+      <h1 style={{ display: 'flex', width: '100%' }}>
         <button onClick={() => props.setGame()}>
           <ArrowLeft className="icon" />
         </button>
@@ -33,7 +33,7 @@ export function GuideItem(props) {
   return (
     <button
       key={guide.id}
-      style={{ width: '70%', height: '4rem', justifyContent: 'space-between', padding: '0 4rem', ...props.style }}
+      style={{ width: '100%', height: '4rem', justifyContent: 'space-between', padding: '0 4rem', ...props.style }}
       onClick={() => props.setGuide(guide)}
     >
       <div style={{ textAlign: 'left' }}>

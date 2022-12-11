@@ -8,11 +8,18 @@ import { useLocalStorage } from './hooks';
 import { lastGame, lastGuide, lastScroll, recentGuideKey } from './util';
 
 import { Recents } from './Recents';
+import { style } from 'typestyle';
 
 export function App() {
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
+
+  const containerStyle = style({
+    padding: '1rem',
+    width: guide ? undefined : '85%',
+    maxWidth: 'var(--maxWidth)',
+  });
 
   useEffect(() => {
     if (guide) {
@@ -26,7 +33,7 @@ export function App() {
   }, [guide]);
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div className={containerStyle}>
       {guide ? (
         <Guide guide={guide} setGuide={setGuide} />
       ) : !guide && game ? (

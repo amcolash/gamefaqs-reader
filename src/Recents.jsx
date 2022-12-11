@@ -10,7 +10,7 @@ export function Recents(props) {
       <h1>Recent Guides</h1>
 
       {props.recentGuides.map((g) => (
-        <div key={g.id} style={{ display: 'flex', width: '70%', justifyContent: 'center', gap: '0.75rem' }}>
+        <div key={g.id} style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', width: '100%' }}>
           <GuideItem guide={g} setGuide={props.setGuide} showGame={true} style={{ width: '100%' }} />
 
           <button
