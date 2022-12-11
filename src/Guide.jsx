@@ -79,7 +79,7 @@ export function Guide(props) {
         setZoom={(z) => {
           setZoomHide(true);
           setZoom(z);
-          setTimeout(() => setZoomHide(false), 0);
+          setTimeout(() => setZoomHide(false), 100);
         }}
       />
 
@@ -94,7 +94,7 @@ export function Guide(props) {
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
         {error && <Error error={error} />}
-        {isLoading && <Spinner />}
+        {(isLoading || zoomHide) && <Spinner />}
 
         {!zoomHide && (
           <Highlighter
