@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
+import useFetch from 'react-fetch-hook';
+
 import { useDebounce } from './hooks';
 import { SERVER } from './util';
+
+import { Spinner } from './Spinner';
+import { Error } from './Error.jsx';
 
 export function Games(props) {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
-
-  const [games, setGames] = useState([]);
-
-  useEffect(() => {
-    if (debouncedSearch) {
-      const url = `${SERVER}/games/${debouncedSearch}`;
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => setGames(data));
-    } else {
-      setGames([]);
-    }
-  }, [debouncedSearch]);
+  const { isLoading, data: games, error } = useFetch(`${SERVER}/games/${debouncedSearch}`, { depends: [!!debouncedSearch] });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
@@ -35,7 +28,9 @@ export function Games(props) {
         />
       </div>
 
-      {games && games.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
+      <Error error={error} />
+      {isLoading && <Spinner />}
+      {debouncedSearch.length > 0 && games && games.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
     </div>
   );
 }

@@ -1,15 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import useFetch from 'react-fetch-hook';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
+import { useDebounce } from './hooks';
 import { debounce, lastScroll, lastZoom, SERVER } from './util';
 
-import ArrowUp from './icons/arrow-up.svg';
+import { Error } from './Error';
 import { Header } from './Header';
-import { useDebounce } from './hooks';
+import { Spinner } from './Spinner';
+
+import ArrowUp from './icons/arrow-up.svg';
 
 export function Guide(props) {
-  const [guideContent, setGuideContent] = useState();
+  const {
+    isLoading,
+    data: guideContent,
+    error,
+  } = useFetch(`${SERVER}/guide/${props.guide.gameId}/${props.guide.id}`, { formatter: (response) => response.text() });
 
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 350);
@@ -30,31 +38,13 @@ export function Guide(props) {
   );
 
   useEffect(() => {
-    const getGuide = async () => {
-      const url = `${SERVER}/guide/${props.guide.gameId}/${props.guide.id}`;
-
-      const cache = await caches.open('guide-cache');
-      const match = await cache.match(url);
-
-      let content;
-      if (match) {
-        content = await match.text();
-      } else {
-        content = await fetch(url).then((res) => res.text());
-        cache.add(url, content);
-      }
-
-      setGuideContent(content);
-
-      const scroll = localStorage.getItem(lastScroll);
-      if (scroll) setTimeout(() => window.scrollTo(undefined, Number.parseInt(scroll)), 500);
-    };
+    const scroll = localStorage.getItem(lastScroll);
+    if (scroll) setTimeout(() => window.scrollTo(undefined, Number.parseInt(scroll)), 350);
 
     document.addEventListener('scroll', debouncedScroll);
-    getGuide();
 
     return () => document.removeEventListener('scroll', debouncedScroll);
-  }, []);
+  }, [guideContent]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -102,6 +92,9 @@ export function Guide(props) {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
+        <Error error={error} />
+        {isLoading && <Spinner />}
+
         <Highlighter
           className={content}
           searchWords={debouncedSearch.length > 3 ? debouncedSearch.split(' ') : []}

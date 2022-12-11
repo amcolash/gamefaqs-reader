@@ -29,10 +29,12 @@ export async function loadServiceWorker() {
       const registration = await navigator.serviceWorker.register('/service-worker.js', {
         scope: '/',
       });
+
       if (registration.installing) {
         console.log('Service worker installing');
       } else if (registration.waiting) {
         console.log('Service worker installed');
+        window.location.reload();
       } else if (registration.active) {
         console.log('Service worker active');
       }

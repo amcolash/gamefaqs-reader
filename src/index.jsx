@@ -17,8 +17,8 @@ const variables = {
 
 Object.entries(variables).forEach((v) => document.body.style.setProperty(v[0], v[1]));
 
-// Load service worker
-loadServiceWorker();
+// Load service worker for production only
+if (import.meta.env.PROD) loadServiceWorker();
 
 // Set up core styles
 cssRule('html', {
