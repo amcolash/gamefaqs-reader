@@ -3,7 +3,6 @@ const axios = require('axios');
 
 const cors = require('cors');
 const express = require('express');
-const { readdirSync } = require('fs');
 const { JSDOM } = require('jsdom');
 const { join, basename } = require('path');
 
@@ -20,6 +19,8 @@ app.use(cors());
 app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+app.use('/', express.static(join(__dirname, 'dist')));
 
 app.get('/games/:search', async (req, res) => {
   try {
@@ -44,7 +45,7 @@ app.get('/games/:search', async (req, res) => {
     res.send(games);
   } catch (err) {
     console.log(err);
-    res.send(err);
+    res.status(404).send([]);
   }
 });
 
@@ -82,7 +83,7 @@ app.get('/guides/:id', async (req, res) => {
     res.send(guides);
   } catch (err) {
     console.log(err);
-    res.send(err);
+    res.status(404).send([]);
   }
 });
 
@@ -98,7 +99,7 @@ app.get('/guide/:gameId/:guideId', async (req, res) => {
     res.send(guide);
   } catch (err) {
     console.log(err);
-    res.send(err);
+    res.status(404).send('');
   }
 });
 
