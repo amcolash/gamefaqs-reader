@@ -1,12 +1,13 @@
 {
-  "name": "guide-reader",
+  "name": "gamefaqs-reader",
   "version": "0.1.0",
   "description": "",
   "license": "MIT",
   "scripts": {
     "start": "vite",
     "preview": "vite preview",
-    "build": "vite build"
+    "build": "vite build",
+    "docker": "node index.js"
   },
   "dependencies": {
     "axios": "^1.2.1",

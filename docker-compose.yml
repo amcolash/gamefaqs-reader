@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  gamefaqs-reader:
+    image: amcolash/gamgefaqs-reader
+    container_name: gamefaqs-reader
+    build: ./
+    network_mode: 'host'
+    volumes:
+      - ./.cert:/usr/src/app/.cert
+    entrypoint: npm run docker
+    env_file:
+      - .env
+    restart: unless-stopped
