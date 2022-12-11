@@ -20,7 +20,7 @@ export function Guides(props) {
         <div style={{ width: '100%', textAlign: 'center' }}>Guides</div>
       </h1>
 
-      <Error error={error} />
+      {error && <Error error={error} />}
       {isLoading && <Spinner />}
       {!isLoading && guides && guides.map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />)}
     </div>

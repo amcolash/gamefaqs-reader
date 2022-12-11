@@ -92,7 +92,7 @@ export function Guide(props) {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
-        <Error error={error} />
+        {error && <Error error={error} />}
         {isLoading && <Spinner />}
 
         <Highlighter

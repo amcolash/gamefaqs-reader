@@ -28,7 +28,7 @@ export function Games(props) {
         />
       </div>
 
-      <Error error={error} />
+      {error && <Error error={error} />}
       {isLoading && <Spinner />}
       {debouncedSearch.length > 0 && games && games.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
     </div>
