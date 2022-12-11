@@ -3,7 +3,7 @@ import useFetch from 'react-fetch-hook';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
-import { useDebounce } from './utils/hooks';
+import { useDebounce, useLocalStorage } from './utils/hooks';
 import { debounce, lastScroll, lastZoom, SERVER } from './utils/util';
 
 import { Error } from './Error';
@@ -24,10 +24,9 @@ export function Guide(props) {
   const [searchIndex, setSearchIndex] = useState(0);
   const [searchLength, setSearchLength] = useState(0);
 
-  const previousZoom = localStorage.getItem(lastZoom) || '1';
-  const [zoom, setZoom] = useState(Number.parseFloat(previousZoom));
-
+  const [zoom, setZoom] = useLocalStorage(lastZoom, 1);
   const [scrollTop, setScrollTop] = useState(false);
+  const [zoomHide, setZoomHide] = useState(false);
 
   const debouncedScroll = useCallback(
     debounce((e) => {
@@ -61,8 +60,6 @@ export function Guide(props) {
     if (highlights[searchIndex]) highlights[searchIndex].scrollIntoView({ behavior: 'smooth' });
   }, [searchIndex]);
 
-  useEffect(() => localStorage.setItem(lastZoom, zoom), [zoom]);
-
   const content = style({
     fontFamily: 'monospace',
     whiteSpace: 'pre',
@@ -79,7 +76,11 @@ export function Guide(props) {
         searchIndex={searchIndex}
         setSearchIndex={setSearchIndex}
         zoom={zoom}
-        setZoom={setZoom}
+        setZoom={(z) => {
+          setZoomHide(true);
+          setZoom(z);
+          setTimeout(() => setZoomHide(false), 0);
+        }}
       />
 
       {scrollTop && (
@@ -95,15 +96,17 @@ export function Guide(props) {
         {error && <Error error={error} />}
         {isLoading && <Spinner />}
 
-        <Highlighter
-          className={content}
-          searchWords={debouncedSearch.length > 3 ? debouncedSearch.split(' ') : []}
-          caseSensitive={false}
-          autoEscape={true}
-          textToHighlight={guideContent || ''}
-          activeIndex={searchIndex}
-          activeStyle={{ background: 'orange' }}
-        />
+        {!zoomHide && (
+          <Highlighter
+            className={content}
+            searchWords={debouncedSearch.length > 3 ? debouncedSearch.split(' ') : []}
+            caseSensitive={false}
+            autoEscape={true}
+            textToHighlight={guideContent || ''}
+            activeIndex={searchIndex}
+            activeStyle={{ background: 'orange' }}
+          />
+        )}
       </div>
     </div>
   );

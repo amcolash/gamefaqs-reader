@@ -1,4 +1,4 @@
-import { cssRule } from 'typestyle';
+import { cssRule, media } from 'typestyle';
 
 // Set css variables
 export function createVariables() {
@@ -23,9 +23,19 @@ export function createStyles() {
 }
 
 function base() {
-  cssRule('html', {
-    scrollPaddingTop: '7rem',
-  });
+  cssRule(
+    'html',
+    {
+      scrollPaddingTop: '7rem',
+    },
+    // Larger UI for steam deck
+    media(
+      { maxWidth: 1280 },
+      {
+        zoom: 1.25,
+      }
+    )
+  );
 
   cssRule('body', {
     margin: 0,
@@ -55,9 +65,12 @@ function buttons() {
     alignItems: 'center',
 
     $nest: {
-      '&:active, &:focus, &:hover': {
+      '&:active:not([disabled]), &:focus:not([disabled]), &:hover:not([disabled])': {
         background: 'var(--primary)',
         color: 'var(--secondary)',
+      },
+      '&:disabled': {
+        opacity: 0.5,
       },
     },
   });
