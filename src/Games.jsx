@@ -3,7 +3,7 @@ import { useDebounce } from './hooks';
 import { SERVER } from './util';
 
 export function Games(props) {
-  const [search, setSearch] = useState('chrono trigger');
+  const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
 
   const [games, setGames] = useState([]);
@@ -35,12 +35,12 @@ export function Games(props) {
         />
       </div>
 
-      {games && games.map((g) => <Game key={g.id} game={g} setGame={props.setGame} />)}
+      {games && games.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
     </div>
   );
 }
 
-function Game(props) {
+function GameItem(props) {
   const game = props.game;
 
   return (

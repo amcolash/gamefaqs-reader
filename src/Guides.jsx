@@ -22,18 +22,23 @@ export function Guides(props) {
         <div style={{ width: '100%', textAlign: 'center' }}>Guides</div>
       </h1>
 
-      {guides && guides.map((g) => <Guide key={g.id} guide={g} setGuide={props.setGuide} />)}
+      {guides && guides.map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />)}
     </div>
   );
 }
 
-function Guide(props) {
+export function GuideItem(props) {
   const guide = props.guide;
 
   return (
-    <button key={guide.id} style={{ width: '70%', height: '4rem', justifyContent: 'space-around' }} onClick={() => props.setGuide(guide)}>
+    <button
+      key={guide.id}
+      style={{ width: '70%', height: '4rem', justifyContent: 'space-between', padding: '0 4rem', ...props.style }}
+      onClick={() => props.setGuide(guide)}
+    >
       <div style={{ textAlign: 'left' }}>
-        {guide.title} [{guide.platform}]
+        {props.showGame && props.guide.gameTitle}
+        {!props.showGame && guide.title} [{guide.platform}]
         <br />
         By: {guide.authors}
       </div>
