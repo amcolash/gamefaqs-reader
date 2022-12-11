@@ -17,20 +17,17 @@ const app = express();
 
 // HTTPS setup
 const credentials = {};
-if (existsSync('./.cert/privkey.pem')) credentials.key = readFileSync('./.cert/privkey.pem');
+if (existsSync('./.cert/RSA-privkey.pem')) credentials.key = readFileSync('./.cert/RSA-privkey.pem');
+else if (existsSync('./.cert/privkey.pem')) credentials.key = readFileSync('./.cert/privkey.pem');
 
 // Try to fix let's encrypt stuff based on this post
 // https://community.letsencrypt.org/t/facebook-dev-error-curl-error-60-ssl-cacert/72782
-if (existsSync('./.cert/fullchain.pem')) {
-  credentials.cert = readFileSync('./.cert/fullchain.pem');
+if (existsSync('./.cert/RSA-fullchain.pem')) {
+  credentials.cert = readFileSync('./.cert/RSA-fullchain.pem');
+} else if (existsSync('./.cert/RSA-cert.pem')) {
+  credentials.cert = readFileSync('./.cert/RSA-cert.pem');
 } else if (existsSync('./.cert/cert.pem')) {
   credentials.cert = readFileSync('./.cert/cert.pem');
-}
-
-// If the nas cert exists, use that instead of default cert
-if (existsSync('./.cert/default/fullchain.pem')) {
-  credentials.key = readFileSync('./.cert/default/privkey.pem');
-  credentials.cert = readFileSync('./.cert/default/fullchain.pem');
 }
 
 // Make the server
