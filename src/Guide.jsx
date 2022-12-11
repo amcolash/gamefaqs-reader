@@ -25,19 +25,25 @@ export function Guide(props) {
   const [searchLength, setSearchLength] = useState(0);
 
   const [zoom, setZoom] = useLocalStorage(lastZoom, 1);
-  const [scrollTop, setScrollTop] = useState(false);
   const [zoomHide, setZoomHide] = useState(false);
 
+  const [scrollPositions, setScrollPositions] = useLocalStorage(lastScroll, {});
+  const [scrollTop, setScrollTop] = useState(false);
+
   const debouncedScroll = useCallback(
-    debounce((e) => {
+    debounce(() => {
+      let scroll = { ...scrollPositions };
+
+      scroll[props.guide.gameId + '/' + props.guide.id] = window.scrollY;
+
+      setScrollPositions(scroll);
       setScrollTop(window.scrollY > 300);
-      localStorage.setItem(lastScroll, window.scrollY);
     }),
     [setScrollTop]
   );
 
   useEffect(() => {
-    const scroll = localStorage.getItem(lastScroll);
+    const scroll = scrollPositions[props.guide.gameId + '/' + props.guide.id];
     if (scroll) setTimeout(() => window.scrollTo(undefined, Number.parseInt(scroll)), 350);
 
     document.addEventListener('scroll', debouncedScroll);

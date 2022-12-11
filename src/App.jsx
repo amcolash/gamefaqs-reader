@@ -29,7 +29,7 @@ export function App() {
       if (recent.length > 5) recent.pop();
 
       setRecentGuides(recent);
-    } else localStorage.removeItem(lastScroll);
+    }
   }, [guide]);
 
   return (
