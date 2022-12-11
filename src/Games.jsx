@@ -1,8 +1,8 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useFetch from 'react-fetch-hook';
 
-import { useDebounce } from './hooks';
-import { SERVER } from './util';
+import { useDebounce } from './utils/hooks';
+import { SERVER } from './utils/util';
 
 import { Spinner } from './Spinner';
 import { Error } from './Error.jsx';

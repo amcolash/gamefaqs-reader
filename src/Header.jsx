@@ -5,7 +5,7 @@ import ArrowBarDown from './icons/arrow-bar-down.svg';
 import Dash from './icons/dash-lg.svg';
 import Plus from './icons/plus-lg.svg';
 import X from './icons/x-lg.svg';
-import { mod } from './util';
+import { mod } from './utils/util';
 
 const zoomFactor = 0.2;
 

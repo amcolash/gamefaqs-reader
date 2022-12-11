@@ -4,7 +4,7 @@ import useFetch from 'react-fetch-hook';
 import { Error } from './Error';
 import { Spinner } from './Spinner';
 
-import { SERVER } from './util';
+import { SERVER } from './utils/util';
 
 import ArrowLeft from './icons/arrow-left.svg';
 

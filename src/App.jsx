@@ -4,8 +4,8 @@ import { Guide } from './Guide';
 import { Games } from './Games';
 import { Guides } from './Guides';
 
-import { useLocalStorage } from './hooks';
-import { lastGame, lastGuide, lastScroll, recentGuideKey } from './util';
+import { useLocalStorage } from './utils/hooks';
+import { lastGame, lastGuide, lastScroll, recentGuideKey } from './utils/util';
 
 import { Recents } from './Recents';
 import { style } from 'typestyle';

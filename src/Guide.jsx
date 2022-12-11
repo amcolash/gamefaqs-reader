@@ -3,8 +3,8 @@ import useFetch from 'react-fetch-hook';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
-import { useDebounce } from './hooks';
-import { debounce, lastScroll, lastZoom, SERVER } from './util';
+import { useDebounce } from './utils/hooks';
+import { debounce, lastScroll, lastZoom, SERVER } from './utils/util';
 
 import { Error } from './Error';
 import { Header } from './Header';

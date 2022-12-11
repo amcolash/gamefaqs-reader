@@ -14,6 +14,7 @@ export function Recents(props) {
           <GuideItem guide={g} setGuide={props.setGuide} showGame={true} style={{ width: '100%' }} />
 
           <button
+            className="error"
             style={{ height: 'unset' }}
             onClick={() => {
               let guides = [...props.recentGuides];
