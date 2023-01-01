@@ -1,4 +1,4 @@
-export const SERVER = import.meta.env.PROD ? 'https://home.amcolash.com:8004' : 'https://192.168.1.106:8004';
+export const SERVER = import.meta.env.PROD ? 'https://home.amcolash.com:8004' : 'https://localhost:8004';
 
 const prefix = 'guide-viewer';
 export const lastGame = `${prefix}-game`;

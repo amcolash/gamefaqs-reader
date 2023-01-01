@@ -108,10 +108,11 @@ function inputs() {
     height: '1em',
     width: '1em',
     borderRadius: '50em',
-    background: 'url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%',
+    background: `url(./src/icons/times-circle-solid.svg) no-repeat 50% 50%`,
     backgroundSize: 'contain',
     pointerEvents: 'none',
     opacity: 0,
+    '-webkit-appearance': 'none',
   });
 
   cssRule('input[type="search"]:focus::-webkit-search-cancel-button', {
