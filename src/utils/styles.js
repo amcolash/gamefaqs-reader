@@ -108,7 +108,7 @@ function inputs() {
     height: '1em',
     width: '1em',
     borderRadius: '50em',
-    background: `url(./src/icons/times-circle-solid.svg) no-repeat 50% 50%`,
+    background: `url(./times-circle-solid.svg) no-repeat 50% 50%`,
     backgroundSize: 'contain',
     pointerEvents: 'none',
     opacity: 0,
