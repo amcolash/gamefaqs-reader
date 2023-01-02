@@ -32,9 +32,10 @@ export function Input(props) {
   });
 
   return (
-    <div ref={divRef}>
+    <div ref={divRef} style={{ width: '100%' }}>
       <input
         {...props}
+        style={{ width: '100%' }}
         ref={inputRef}
         onChange={(e) => {
           props.onChange(e);
@@ -43,7 +44,10 @@ export function Input(props) {
       />
       {showKeyboard && (
         <Keyboard
-          keyboardRef={(ref) => (keyboardRef.current = ref)}
+          keyboardRef={(ref) => {
+            keyboardRef.current = ref;
+            keyboardRef.current.setInput(props.value);
+          }}
           onChange={(text) => {
             console.log('onChange', text);
             props.onChange({ target: { value: text } });

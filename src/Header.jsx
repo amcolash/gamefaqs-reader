@@ -44,7 +44,7 @@ export function Header(props) {
 
           {props.searchLength > 0 && (
             <>
-              <span style={{ marginLeft: '0.5rem' }}>
+              <span style={{ margin: '0.5rem', whiteSpace: 'nowrap' }}>
                 {props.searchIndex + 1} / {props.searchLength}
               </span>
               <button onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))} style={{ padding: '0 1rem' }}>
