@@ -4,12 +4,13 @@ import useFetch from 'react-fetch-hook';
 import { useDebounce } from './utils/hooks';
 import { SERVER } from './utils/util';
 
-import { Spinner } from './Spinner';
 import { Error } from './Error.jsx';
+import { Input } from './Input';
+import { Spinner } from './Spinner';
 
 export function Games(props) {
   const [search, setSearch] = useState('');
-  const debouncedSearch = useDebounce(search, 500);
+  const debouncedSearch = useDebounce(search, 1000);
   const { isLoading, data: games, error } = useFetch(`${SERVER}/games/${debouncedSearch}`, { depends: [!!debouncedSearch] });
 
   return (
@@ -19,7 +20,7 @@ export function Games(props) {
       <div style={{ width: '100%' }}>
         <label>Game Search</label>
         <br />
-        <input
+        <Input
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

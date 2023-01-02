@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
+import { style } from 'typestyle';
 
 import { Guide } from './Guide';
 import { Games } from './Games';
 import { Guides } from './Guides';
+import { Recents } from './Recents';
 
 import { useLocalStorage } from './utils/hooks';
-import { lastGame, lastGuide, lastScroll, recentGuideKey } from './utils/util';
-
-import { Recents } from './Recents';
-import { style } from 'typestyle';
+import { lastGame, lastGuide, recentGuideKey } from './utils/util';
 
 export function App() {
   const [game, setGame] = useLocalStorage(lastGame);

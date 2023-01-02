@@ -10,6 +10,7 @@
     "docker": "node index.js"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.5",
     "axios": "^1.2.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -19,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-fetch-hook": "^1.9.5",
     "react-highlight-words": "^0.18.0",
+    "react-simple-keyboard": "^3.4.252",
     "typestyle": "^2.4.0"
   },
   "devDependencies": {
