@@ -1,17 +1,17 @@
-import { cssRule, media } from 'typestyle';
+import { cssRaw, cssRule, media } from 'typestyle';
 
 // Set css variables
 export function createVariables() {
-  const variables = {
-    '--background': '#0e131a',
-    '--primary': '#c5c5c5',
-    '--secondary': '#24262e',
-    '--header': '#3d4451',
-    '--error': '#dd3517',
-    '--maxWidth': '950px',
-  };
+  createVariable('--background', '#0e131a');
+  createVariable('--primary', '#c5c5c5');
+  createVariable('--secondary', '#24262e');
+  createVariable('--header', '#3d4451');
+  createVariable('--error', '#dd3517');
+  createVariable('--maxWidth', '950px');
+}
 
-  Object.entries(variables).forEach((v) => document.body.style.setProperty(v[0], v[1]));
+function createVariable(name, value) {
+  document.documentElement.style.setProperty(name, value);
 }
 
 // Set up css styles
@@ -20,6 +20,7 @@ export function createStyles() {
   buttons();
   inputs();
   icons();
+  scrollbars();
 }
 
 function base() {
@@ -126,4 +127,28 @@ function icons() {
     width: 20,
     height: 20,
   });
+}
+
+function scrollbars() {
+  cssRaw(`
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--header);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+::-webkit-scrollbar-track {
+  background: var(--secondary);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}`);
 }
