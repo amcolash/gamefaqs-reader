@@ -17,7 +17,7 @@ export function Guides(props) {
         <button onClick={() => props.setGame()} style={{ position: 'absolute' }}>
           <ArrowLeft className="icon" />
         </button>
-        <div style={{ width: '100%', textAlign: 'center' }}>Guides</div>
+        <div style={{ width: '100%', textAlign: 'center' }}>Guides for {props.game.title}</div>
       </h1>
 
       {error && <Error error={error} />}

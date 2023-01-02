@@ -1,10 +1,13 @@
 import React from 'react';
 
+import { Input } from './Input';
+
 import ArrowBarUp from './icons/arrow-bar-up.svg';
 import ArrowBarDown from './icons/arrow-bar-down.svg';
 import Dash from './icons/dash-lg.svg';
 import Plus from './icons/plus-lg.svg';
 import X from './icons/x-lg.svg';
+
 import { mod } from './utils/util';
 
 const zoomFactor = 0.2;
@@ -16,6 +19,7 @@ export function Header(props) {
         position: 'fixed',
         top: 0,
         left: 0,
+        zIndex: 1,
         width: 'calc(100% - 2rem)',
         padding: '1rem',
         background: 'var(--background)',
@@ -30,7 +34,7 @@ export function Header(props) {
         </button>
 
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}>
-          <input
+          <Input
             type="search"
             value={props.search}
             onChange={(e) => props.setSearch(e.target.value)}
