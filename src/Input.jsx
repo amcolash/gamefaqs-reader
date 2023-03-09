@@ -19,7 +19,7 @@ export function Input(props) {
   useEffect(() => {
     const onFocusChange = (e) => {
       const focused = divRef?.current?.matches(':focus-within');
-      if (window.screen.width <= 1280) setShowKeyboard(focused);
+      if (window.innerWidth <= 1280) setShowKeyboard(focused);
     };
 
     document.addEventListener('focusin', onFocusChange);
@@ -39,7 +39,7 @@ export function Input(props) {
         ref={inputRef}
         onChange={(e) => {
           props.onChange(e);
-          keyboardRef.current.setInput(e.target.value);
+          keyboardRef?.current?.setInput(e.target.value);
         }}
       />
       {showKeyboard && (

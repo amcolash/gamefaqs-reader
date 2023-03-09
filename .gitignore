@@ -106,3 +106,5 @@ dist
 dist/
 *.txt
 .cert
+
+cookie.json
