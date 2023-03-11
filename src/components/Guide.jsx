@@ -3,14 +3,15 @@ import useFetch from 'react-fetch-hook';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
-import { useDebounce, useLocalStorage } from './utils/hooks';
-import { debounce, lastScroll, lastZoom, SERVER } from './utils/util';
+import { useDebounce } from '../hooks/debounce';
+import { useLocalStorage } from '../hooks/localStorage';
+import { debounce, lastScroll, lastZoom, SERVER } from '../utils/util';
 
 import { Error } from './Error';
 import { Header } from './Header';
 import { Spinner } from './Spinner';
 
-import ArrowUp from './icons/arrow-up.svg';
+import ArrowUp from '../icons/arrow-up.svg';
 
 export function Guide(props) {
   const {

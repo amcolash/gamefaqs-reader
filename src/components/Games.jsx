@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import useFetch from 'react-fetch-hook';
 
-import { useDebounce } from './utils/hooks';
-import { SERVER } from './utils/util';
+import { useDebounce } from '../hooks/debounce';
+import { SERVER } from '../utils/util';
 
 import { Error } from './Error.jsx';
 import { Input } from './Input';

@@ -6,8 +6,8 @@ import { Games } from './Games';
 import { Guides } from './Guides';
 import { Recents } from './Recents';
 
-import { useLocalStorage } from './utils/hooks';
-import { lastGame, lastGuide, recentGuideKey } from './utils/util';
+import { useLocalStorage } from '../hooks/localStorage';
+import { lastGame, lastGuide, recentGuideKey } from '../utils/util';
 
 export function App() {
   const [game, setGame] = useLocalStorage(lastGame);

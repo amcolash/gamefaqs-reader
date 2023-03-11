@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Input } from './Input';
 
-import ArrowBarUp from './icons/arrow-bar-up.svg';
-import ArrowBarDown from './icons/arrow-bar-down.svg';
-import Dash from './icons/dash-lg.svg';
-import Plus from './icons/plus-lg.svg';
-import X from './icons/x-lg.svg';
+import ArrowBarUp from '../icons/arrow-bar-up.svg';
+import ArrowBarDown from '../icons/arrow-bar-down.svg';
+import Dash from '../icons/dash-lg.svg';
+import Plus from '../icons/plus-lg.svg';
+import X from '../icons/x-lg.svg';
 
-import { mod } from './utils/util';
+import { mod } from '../utils/util';
 
 const zoomFactor = 0.2;
 

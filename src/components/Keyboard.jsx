@@ -3,8 +3,8 @@ import Keys from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 import { cssRaw } from 'typestyle';
 
-import Backspace from './icons/backspace.svg?raw';
-import KeyboardIcon from './icons/keyboard.svg?raw';
+import Backspace from '../icons/backspace.svg?raw';
+import KeyboardIcon from '../icons/keyboard.svg?raw';
 
 cssRaw(`
 .simple-keyboard {
