@@ -11,6 +11,8 @@ import ArrowLeft from './icons/arrow-left.svg';
 export function Guides(props) {
   const { isLoading, data: guides, error } = useFetch(`${SERVER}/guides/${props.game.id}`);
 
+  const guideItems = guides?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <h1 style={{ display: 'flex', width: '100%', position: 'relative' }}>
@@ -22,7 +24,7 @@ export function Guides(props) {
 
       {error && <Error error={error} />}
       {isLoading && <Spinner />}
-      {!isLoading && guides && guides.map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />)}
+      {!isLoading && (guideItems.length > 0 ? guideItems : <h2>No Guides Found</h2>)}
     </div>
   );
 }
