@@ -4,11 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { createStyles, createVariables } from './utils/styles';
 
-import { loadServiceWorker } from './utils/util';
-
-// Load service worker for production only
-if (import.meta.env.PROD) loadServiceWorker();
-
 // Set up core styles
 createVariables();
 createStyles();
