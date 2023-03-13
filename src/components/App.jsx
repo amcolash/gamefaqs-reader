@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { style } from 'typestyle';
 
 import { Guide } from './Guide';
@@ -7,12 +7,15 @@ import { Guides } from './Guides';
 import { Recents } from './Recents';
 
 import { useLocalStorage } from '../hooks/localStorage';
-import { lastGame, lastGuide, recentGuideKey } from '../utils/util';
+import { cookieKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
+import { CookieContext } from '../contexts/cookieContext';
 
 export function App() {
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
+
+  const cookie = useContext(CookieContext);
 
   const containerStyle = style({
     padding: '1rem',
