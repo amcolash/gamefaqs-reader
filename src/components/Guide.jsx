@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import useFetch from 'react-fetch-hook';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
 import { useDebounce } from '../hooks/debounce';
 import { useLocalStorage } from '../hooks/localStorage';
-import { debounce, lastScroll, lastZoom, SERVER } from '../utils/util';
+import { debounce, lastScroll, lastZoom } from '../utils/util';
 
 import { Error } from './Error';
 import { Header } from './Header';
@@ -14,11 +13,9 @@ import { Spinner } from './Spinner';
 import ArrowUp from '../icons/arrow-up.svg';
 
 export function Guide(props) {
-  const {
-    isLoading,
-    data: guideContent,
-    error,
-  } = useFetch(`${SERVER}/guide/${props.guide.gameId}/${props.guide.id}`, { formatter: (response) => response.text() });
+  const isLoading = true;
+  const guideContent = '';
+  const error = undefined;
 
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 350);

@@ -7,15 +7,12 @@ import { Guides } from './Guides';
 import { Recents } from './Recents';
 
 import { useLocalStorage } from '../hooks/localStorage';
-import { cookieKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
-import { CookieContext } from '../contexts/cookieContext';
+import { lastGame, lastGuide, recentGuideKey } from '../utils/util';
 
 export function App() {
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
-
-  const cookie = useContext(CookieContext);
 
   const containerStyle = style({
     padding: '1rem',

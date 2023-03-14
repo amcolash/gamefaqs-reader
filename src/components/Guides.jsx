@@ -1,15 +1,14 @@
 import React from 'react';
-import useFetch from 'react-fetch-hook';
 
 import { Error } from './Error';
 import { Spinner } from './Spinner';
 
-import { SERVER } from '../utils/util';
-
 import ArrowLeft from '../icons/arrow-left.svg';
 
 export function Guides(props) {
-  const { isLoading, data: guides, error } = useFetch(`${SERVER}/guides/${props.game.id}`);
+  const isLoading = true;
+  const guides = [];
+  const error = undefined;
 
   const guideItems = guides?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />);
 

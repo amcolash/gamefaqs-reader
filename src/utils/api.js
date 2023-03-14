@@ -1,25 +1,29 @@
-export async function games(search) {
-  try {
-    const url = `https://gamefaqs.gamespot.com/search?game=${search}`;
-    const data = await checkCache(url);
+import { useEffect, useState } from 'react';
 
-    const dom = new JSDOM(data);
-    const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
+export function useApi(api, search) {
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
 
-    const games = [];
-    results.forEach((r) => {
-      const title = r.querySelector('.sr_name').textContent.trim();
-      const [genre, year] = r.querySelector('.sr_info').textContent.split(', ');
-      const platforms = r.querySelector('.meta.float_r').textContent.split(', ');
-      const url = 'https://gamefaqs.gamespot.com' + r.querySelector('.log_search').getAttribute('href');
-      const id = basename(url);
+  useEffect(() => {
+    if (search.length > 0) {
+      setLoading(true);
+      setError(undefined);
+      setData(undefined);
 
-      const game = { title, genre, year: Number.parseInt(year), platforms, url, id };
-      games.push(game);
-    });
+      window.electronAPI[api](search)
+        .then((res) => {
+          setLoading(false);
 
-    return { items: games };
-  } catch (err) {
-    return { items: [], err };
-  }
+          if (res.data) setData(res.data);
+          if (res.error) setError({ message: res.error });
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err);
+        });
+    }
+  }, [api, search]);
+
+  return [data, loading, error];
 }

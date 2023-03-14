@@ -6,7 +6,6 @@ export const lastGuide = `${prefix}-guide`;
 export const lastScroll = `${prefix}-scroll`;
 export const lastZoom = `${prefix}-zoom`;
 export const recentGuideKey = `${prefix}-recent-guides`;
-export const cookieKey = `${prefix}-cookie`;
 
 // From https://stackoverflow.com/a/17323608/2303432
 export function mod(n, m) {

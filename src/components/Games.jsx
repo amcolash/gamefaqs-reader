@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import useFetch from 'react-fetch-hook';
 
 import { useDebounce } from '../hooks/debounce';
-import { SERVER } from '../utils/util';
+import { useApi } from '../utils/api';
 
 import { Error } from './Error.jsx';
 import { Input } from './Input';
@@ -11,7 +10,7 @@ import { Spinner } from './Spinner';
 export function Games(props) {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 1000);
-  const { isLoading, data: games, error } = useFetch(`${SERVER}/games/${debouncedSearch}`, { depends: [!!debouncedSearch] });
+  const [data, loading, error] = useApi('games', debouncedSearch);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
@@ -30,8 +29,8 @@ export function Games(props) {
       </div>
 
       {error && <Error error={error} />}
-      {isLoading && <Spinner />}
-      {debouncedSearch.length > 0 && games && games.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
+      {loading && <Spinner />}
+      {debouncedSearch.length > 0 && data && data.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
     </div>
   );
 }
