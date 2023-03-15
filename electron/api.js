@@ -15,7 +15,6 @@ export function getGames(search) {
 
       const dom = new JSDOM(data);
       const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
-      if (results.length === 0) throw 'Error searching - no results found';
 
       const games = [];
       results.forEach((r) => {
@@ -30,6 +29,46 @@ export function getGames(search) {
       });
 
       return { data: games };
+    })
+    .catch((err) => {
+      console.error(err);
+      return { error: err };
+    });
+}
+
+export async function getGuides(id) {
+  // Not sure if it should always be hardcoded to "pc", seems like it resolves ok?
+  const url = `https://gamefaqs.gamespot.com/pc/${id}/faqs`;
+
+  return checkCache(url)
+    .then((data) => {
+      const dom = new JSDOM(data);
+      const mainGuideSection = dom.window.document.querySelector('.gf_guides');
+      const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
+
+      const gameId = id;
+      const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
+
+      const guides = [];
+      results.forEach((r) => {
+        const platform = r.getAttribute('data-platform');
+        const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
+
+        const info = r.querySelector('.float_l:first-child');
+        const title = info.querySelector('a.bold').textContent;
+        const url = info.querySelector('a.bold').getAttribute('href');
+        const id = url.split('/').pop();
+        const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
+        const html = info.querySelector('.flair')?.textContent?.includes('HTML');
+
+        const meta = r.querySelector('.meta.float_r');
+        const [version, size, year] = meta.textContent.trim().split(', ');
+
+        const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle, html };
+        guides.push(guide);
+      });
+
+      return { data: guides };
     })
     .catch((err) => {
       console.error(err);

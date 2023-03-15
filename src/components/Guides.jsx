@@ -4,13 +4,12 @@ import { Error } from './Error';
 import { Spinner } from './Spinner';
 
 import ArrowLeft from '../icons/arrow-left.svg';
+import { useApi } from '../utils/api';
 
 export function Guides(props) {
-  const isLoading = true;
-  const guides = [];
-  const error = undefined;
+  const [data, loading, error] = useApi('guides', props.game.id);
 
-  const guideItems = guides?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />);
+  const guideItems = data?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
@@ -22,8 +21,8 @@ export function Guides(props) {
       </h1>
 
       {error && <Error error={error} />}
-      {isLoading && <Spinner />}
-      {!isLoading && (guideItems.length > 0 ? guideItems : <h2>No Guides Found</h2>)}
+      {loading && <Spinner />}
+      {!loading && !error && (guideItems.length > 0 ? guideItems : <h2>No Guides Found</h2>)}
     </div>
   );
 }

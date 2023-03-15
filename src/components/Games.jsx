@@ -30,7 +30,7 @@ export function Games(props) {
 
       {error && <Error error={error} />}
       {loading && <Spinner />}
-      {debouncedSearch.length > 0 && data && data.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
+      {debouncedSearch.length > 0 && !error && data && data.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
     </div>
   );
 }
