@@ -11,8 +11,6 @@ export function getGames(search) {
 
   return checkCache(url)
     .then((data) => {
-      console.log(data.length, data.includes('search_result'));
-
       const dom = new JSDOM(data);
       const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
 
@@ -76,16 +74,30 @@ export async function getGuides(id) {
     });
 }
 
+export async function getGuide(gameId, guideId) {
+  const url = `https://gamefaqs.gamespot.com/pc/${gameId}/faqs/${guideId}`;
+
+  return checkCache(url)
+    .then((data) => {
+      const dom = new JSDOM(data);
+      const sections = Array.from(dom.window.document.querySelectorAll('.faqtext pre'));
+      const guide = sections.map((s) => s.textContent).join('\n');
+
+      return { data: guide };
+    })
+    .catch((err) => {
+      console.error(err);
+      return { error: err };
+    });
+}
+
 async function checkCache(url) {
   if (CACHE[url]) {
     console.log(`Using cache for ${url}`);
     return CACHE[url];
   }
 
-  const data = await fetch(url, { headers: { cookie: `gf_dvi=${cookie.value}`, 'User-Agent': '' } }).then((res) => {
-    console.log(res);
-    return res.text();
-  });
+  const data = await fetch(url, { headers: { cookie: `gf_dvi=${cookie.value}`, 'User-Agent': '' } }).then((res) => res.text());
   CACHE[url] = data;
 
   return data;

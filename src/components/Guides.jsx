@@ -3,8 +3,9 @@ import React from 'react';
 import { Error } from './Error';
 import { Spinner } from './Spinner';
 
+import { useApi } from '../hooks/useApi';
+
 import ArrowLeft from '../icons/arrow-left.svg';
-import { useApi } from '../utils/api';
 
 export function Guides(props) {
   const [data, loading, error] = useApi('guides', props.game.id);
@@ -33,7 +34,7 @@ export function GuideItem(props) {
   return (
     <button
       key={guide.id}
-      style={{ width: '100%', height: '4rem', justifyContent: 'space-between', padding: '0 4rem', ...props.style }}
+      style={{ width: '100%', height: '4rem', justifyContent: 'space-between', padding: '0 4rem', overflow: 'hidden', ...props.style }}
       onClick={() => props.setGuide(guide)}
     >
       <div style={{ textAlign: 'left' }}>

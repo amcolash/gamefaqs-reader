@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { style } from 'typestyle';
 
-import { useDebounce } from '../hooks/debounce';
-import { useLocalStorage } from '../hooks/localStorage';
+import { useDebounce } from '../hooks/useDebounce';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useApi } from '../hooks/useApi';
 import { debounce, lastScroll, lastZoom } from '../utils/util';
 
 import { Error } from './Error';
@@ -13,9 +14,7 @@ import { Spinner } from './Spinner';
 import ArrowUp from '../icons/arrow-up.svg';
 
 export function Guide(props) {
-  const isLoading = true;
-  const guideContent = '';
-  const error = undefined;
+  const [data, loading, error] = useApi('guide', props.guide.gameId, props.guide.id);
 
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 350);
@@ -47,7 +46,7 @@ export function Guide(props) {
     document.addEventListener('scroll', debouncedScroll);
 
     return () => document.removeEventListener('scroll', debouncedScroll);
-  }, [guideContent]);
+  }, [data]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -98,7 +97,7 @@ export function Guide(props) {
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
         {error && <Error error={error} />}
-        {(isLoading || zoomHide) && <Spinner />}
+        {!error && (loading || zoomHide) && <Spinner />}
 
         {!zoomHide && (
           <Highlighter
@@ -106,7 +105,7 @@ export function Guide(props) {
             searchWords={debouncedSearch.length > 3 ? debouncedSearch.split(' ') : []}
             caseSensitive={false}
             autoEscape={true}
-            textToHighlight={guideContent || ''}
+            textToHighlight={data || ''}
             activeIndex={searchIndex}
             activeStyle={{ background: 'orange' }}
           />

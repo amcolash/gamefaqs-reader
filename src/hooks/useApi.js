@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 
-export function useApi(api, search) {
+export function useApi(api, arg1, arg2) {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
   useEffect(() => {
-    if (search.length > 0) {
+    if (arg1 && arg1.length > 0) {
       setLoading(true);
       setError(undefined);
       setData(undefined);
 
-      window.electronAPI[api](search)
+      window.electronAPI[api](arg1, arg2)
         .then((res) => {
           setLoading(false);
 
@@ -23,7 +23,7 @@ export function useApi(api, search) {
           setError(err);
         });
     }
-  }, [api, search]);
+  }, [api, arg1, arg2]);
 
   return [data, loading, error];
 }
