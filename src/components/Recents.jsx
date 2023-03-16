@@ -20,6 +20,8 @@ export function Recents(props) {
               let guides = [...props.recentGuides];
               guides = guides.filter((guide) => guide.id !== g.id);
               props.setRecentGuides(guides);
+
+              window.electronAPI.removeGuide(g.gameId, g.id);
             }}
           >
             <X />

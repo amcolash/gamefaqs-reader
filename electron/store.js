@@ -7,10 +7,9 @@ class Store {
   constructor(opts) {
     const userDataPath = app.getPath('userData');
     this.path = join(userDataPath, opts.configName + '.json');
-
-    console.log(this.path);
-
     this.data = parseDataFile(this.path, opts.defaults);
+
+    console.log(`Store: ${this.path}, entries: ${this.size()}`);
   }
 
   has(key) {
@@ -27,7 +26,8 @@ class Store {
   }
 
   remove(key) {
-    this.set(key);
+    delete this.data[key];
+    writeFileSync(this.path, JSON.stringify(this.data));
   }
 
   size() {

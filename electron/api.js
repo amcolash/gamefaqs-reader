@@ -1,7 +1,7 @@
 import fetch from 'electron-fetch';
 import { JSDOM } from 'jsdom';
 
-import { cookieKey, store } from './store';
+import { cookieKey, guideCache, store } from './store';
 
 const CACHE = {};
 const cookie = store.get(cookieKey);
@@ -90,14 +90,29 @@ export async function getGuide(gameId, guideId) {
   }
 }
 
-async function checkCache(url) {
+export function removeGuide(gameId, guideId) {
+  const url = `https://gamefaqs.gamespot.com/pc/${gameId}/faqs/${guideId}`;
+
+  console.log(`Removing guide from cache ${url}`);
+  guideCache.remove(url);
+}
+
+async function checkCache(url, isGuide) {
   if (CACHE[url]) {
     console.log(`Using cache for ${url}`);
     return CACHE[url];
   }
 
+  if (guideCache.has(url)) {
+    console.log(`Using guide cache for ${url}`);
+    return guideCache.get(url).data;
+  }
+
+  console.log(`Fetching ${url}`);
   const data = await fetch(url, { headers: { cookie: `gf_dvi=${cookie.value}`, 'User-Agent': '' } }).then((res) => res.text());
-  CACHE[url] = data;
+
+  if (isGuide) guideCache.set(url, { date: Date.now(), data: data });
+  else CACHE[url] = data;
 
   return data;
 }

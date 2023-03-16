@@ -25,7 +25,10 @@ export function App() {
       let recent = [...recentGuides];
       recent = recent.filter((g) => guide.id !== g.id);
       recent.unshift(guide);
-      if (recent.length > 5) recent.pop();
+      if (recent.length > 7) {
+        const removed = recent.pop();
+        window.electronAPI.removeGuide(removed.gameId, removed.id);
+      }
 
       setRecentGuides(recent);
     }

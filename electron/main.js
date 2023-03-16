@@ -3,7 +3,7 @@ import windowStateKeeper from 'electron-window-state';
 import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
 import { cookieKey, store } from './store';
-import { getGames, getGuide, getGuides } from './api';
+import { getGames, getGuide, getGuides, removeGuide } from './api';
 
 const PROD = app.isPackaged;
 let win;
@@ -70,4 +70,5 @@ function initIpc() {
   ipcMain.handle('games', (event, search) => getGames(search));
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
+  ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
 }
