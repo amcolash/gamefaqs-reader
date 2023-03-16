@@ -16,7 +16,7 @@ export function useApi(api, arg1, arg2) {
           setLoading(false);
 
           if (res.data) setData(res.data);
-          if (res.error) setError({ message: res.error });
+          if (res.error) setError(res.error);
         })
         .catch((err) => {
           console.error(err);
