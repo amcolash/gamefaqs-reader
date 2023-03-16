@@ -6,89 +6,88 @@ import { cookieKey, store } from './store';
 const CACHE = {};
 const cookie = store.get(cookieKey);
 
-export function getGames(search) {
+export async function getGames(search) {
   const url = `https://gamefaqs.gamespot.com/search?game=${search}`;
 
-  return checkCache(url)
-    .then((data) => {
-      const dom = new JSDOM(data);
-      const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
+  try {
+    const data = await checkCache(url);
 
-      const games = [];
-      results.forEach((r) => {
-        const title = r.querySelector('.sr_name').textContent.trim();
-        const [genre, year] = r.querySelector('.sr_info').textContent.split(', ');
-        const platforms = r.querySelector('.meta.float_r').textContent.split(', ');
-        const url = 'https://gamefaqs.gamespot.com' + r.querySelector('.log_search').getAttribute('href');
-        const id = url.split('/').pop();
+    const dom = new JSDOM(data);
+    const results = Array.from(dom.window.document.querySelectorAll('.search_result'));
 
-        const game = { title, genre, year: Number.parseInt(year), platforms, url, id };
-        games.push(game);
-      });
+    const games = [];
+    results.forEach((r) => {
+      const title = r.querySelector('.sr_name').textContent.trim();
+      const [genre, year] = r.querySelector('.sr_info').textContent.split(', ');
+      const platforms = r.querySelector('.meta.float_r').textContent.split(', ');
+      const url = 'https://gamefaqs.gamespot.com' + r.querySelector('.log_search').getAttribute('href');
+      const id = url.split('/').pop();
 
-      return { data: games };
-    })
-    .catch((err) => {
-      console.error(err);
-      return { error: err };
+      const game = { title, genre, year: Number.parseInt(year), platforms, url, id };
+      games.push(game);
     });
+
+    return { data: games };
+  } catch (err) {
+    console.error(err);
+    return { error: err };
+  }
 }
 
 export async function getGuides(id) {
   // Not sure if it should always be hardcoded to "pc", seems like it resolves ok?
   const url = `https://gamefaqs.gamespot.com/pc/${id}/faqs`;
 
-  return checkCache(url)
-    .then((data) => {
-      const dom = new JSDOM(data);
-      const mainGuideSection = dom.window.document.querySelector('.gf_guides');
-      const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
+  try {
+    const data = await checkCache(url);
 
-      const gameId = id;
-      const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
+    const dom = new JSDOM(data);
+    const mainGuideSection = dom.window.document.querySelector('.gf_guides');
+    const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
 
-      const guides = [];
-      results.forEach((r) => {
-        const platform = r.getAttribute('data-platform');
-        const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
+    const gameId = id;
+    const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
 
-        const info = r.querySelector('.float_l:first-child');
-        const title = info.querySelector('a.bold').textContent;
-        const url = info.querySelector('a.bold').getAttribute('href');
-        const id = url.split('/').pop();
-        const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
-        const html = info.querySelector('.flair')?.textContent?.includes('HTML');
+    const guides = [];
+    results.forEach((r) => {
+      const platform = r.getAttribute('data-platform');
+      const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
 
-        const meta = r.querySelector('.meta.float_r');
-        const [version, size, year] = meta.textContent.trim().split(', ');
+      const info = r.querySelector('.float_l:first-child');
+      const title = info.querySelector('a.bold').textContent;
+      const url = info.querySelector('a.bold').getAttribute('href');
+      const id = url.split('/').pop();
+      const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
+      const html = info.querySelector('.flair')?.textContent?.includes('HTML');
 
-        const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle, html };
-        guides.push(guide);
-      });
+      const meta = r.querySelector('.meta.float_r');
+      const [version, size, year] = meta.textContent.trim().split(', ');
 
-      return { data: guides };
-    })
-    .catch((err) => {
-      console.error(err);
-      return { error: err };
+      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle, html };
+      guides.push(guide);
     });
+
+    return { data: guides };
+  } catch (err) {
+    console.error(err);
+    return { error: err };
+  }
 }
 
 export async function getGuide(gameId, guideId) {
   const url = `https://gamefaqs.gamespot.com/pc/${gameId}/faqs/${guideId}`;
 
-  return checkCache(url)
-    .then((data) => {
-      const dom = new JSDOM(data);
-      const sections = Array.from(dom.window.document.querySelectorAll('.faqtext pre'));
-      const guide = sections.map((s) => s.textContent).join('\n');
+  try {
+    const data = await checkCache(url, true);
+    const dom = new JSDOM(data);
+    const sections = Array.from(dom.window.document.querySelectorAll('.faqtext pre'));
+    const guide = sections.map((s) => s.textContent).join('\n');
 
-      return { data: guide };
-    })
-    .catch((err) => {
-      console.error(err);
-      return { error: err };
-    });
+    return { data: guide };
+  } catch (err) {
+    console.error(err);
+    return { error: err };
+  }
 }
 
 async function checkCache(url) {
