@@ -5,10 +5,7 @@ import { readFileSync, writeFileSync } from 'fs';
 // Based on code from https://cameronnokes.com/blog/how-to-store-user-data-in-electron/
 class Store {
   constructor(opts) {
-    // Renderer process has to get `app` module via `remote`, whereas the main process can get it directly
-    // app.getPath('userData') will return a string of the user's app data directory path.
     const userDataPath = app.getPath('userData');
-    // We'll use the `configName` property to set the file name and path.join to bring it all together as a string
     this.path = join(userDataPath, opts.configName + '.json');
 
     console.log(this.path);
@@ -16,19 +13,29 @@ class Store {
     this.data = parseDataFile(this.path, opts.defaults);
   }
 
-  // This will just return the property on the `data` object
+  has(key) {
+    return this.data[key] !== undefined;
+  }
+
   get(key) {
     return this.data[key];
   }
 
-  // ...and this will set it
   set(key, val) {
     this.data[key] = val;
-    // Wait, I thought using the node.js' synchronous APIs was bad form?
-    // We're not writing a server so there's not nearly the same IO demand on the process
-    // Also if we used an async API and our app was quit before the asynchronous write had a chance to complete,
-    // we might lose that data. Note that in a real app, we would try/catch this.
     writeFileSync(this.path, JSON.stringify(this.data));
+  }
+
+  remove(key) {
+    this.set(key);
+  }
+
+  size() {
+    return Object.keys(this.data).length;
+  }
+
+  entries() {
+    return Object.entries(this.data);
   }
 }
 
@@ -39,11 +46,12 @@ function parseDataFile(filePath, defaults) {
     return JSON.parse(readFileSync(filePath).toString());
   } catch (error) {
     // if there was some kind of error, return the passed in defaults instead.
-    return defaults;
+    return defaults || {};
   }
 }
 
 export const cookieKey = 'cookie';
+export const guideKey = 'guides';
 
 // First instantiate the class
 export const store = new Store({
@@ -52,4 +60,8 @@ export const store = new Store({
   defaults: {
     [cookieKey]: undefined,
   },
+});
+
+export const guideCache = new Store({
+  configName: 'guide-cache',
 });
