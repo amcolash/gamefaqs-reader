@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { style } from 'typestyle';
 
 import { Guide } from './Guide';
@@ -7,9 +7,13 @@ import { Guides } from './Guides';
 import { Recents } from './Recents';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useOnline } from '../hooks/useOnline';
 import { lastGame, lastGuide, recentGuideKey } from '../utils/util';
 
+import OfflineIcon from '../icons/wifi-off.svg';
+
 export function App() {
+  const online = useOnline();
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
@@ -38,11 +42,16 @@ export function App() {
     <div className={containerStyle}>
       {guide ? (
         <Guide guide={guide} setGuide={setGuide} />
-      ) : !guide && game ? (
+      ) : !guide && game && online ? (
         <Guides game={game} setGuide={setGuide} setGame={setGame} />
       ) : (
         <div>
-          <Games setGame={setGame} />
+          {!online && (
+            <h1 style={{ textAlign: 'center' }}>
+              Device Offline <OfflineIcon className="icon" />
+            </h1>
+          )}
+          {online && <Games setGame={setGame} />}
           {recentGuides.length > 0 && <Recents setGuide={setGuide} recentGuides={recentGuides} setRecentGuides={setRecentGuides} />}
         </div>
       )}
