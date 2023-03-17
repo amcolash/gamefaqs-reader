@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.5",
-    "@theace0296/steamworks": "^1.2.0",
     "electron-fetch": "^1.9.1",
     "electron-window-state": "^5.0.3",
     "jsdom": "^20.0.3",
@@ -37,7 +36,7 @@
     ]
   },
   "build": {
-    "appId": "YourAppID",
+    "appId": "com.amcolash.gamefaqs-reader",
     "asar": true,
     "directories": {
       "output": "build/release/${version}"

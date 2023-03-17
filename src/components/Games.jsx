@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useDebounce } from '../hooks/useDebounce';
-import { useApi } from '../HOOKS/useApi';
+import { useApi } from '../hooks/useApi';
 
 import { Error } from './Error.jsx';
 import { Input } from './Input';

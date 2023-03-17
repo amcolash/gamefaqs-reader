@@ -4,6 +4,7 @@ import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
 import { cookieKey, store } from './store';
 import { getGames, getGuide, getGuides, removeGuide } from './api';
+import { execSync } from 'child_process';
 
 const PROD = app.isPackaged;
 let win;
@@ -15,6 +16,8 @@ process.env.ELECTRON_ENABLE_LOGGING = true;
 app.whenReady().then(async () => {
   createWindow();
   initIpc();
+
+  toggleKeyboard();
 });
 
 function createWindow() {
@@ -71,4 +74,10 @@ function initIpc() {
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
+  ipcMain.handle('toggleKeyboard', (event, open) => toggleKeyboard(open));
+}
+
+function toggleKeyboard() {
+  const results = execSync(join(__dirname, '../steam/test'));
+  console.log(results.toString());
 }

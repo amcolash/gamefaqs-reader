@@ -4,7 +4,6 @@ import { JSDOM } from 'jsdom';
 import { cookieKey, guideCache, store } from './store';
 
 const CACHE = {};
-const cookie = store.get(cookieKey);
 
 export async function getGames(search) {
   const url = `https://gamefaqs.gamespot.com/search?game=${search}`;
@@ -109,6 +108,7 @@ async function checkCache(url, isGuide) {
   }
 
   console.log(`Fetching ${url}`);
+  const cookie = store.get(cookieKey);
   const data = await fetch(url, { headers: { cookie: `gf_dvi=${cookie.value}`, 'User-Agent': '' } }).then((res) => res.text());
 
   if (isGuide) guideCache.set(url, { date: Date.now(), data: data });

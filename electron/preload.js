@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   guides: (id) => ipcRenderer.invoke('guides', id),
   guide: (gameId, guideId) => ipcRenderer.invoke('guide', gameId, guideId),
   removeGuide: (gameId, guideId) => ipcRenderer.invoke('removeGuide', gameId, guideId),
+  toggleKeyboard: (open) => ipcRenderer.invoke('toggleKeyboard', open),
 });
