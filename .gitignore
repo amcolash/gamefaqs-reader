@@ -106,11 +106,9 @@ dist
 .tern-port
 
 dist/
-*.txt
 .cert
 
 build/
 
 # Exclude steamworks sdk
 steamworks_sdk*.zip
-steam/

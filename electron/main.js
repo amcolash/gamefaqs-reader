@@ -77,7 +77,11 @@ function initIpc() {
   ipcMain.handle('toggleKeyboard', (event, open) => toggleKeyboard(open));
 }
 
-function toggleKeyboard() {
-  const results = execSync(join(__dirname, '../steam/test'));
-  console.log(results.toString());
+function toggleKeyboard(open) {
+  const execPath = join(__dirname, '../../steam');
+  try {
+    execSync(join(execPath, '/toggle_keyboard'), { cwd: execPath, stdio: 'inherit' });
+  } catch (err) {
+    console.error(err);
+  }
 }
