@@ -47,6 +47,7 @@ cssRaw(`
 export function Keyboard(props) {
   return (
     <div
+      className="keyboard"
       style={{
         position: 'fixed',
         bottom: 0,

@@ -94,7 +94,6 @@ function inputs() {
     border: 'none',
     color: 'var(--primary)',
     padding: '0 1.5rem',
-    margin: '0.5rem 0rem 1rem',
     height: '2.5rem',
 
     $nest: {

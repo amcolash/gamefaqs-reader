@@ -28,7 +28,7 @@ export function Header(props) {
         justifyContent: 'center',
       }}
     >
-      <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
         <button onClick={() => props.setGuide()} style={{ padding: '0 1rem' }}>
           <X className="icon" />
         </button>

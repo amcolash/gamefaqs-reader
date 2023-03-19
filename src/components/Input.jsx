@@ -19,33 +19,44 @@ export function Input(props) {
   useEffect(() => {
     const onFocusChange = (e) => {
       const focused = divRef?.current?.matches(':focus-within');
-      if (window.innerWidth <= 1280) setShowKeyboard(focused);
+      setShowKeyboard(focused);
     };
 
     const onKeyDown = (e) => {
-      if (keyboardRef) {
-        if (e.key === 'ArrowUp') {
-          keyboardRef.current?.modules.keyNavigation.up();
-          e.preventDefault();
-        } else if (e.key === 'ArrowDown') {
-          keyboardRef.current?.modules.keyNavigation.down();
-          e.preventDefault();
-        } else if (e.key === 'ArrowLeft') {
-          keyboardRef.current?.modules.keyNavigation.left();
-          e.preventDefault();
-        } else if (e.key === 'ArrowRight') {
-          keyboardRef.current?.modules.keyNavigation.right();
-          e.preventDefault();
-        } else if (e.key === 'Enter') keyboardRef.current?.modules.keyNavigation.press();
-        else if (e.key === 'Escape') {
-          setShowKeyboard(false);
-          e.preventDefault();
+      if (keyboardRef && showKeyboard) {
+        switch (e.key) {
+          case 'ArrowUp':
+            keyboardRef.current?.modules.keyNavigation.up();
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+            keyboardRef.current?.modules.keyNavigation.down();
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+            keyboardRef.current?.modules.keyNavigation.left();
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+            keyboardRef.current?.modules.keyNavigation.right();
+            e.preventDefault();
+            break;
+          case 'Enter':
+            keyboardRef.current?.modules.keyNavigation.press();
+            e.preventDefault();
+            break;
+          case 'Escape':
+            setShowKeyboard(false);
+            e.preventDefault();
+            break;
+          default:
+            break;
         }
       }
     };
 
     const onEnter = (e) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && !showKeyboard) {
         setShowKeyboard(true);
         e.stopPropagation();
       }
@@ -64,20 +75,20 @@ export function Input(props) {
 
       inputRef.current?.removeEventListener('keydown', onEnter);
     };
-  });
+  }, [showKeyboard]);
 
   return (
     <div ref={divRef} style={{ width: '100%' }}>
       <input
         {...props}
-        style={{ width: '100%' }}
+        style={{ width: '100%', ...props.style }}
         ref={inputRef}
         onChange={(e) => {
           props.onChange(e);
           keyboardRef?.current?.setInput(e.target.value);
         }}
       />
-      {showKeyboard && (
+      {showKeyboard && window.innerWidth <= 1280 && (
         <Keyboard
           keyboardRef={(ref) => {
             keyboardRef.current = ref;

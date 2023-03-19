@@ -11,6 +11,7 @@ import { useOnline } from '../hooks/useOnline';
 import { lastGame, lastGuide, recentGuideKey } from '../utils/util';
 
 import OfflineIcon from '../icons/wifi-off.svg';
+import { cleanupNavigation, initNavigation } from '../utils/nav';
 
 export function App() {
   const online = useOnline();
@@ -37,6 +38,12 @@ export function App() {
       setRecentGuides(recent);
     }
   }, [guide]);
+
+  useEffect(() => {
+    initNavigation();
+
+    return () => cleanupNavigation();
+  }, []);
 
   return (
     <div className={containerStyle}>
