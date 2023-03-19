@@ -64,9 +64,8 @@ function getFocusableItem(el, dir, shouldWrap) {
 
 function focusToIndex(el, index) {
   const focusableEls = getFocusable(el);
-
   index = Math.max(0, Math.min(index, focusableEls.length - 1));
-  console.log(index, focusableEls[index]);
+
   if (focusableEls[index]) focusableEls[index].focus();
 }
 

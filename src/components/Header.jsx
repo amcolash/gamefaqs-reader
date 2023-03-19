@@ -29,7 +29,7 @@ export function Header(props) {
       }}
     >
       <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => props.setGuide()} style={{ padding: '0 1rem' }}>
+        <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
           <X className="icon" />
         </button>
 
@@ -47,10 +47,10 @@ export function Header(props) {
               <span style={{ margin: '0.5rem', whiteSpace: 'nowrap' }}>
                 {props.searchIndex + 1} / {props.searchLength}
               </span>
-              <button onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))} style={{ padding: '0 1rem' }}>
+              <button onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))} style={{ padding: '0.6rem' }}>
                 <ArrowBarUp className="icon" />
               </button>
-              <button onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))} style={{ padding: '0 1rem' }}>
+              <button onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))} style={{ padding: '0.6rem' }}>
                 <ArrowBarDown className="icon" />
               </button>
             </>
@@ -62,14 +62,14 @@ export function Header(props) {
           <button
             disabled={props.zoom <= 1}
             onClick={() => props.setZoom(props.zoom - zoomFactor)}
-            style={{ fontWeight: 'bold', padding: '0 1rem' }}
+            style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >
             <Dash className="icon" />
           </button>
           <button
             disabled={props.zoom >= 1.99}
             onClick={() => props.setZoom(props.zoom + zoomFactor)}
-            style={{ fontWeight: 'bold', padding: '0 1rem' }}
+            style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >
             <Plus className="icon" />
           </button>

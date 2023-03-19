@@ -52,6 +52,7 @@ export function Keyboard(props) {
         position: 'fixed',
         bottom: 0,
         left: 0,
+        zIndex: 1,
         width: 'calc(100% - 2rem)',
         display: 'flex',
         justifyContent: 'center',
