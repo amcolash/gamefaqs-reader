@@ -16,8 +16,6 @@ process.env.ELECTRON_ENABLE_LOGGING = true;
 app.whenReady().then(async () => {
   createWindow();
   initIpc();
-
-  toggleKeyboard();
 });
 
 function createWindow() {
@@ -74,14 +72,4 @@ function initIpc() {
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
-  ipcMain.handle('toggleKeyboard', (event, open) => toggleKeyboard(open));
-}
-
-function toggleKeyboard(open) {
-  const execPath = join(__dirname, '../../steam');
-  try {
-    execSync(join(execPath, '/toggle_keyboard'), { cwd: execPath, stdio: 'inherit' });
-  } catch (err) {
-    console.error(err);
-  }
 }

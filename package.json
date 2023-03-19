@@ -20,6 +20,7 @@
     "react-highlight-words": "^0.18.0",
     "react-simple-keyboard": "^3.4.252",
     "set-cookie-parser": "^2.5.1",
+    "simple-keyboard-key-navigation": "^2.4.246",
     "typestyle": "^2.4.0"
   },
   "devDependencies": {

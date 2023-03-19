@@ -22,12 +22,47 @@ export function Input(props) {
       if (window.innerWidth <= 1280) setShowKeyboard(focused);
     };
 
+    const onKeyDown = (e) => {
+      if (keyboardRef) {
+        if (e.key === 'ArrowUp') {
+          keyboardRef.current?.modules.keyNavigation.up();
+          e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+          keyboardRef.current?.modules.keyNavigation.down();
+          e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+          keyboardRef.current?.modules.keyNavigation.left();
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          keyboardRef.current?.modules.keyNavigation.right();
+          e.preventDefault();
+        } else if (e.key === 'Enter') keyboardRef.current?.modules.keyNavigation.press();
+        else if (e.key === 'Escape') {
+          setShowKeyboard(false);
+          e.preventDefault();
+        }
+      }
+    };
+
+    const onEnter = (e) => {
+      if (e.key === 'Enter') {
+        setShowKeyboard(true);
+        e.stopPropagation();
+      }
+    };
+
     document.addEventListener('focusin', onFocusChange);
     document.addEventListener('focusout', onFocusChange);
+    document.addEventListener('keydown', onKeyDown);
+
+    inputRef.current?.addEventListener('keydown', onEnter);
 
     return () => {
       document.removeEventListener('focusin', onFocusChange);
       document.removeEventListener('focusout', onFocusChange);
+      document.removeEventListener('keydown', onKeyDown);
+
+      inputRef.current?.removeEventListener('keydown', onEnter);
     };
   });
 
@@ -49,7 +84,6 @@ export function Input(props) {
             keyboardRef.current.setInput(props.value);
           }}
           onChange={(text) => {
-            console.log('onChange', text);
             props.onChange({ target: { value: text } });
           }}
           setVisible={(visible) => setShowKeyboard(visible)}

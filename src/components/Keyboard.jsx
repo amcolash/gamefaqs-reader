@@ -1,5 +1,6 @@
 import React from 'react';
 import Keys from 'react-simple-keyboard';
+import keyNavigation from 'simple-keyboard-key-navigation';
 import 'react-simple-keyboard/build/css/index.css';
 import { cssRaw } from 'typestyle';
 
@@ -75,6 +76,8 @@ export function Keyboard(props) {
           '{bksp}': Backspace,
           '{close}': KeyboardIcon,
         }}
+        enableKeyNavigation={true}
+        modules={[keyNavigation]}
       />
     </div>
   );
