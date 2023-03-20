@@ -52,9 +52,17 @@ export function App() {
 
     window.addEventListener('keydown', escapeHandler);
 
+    const exitHandler = window.joypad.on('button_press', (e) => {
+      if (e.detail.gamepad.index !== 0) return;
+
+      // Button 1: B (A nintendo)
+      if (e.detail.index === 1) escapeHandler({ key: 'Escape' });
+    });
+
     return () => {
       cleanupNavigation();
       window.removeEventListener('keydown', escapeHandler);
+      exitHandler.unsubscribe();
     };
   }, [guide, game]);
 

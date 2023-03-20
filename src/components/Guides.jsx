@@ -17,9 +17,11 @@ export function Guides(props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <h1 style={{ display: 'flex', width: '100%', position: 'relative' }}>
-        <button onClick={() => props.setGame()} style={{ position: 'absolute' }}>
-          <ArrowLeft className="icon" />
-        </button>
+        {Object.entries(joypad.instances).length === 0 && (
+          <button onClick={() => props.setGame()} style={{ position: 'absolute' }}>
+            <ArrowLeft className="icon" />
+          </button>
+        )}
         <div style={{ width: '100%', textAlign: 'center' }}>Guides for {props.game.title}</div>
       </h1>
 

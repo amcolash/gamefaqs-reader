@@ -1,9 +1,36 @@
+let listener;
+
 export function initNavigation() {
   window.addEventListener('keydown', keyDown);
+
+  if (listener) listener.unsubscribe();
+  listener = window.joypad.on('button_press', (e) => {
+    if (e.detail.gamepad.index !== 0) return;
+    const button = e.detail.index;
+
+    switch (button) {
+      case 0: // A (B nintendo)
+        document.activeElement?.click();
+        break;
+      case 12: // Dpad Up
+        keyDown({ key: 'ArrowUp', preventDefault: () => {} });
+        break;
+      case 13: // Dpad Down
+        keyDown({ key: 'ArrowDown', preventDefault: () => {} });
+        break;
+      case 14: // Dpad Left
+        keyDown({ key: 'ArrowLeft', preventDefault: () => {} });
+        break;
+      case 15: // Dpad Right
+        keyDown({ key: 'ArrowRight', preventDefault: () => {} });
+        break;
+    }
+  });
 }
 
 export function cleanupNavigation() {
   window.removeEventListener('keydown', keyDown);
+  listener.unsubscribe();
 }
 
 function keyDown(event) {

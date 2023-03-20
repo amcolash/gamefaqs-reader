@@ -29,9 +29,11 @@ export function Header(props) {
       }}
     >
       <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
-          <X className="icon" />
-        </button>
+        {Object.entries(joypad.instances).length === 0 && (
+          <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
+            <X className="icon" />
+          </button>
+        )}
 
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}>
           <Input
