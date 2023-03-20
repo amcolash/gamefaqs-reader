@@ -14,8 +14,8 @@ export function Recents(props) {
           <GuideItem guide={g} setGuide={props.setGuide} showGame={true} style={{ width: '100%' }} />
 
           <button
-            className="error"
-            style={{ height: 'unset' }}
+            className="error remove"
+            style={{ height: 'unset', margin: '0.35rem 0' }}
             onClick={() => {
               let guides = [...props.recentGuides];
               guides = guides.filter((guide) => guide.id !== g.id);

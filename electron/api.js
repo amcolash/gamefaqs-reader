@@ -22,7 +22,9 @@ export async function getGames(search) {
       const url = 'https://gamefaqs.gamespot.com' + r.querySelector('.log_search').getAttribute('href');
       const id = url.split('/').pop();
 
-      const game = { title, genre, year: Number.parseInt(year), platforms, url, id };
+      const parsedYear = Number.parseInt(year);
+
+      const game = { title, genre, year: isNaN(parsedYear) ? year : parsedYear, platforms, url, id };
       games.push(game);
     });
 
@@ -62,7 +64,22 @@ export async function getGuides(id) {
       const meta = r.querySelector('.meta.float_r');
       const [version, size, year] = meta.textContent.trim().split(', ');
 
-      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle, html };
+      const parsedYear = Number.parseInt(year);
+
+      const guide = {
+        platform,
+        comment,
+        title,
+        url,
+        id,
+        authors,
+        version,
+        size,
+        year: isNaN(parsedYear) ? year : parsedYear,
+        gameId,
+        gameTitle,
+        html,
+      };
       guides.push(guide);
     });
 

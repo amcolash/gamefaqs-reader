@@ -8,23 +8,46 @@ export function cleanupNavigation() {
 
 function keyDown(event) {
   if (!document.querySelector('.keyboard')) {
+    let handled = true;
+    const activeClasses = document.activeElement?.classList;
+
     switch (event.key) {
       case 'ArrowDown':
-      case 'ArrowRight':
         if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else {
+          focusItem(document, activeClasses?.contains('guide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
+        }
+        break;
+      case 'ArrowRight':
+        if (document.activeElement === document.body) {
+          focusToIndex(document, 0);
+        } else if (!activeClasses?.contains('remove')) {
           focusItem(document, 1);
         }
-
-        event.preventDefault();
         break;
+
       case 'ArrowUp':
+        if (document.activeElement === document.body) {
+          focusToIndex(document, 0);
+        } else {
+          focusItem(document, activeClasses?.contains('guide') || activeClasses?.contains('remove') ? -2 : -1);
+        }
+        break;
       case 'ArrowLeft':
-        focusItem(document, -1);
-        event.preventDefault();
+        if (document.activeElement === document.body) {
+          focusToIndex(document, 0);
+        } else if (!activeClasses?.contains('guide')) {
+          focusItem(document, -1);
+        }
+        break;
+
+      default:
+        handled = false;
         break;
     }
+
+    if (handled) event.preventDefault();
   }
 }
 
@@ -48,7 +71,7 @@ function getFocusIndex(els, active) {
   return 0;
 }
 
-function getFocusableItem(el, dir, shouldWrap) {
+function getFocusableItem(el, dir, shouldWrap, exact) {
   const focusableEls = getFocusable(el);
   let index = getFocusIndex(focusableEls) + dir;
 
@@ -56,7 +79,8 @@ function getFocusableItem(el, dir, shouldWrap) {
     if (index >= focusableEls.length) index = 0;
     if (index < 0) index = focusableEls.length - 1;
   } else {
-    index = Math.max(0, Math.min(index, focusableEls.length - 1));
+    if (exact && (index < 0 || index > focusableEls.length - 1)) index -= dir;
+    else index = Math.max(0, Math.min(index, focusableEls.length - 1));
   }
 
   return focusableEls[index];
@@ -69,7 +93,7 @@ function focusToIndex(el, index) {
   if (focusableEls[index]) focusableEls[index].focus();
 }
 
-function focusItem(el, dir, shouldWrap) {
-  const item = getFocusableItem(el, dir, shouldWrap);
+function focusItem(el, dir, shouldWrap, exact) {
+  const item = getFocusableItem(el, dir, shouldWrap, exact);
   if (item) item.focus();
 }

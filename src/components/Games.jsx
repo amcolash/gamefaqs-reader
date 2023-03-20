@@ -9,7 +9,7 @@ import { Input } from './Input';
 import { Spinner } from './Spinner';
 
 export function Games(props) {
-  const [search, setSearch] = useState('chrono');
+  const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 1000);
   const [data, loading, error] = useApi('games', debouncedSearch);
   const [animationParent] = useAutoAnimate();
@@ -32,7 +32,10 @@ export function Games(props) {
         <Input
           type="search"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            props.setSearch(e.target.value);
+          }}
           placeholder="Search Games"
           style={{ width: '100%', marginTop: '0.5rem', marginBottom: '1.5rem' }}
         />

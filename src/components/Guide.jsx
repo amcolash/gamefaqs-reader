@@ -82,13 +82,13 @@ export function Guide(props) {
         setZoom={(z) => {
           setZoomHide(true);
           setZoom(z);
-          setTimeout(() => setZoomHide(false), 100);
+          setTimeout(() => setZoomHide(false), 0);
         }}
       />
 
       {scrollTop && (
         <button
-          style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0 1rem' }}
+          style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0.85rem' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <ArrowUp className="icon" />

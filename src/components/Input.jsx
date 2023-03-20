@@ -1,4 +1,4 @@
-import autoAnimate from '@formkit/auto-animate';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Keyboard } from './Keyboard';
@@ -9,76 +9,12 @@ export function Input(props) {
   const divRef = useRef();
   const keyboardRef = useRef();
 
-  useEffect(() => {
-    if (divRef.current) {
-      autoAnimate(divRef.current);
-    }
-  }, [divRef]);
+  const [animationParent] = useAutoAnimate();
 
-  // Show / Hide keyboard on input focusing
-  useEffect(() => {
-    const onFocusChange = (e) => {
-      const focused = divRef?.current?.matches(':focus-within');
-      setShowKeyboard(focused);
-    };
-
-    const onKeyDown = (e) => {
-      if (keyboardRef && showKeyboard) {
-        switch (e.key) {
-          case 'ArrowUp':
-            keyboardRef.current?.modules.keyNavigation.up();
-            e.preventDefault();
-            break;
-          case 'ArrowDown':
-            keyboardRef.current?.modules.keyNavigation.down();
-            e.preventDefault();
-            break;
-          case 'ArrowLeft':
-            keyboardRef.current?.modules.keyNavigation.left();
-            e.preventDefault();
-            break;
-          case 'ArrowRight':
-            keyboardRef.current?.modules.keyNavigation.right();
-            e.preventDefault();
-            break;
-          case 'Enter':
-            keyboardRef.current?.modules.keyNavigation.press();
-            e.preventDefault();
-            break;
-          case 'Escape':
-            setShowKeyboard(false);
-            e.preventDefault();
-            break;
-          default:
-            break;
-        }
-      }
-    };
-
-    const onEnter = (e) => {
-      if (e.key === 'Enter' && !showKeyboard) {
-        setShowKeyboard(true);
-        e.stopPropagation();
-      }
-    };
-
-    document.addEventListener('focusin', onFocusChange);
-    document.addEventListener('focusout', onFocusChange);
-    document.addEventListener('keydown', onKeyDown);
-
-    inputRef.current?.addEventListener('keydown', onEnter);
-
-    return () => {
-      document.removeEventListener('focusin', onFocusChange);
-      document.removeEventListener('focusout', onFocusChange);
-      document.removeEventListener('keydown', onKeyDown);
-
-      inputRef.current?.removeEventListener('keydown', onEnter);
-    };
-  }, [showKeyboard]);
+  const keyboardEnabled = window.innerWidth <= 1280;
 
   return (
-    <div ref={divRef} style={{ width: '100%' }}>
+    <div ref={animationParent} style={{ width: '100%' }}>
       <input
         {...props}
         style={{ width: '100%', ...props.style }}
@@ -87,8 +23,53 @@ export function Input(props) {
           props.onChange(e);
           keyboardRef?.current?.setInput(e.target.value);
         }}
+        onFocus={(e) => {
+          setShowKeyboard(true);
+        }}
+        onBlur={(e) => {
+          setShowKeyboard(false);
+        }}
+        onKeyDown={(e) => {
+          if (!keyboardEnabled) return;
+
+          let handled = false;
+          if (showKeyboard) {
+            switch (e.key) {
+              case 'ArrowUp':
+                keyboardRef.current?.modules.keyNavigation.up();
+                handled = true;
+                break;
+              case 'ArrowDown':
+                keyboardRef.current?.modules.keyNavigation.down();
+                handled = true;
+                break;
+              case 'ArrowLeft':
+                keyboardRef.current?.modules.keyNavigation.left();
+                handled = true;
+                break;
+              case 'ArrowRight':
+                keyboardRef.current?.modules.keyNavigation.right();
+                handled = true;
+                break;
+              case 'Enter':
+                keyboardRef.current?.modules.keyNavigation.press();
+                handled = true;
+                break;
+              case 'Escape':
+                setShowKeyboard(false);
+                handled = true;
+                break;
+              default:
+                break;
+            }
+
+            if (handled) e.preventDefault();
+          } else {
+            if (e.key === 'Enter') setShowKeyboard(true);
+          }
+        }}
       />
-      {showKeyboard && window.innerWidth <= 1280 && (
+      {showKeyboard && keyboardEnabled && (
         <Keyboard
           keyboardRef={(ref) => {
             keyboardRef.current = ref;

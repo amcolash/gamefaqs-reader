@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { style } from 'typestyle';
 
 import { Guide } from './Guide';
@@ -15,6 +15,7 @@ import { cleanupNavigation, initNavigation } from '../utils/nav';
 
 export function App() {
   const online = useOnline();
+  const [search, setSearch] = useState(); // Keep track of search for ui
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
@@ -42,8 +43,20 @@ export function App() {
   useEffect(() => {
     initNavigation();
 
-    return () => cleanupNavigation();
-  }, []);
+    const escapeHandler = (e) => {
+      if (e.key === 'Escape') {
+        if (guide) setGuide();
+        else if (game) setGame();
+      }
+    };
+
+    window.addEventListener('keydown', escapeHandler);
+
+    return () => {
+      cleanupNavigation();
+      window.removeEventListener('keydown', escapeHandler);
+    };
+  }, [guide, game]);
 
   return (
     <div className={containerStyle}>
@@ -58,8 +71,10 @@ export function App() {
               Device Offline <OfflineIcon className="icon" />
             </h1>
           )}
-          {online && <Games setGame={setGame} />}
-          {recentGuides.length > 0 && <Recents setGuide={setGuide} recentGuides={recentGuides} setRecentGuides={setRecentGuides} />}
+          {online && <Games setGame={setGame} setSearch={setSearch} />}
+          {!search && recentGuides.length > 0 && (
+            <Recents setGuide={setGuide} recentGuides={recentGuides} setRecentGuides={setRecentGuides} />
+          )}
         </div>
       )}
     </div>
