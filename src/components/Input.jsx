@@ -63,7 +63,10 @@ export function Input(props) {
                 break;
             }
 
-            if (handled) e.preventDefault();
+            if (handled) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
           } else {
             if (e.key === 'Enter') setShowKeyboard(true);
           }

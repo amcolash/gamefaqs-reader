@@ -72,7 +72,7 @@ export function App() {
             </h1>
           )}
           {online && <Games setGame={setGame} setSearch={setSearch} />}
-          {!search && recentGuides.length > 0 && (
+          {(!search || search.length === 0) && recentGuides.length > 0 && (
             <Recents setGuide={setGuide} recentGuides={recentGuides} setRecentGuides={setRecentGuides} />
           )}
         </div>
