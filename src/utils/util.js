@@ -24,6 +24,19 @@ export function debounce(func, timeout = 300) {
   };
 }
 
+// From https://www.geeksforgeeks.org/javascript-throttling/
+export function throttle(func, timeout = 300) {
+  let prev = 0;
+  return (...args) => {
+    let now = new Date().getTime();
+
+    if (now - prev > timeout) {
+      prev = now;
+      return func(...args);
+    }
+  };
+}
+
 // Trigger onchange, from: https://stackoverflow.com/a/62111884/2303432
 export function updateInputValue(input, newValue) {
   const valueSetter = Object.getOwnPropertyDescriptor(input, 'value').set;

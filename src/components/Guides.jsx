@@ -40,7 +40,7 @@ export function GuideItem(props) {
   return (
     <div style={{ padding: '0.35rem 0', background: 'var(--background)', width: '100%' }}>
       <button
-        className="guide"
+        className={props.className || 'guide'}
         key={guide.id}
         style={{ justifyContent: 'space-between', padding: '0.5rem 4rem', overflow: 'hidden', width: '100%', ...props.style }}
         onClick={() => props.setGuide(guide)}

@@ -1,16 +1,29 @@
-let listener;
+import { throttle } from './util';
+
+let buttonListener;
+let axisListener;
+
+const throttledScroll = throttle((x, y) => {
+  window.scrollBy(x, y);
+}, 30);
 
 export function initNavigation() {
   window.addEventListener('keydown', keyDown);
 
-  if (listener) listener.unsubscribe();
-  listener = window.joypad.on('button_press', (e) => {
+  if (buttonListener) buttonListener.unsubscribe();
+  buttonListener = window.joypad.on('button_press', (e) => {
     if (e.detail.gamepad.index !== 0) return;
     const button = e.detail.index;
 
     switch (button) {
       case 0: // A (B nintendo)
         document.activeElement?.click();
+        break;
+      case 6: // R1
+        window.scrollBy(0, -1000);
+        break;
+      case 7: // L1
+        window.scrollBy(0, 1000);
         break;
       case 12: // Dpad Up
         keyDown({ key: 'ArrowUp', preventDefault: () => {} });
@@ -26,11 +39,29 @@ export function initNavigation() {
         break;
     }
   });
+
+  if (axisListener) axisListener.unsubscribe();
+  axisListener = window.joypad.on('axis_move', (e) => {
+    if (e.detail.gamepad.index !== 0) return;
+
+    // Right side, horizontal axis
+    if (e.detail.axis === 2) {
+      const scalar = document.querySelector('.guideContent') ? 50 : 20;
+      throttledScroll(e.detail.axisMovementValue * scalar, 0);
+    }
+
+    // Right side, vertical axis
+    if (e.detail.axis === 3) {
+      const scalar = document.querySelector('.guideContent') ? 50 : 20;
+      throttledScroll(0, e.detail.axisMovementValue * scalar);
+    }
+  });
 }
 
 export function cleanupNavigation() {
   window.removeEventListener('keydown', keyDown);
-  listener.unsubscribe();
+  buttonListener.unsubscribe();
+  axisListener.unsubscribe();
 }
 
 function keyDown(event) {
@@ -43,7 +74,7 @@ function keyDown(event) {
         if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else {
-          focusItem(document, activeClasses?.contains('guide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
+          focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
         }
         break;
       case 'ArrowRight':
@@ -58,13 +89,13 @@ function keyDown(event) {
         if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else {
-          focusItem(document, activeClasses?.contains('guide') || activeClasses?.contains('remove') ? -2 : -1);
+          focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? -2 : -1);
         }
         break;
       case 'ArrowLeft':
         if (document.activeElement === document.body) {
           focusToIndex(document, 0);
-        } else if (!activeClasses?.contains('guide')) {
+        } else if (!activeClasses?.contains('recentGuide')) {
           focusItem(document, -1);
         }
         break;

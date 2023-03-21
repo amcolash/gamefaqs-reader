@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { style } from 'typestyle';
+import { classes, style } from 'typestyle';
 
 import { useDebounce } from '../hooks/useDebounce';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useApi } from '../hooks/useApi';
-import { debounce, lastScroll, lastZoom } from '../utils/util';
+import { debounce, lastScroll, lastZoom, throttle } from '../utils/util';
 
 import { Error } from './Error';
 import { Header } from './Header';
@@ -101,7 +101,7 @@ export function Guide(props) {
 
         {!zoomHide && (
           <Highlighter
-            className={content}
+            className={classes('guideContent', content)}
             searchWords={debouncedSearch.length > 3 ? debouncedSearch.split(' ') : []}
             caseSensitive={false}
             autoEscape={true}

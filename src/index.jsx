@@ -6,6 +6,10 @@ import { App } from './components/App';
 
 import { createStyles, createVariables } from './utils/styles';
 
+window.joypad.set({
+  axisMovementThreshold: 0.05,
+});
+
 async function init() {
   // Set up core styles
   createVariables();
