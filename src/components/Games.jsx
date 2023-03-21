@@ -16,7 +16,9 @@ export function Games(props) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
-      <h1>Games</h1>
+      <h1 style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
+        <img src="./logo_v13.png" alt="GameFAQS logo" style={{ marginTop: '0.25rem', marginRight: '0.5rem' }} /> Reader
+      </h1>
 
       <div
         style={{
