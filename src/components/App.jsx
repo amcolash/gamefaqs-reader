@@ -8,10 +8,11 @@ import { Recents } from './Recents';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useOnline } from '../hooks/useOnline';
-import { lastGame, lastGuide, recentGuideKey } from '../utils/util';
+import { introKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
 
 import OfflineIcon from '../icons/wifi-off.svg';
 import { cleanupNavigation, initNavigation } from '../utils/nav';
+import { Intro } from './Intro';
 
 export function App() {
   const online = useOnline();
@@ -19,6 +20,7 @@ export function App() {
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
+  const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
 
   const containerStyle = style({
     padding: '1rem',
@@ -68,7 +70,9 @@ export function App() {
 
   return (
     <div className={containerStyle}>
-      {guide ? (
+      {showIntro ? (
+        <Intro setShowIntro={setShowIntro} />
+      ) : guide ? (
         <Guide guide={guide} setGuide={setGuide} />
       ) : !guide && game && online ? (
         <Guides game={game} setGuide={setGuide} setGame={setGame} />
