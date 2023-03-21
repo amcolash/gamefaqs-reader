@@ -58,7 +58,7 @@ export function App() {
       if (e.detail.gamepad.index !== 0) return;
 
       // Button 1: B (A nintendo)
-      if (e.detail.index === 1) escapeHandler({ key: 'Escape' });
+      if (e.detail.index === 1 && !document.querySelector('.keyboard')) escapeHandler({ key: 'Escape' });
     });
 
     return () => {

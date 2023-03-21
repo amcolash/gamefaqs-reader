@@ -17,7 +17,7 @@ export function Guides(props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <h1 style={{ display: 'flex', width: '100%', position: 'relative' }}>
-        {Object.entries(joypad.instances).length === 0 && (
+        {window.innerWidth > 1280 && (
           <button onClick={() => props.setGame()} style={{ position: 'absolute' }}>
             <ArrowLeft className="icon" />
           </button>

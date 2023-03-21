@@ -29,7 +29,7 @@ export function Header(props) {
       }}
     >
       <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
-        {Object.entries(joypad.instances).length === 0 && (
+        {window.innerWidth > 1280 && (
           <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
             <X className="icon" />
           </button>

@@ -50,10 +50,10 @@ export function Input(props) {
           e.stopPropagation();
         }
       } else {
-        if (e.key === 'Enter') setShowKeyboard(true);
+        if (e.key === 'Enter' && document.activeElement === inputRef.current) setShowKeyboard(true);
       }
     },
-    [showKeyboard, keyboardEnabled, keyboardRef]
+    [showKeyboard, keyboardEnabled, keyboardRef, inputRef]
   );
 
   useEffect(() => {
@@ -124,8 +124,8 @@ export function Input(props) {
           props.onChange(e);
           keyboardRef?.current?.setInput(e.target.value);
         }}
-        onFocus={(e) => setShowKeyboard(true)}
-        onBlur={(e) => setShowKeyboard(false)}
+        // onFocus={(e) => setShowKeyboard(true)}
+        // onBlur={(e) => setShowKeyboard(false)}
         onKeyDown={(e) => handleKeyDown(e)}
       />
       {showKeyboard && keyboardEnabled && (
