@@ -72,4 +72,5 @@ function initIpc() {
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
+  ipcMain.handle('quit', (event) => app.quit());
 }

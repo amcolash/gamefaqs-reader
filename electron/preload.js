@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { app, contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   cookie: () => ipcRenderer.invoke('cookie'),
@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   guides: (id) => ipcRenderer.invoke('guides', id),
   guide: (gameId, guideId) => ipcRenderer.invoke('guide', gameId, guideId),
   removeGuide: (gameId, guideId) => ipcRenderer.invoke('removeGuide', gameId, guideId),
+  exit: () => ipcRenderer.invoke('quit'),
 });

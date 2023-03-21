@@ -49,6 +49,7 @@ export function App() {
       if (e.key === 'Escape') {
         if (guide) setGuide();
         else if (game) setGame();
+        else window.electronAPI.exit();
       }
     };
 
