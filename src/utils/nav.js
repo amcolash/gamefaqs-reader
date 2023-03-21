@@ -3,8 +3,12 @@ import { throttle } from './util';
 let buttonListener;
 let axisListener;
 
-const throttledScroll = throttle((x, y) => {
-  window.scrollBy(x, y);
+const throttledXScroll = throttle((x) => {
+  window.scrollBy(x, 0);
+}, 30);
+
+const throttledYScroll = throttle((y) => {
+  window.scrollBy(0, y);
 }, 30);
 
 export function initNavigation() {
@@ -47,13 +51,13 @@ export function initNavigation() {
     // Right side, horizontal axis
     if (e.detail.axis === 2) {
       const scalar = document.querySelector('.guideContent') ? 50 : 20;
-      throttledScroll(e.detail.axisMovementValue * scalar, 0);
+      throttledXScroll(e.detail.axisMovementValue * scalar);
     }
 
     // Right side, vertical axis
     if (e.detail.axis === 3) {
       const scalar = document.querySelector('.guideContent') ? 50 : 20;
-      throttledScroll(0, e.detail.axisMovementValue * scalar);
+      throttledYScroll(e.detail.axisMovementValue * scalar);
     }
   });
 }
