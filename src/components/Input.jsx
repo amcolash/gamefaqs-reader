@@ -1,5 +1,6 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { updateInputValue } from '../utils/util';
 
 import { Keyboard } from './Keyboard';
 
@@ -60,28 +61,38 @@ export function Input(props) {
       if (e.detail.gamepad.index !== 0) return;
       const button = e.detail.index;
 
+      const input = inputRef.current;
+
       // console.log(button);
 
       switch (button) {
-        case 0: // A (B nintendo)
+        case 0: // A (B nintendo) - Confirm
           handleKeyDown({ key: 'Enter', preventDefault: () => {}, stopPropagation: () => {} });
           break;
-        case 1: // B (A nintendo)
+        case 1: // B (A nintendo) - Back
           handleKeyDown({ key: 'Escape', preventDefault: () => {}, stopPropagation: () => {} });
           break;
-        case 2: // X (Y nintendo)
-          // inputRef.current?.value = inputRef.current?.value.sub;
+        case 2: // X (Y nintendo) - Delete
+          // Position of cursor
+          const last = Math.max(0, input.selectionStart - 1);
+
+          // Remove character from input
+          const newValue = input.value.slice(0, input.selectionStart - 1) + input.value.slice(input.selectionStart, input.value.length);
+          updateInputValue(input, newValue);
+
+          // Move cursor accordingly
+          input.setSelectionRange(last, last);
+          keyboardRef.current?.setCaretPosition(last);
           break;
-        case 4: // L1
-          const prev = Math.max(0, keyboardRef.current?.getCaretPosition() - 1);
+        case 4: // L1 - Cursor Left
+          const prev = Math.max(0, input.selectionStart - 1);
+          input.setSelectionRange(prev, prev);
           keyboardRef.current?.setCaretPosition(prev);
-          inputRef.current?.setSelectionRange(prev, prev);
           break;
-        case 5: // R1
-          const next = Math.min(keyboardRef.current?.getInput().length, keyboardRef.current?.getCaretPosition() + 1);
-          console.log(keyboardRef.current?.getInput().length, keyboardRef.current?.getCaretPosition() + 1);
+        case 5: // R1 - Cursor Right
+          const next = Math.min(input.value.length, input?.selectionStart + 1);
+          input.setSelectionRange(next, next);
           keyboardRef.current?.setCaretPosition(next);
-          inputRef.current?.setSelectionRange(next, next);
           break;
         case 12: // Dpad Up
           handleKeyDown({ key: 'ArrowUp', preventDefault: () => {}, stopPropagation: () => {} });

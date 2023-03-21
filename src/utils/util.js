@@ -22,3 +22,16 @@ export function debounce(func, timeout = 300) {
     }, timeout);
   };
 }
+
+// Trigger onchange, from: https://stackoverflow.com/a/62111884/2303432
+export function updateInputValue(input, newValue) {
+  const valueSetter = Object.getOwnPropertyDescriptor(input, 'value').set;
+  const prototype = Object.getPrototypeOf(input);
+  const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
+  if (valueSetter && valueSetter !== prototypeValueSetter) {
+    prototypeValueSetter.call(input, newValue);
+  } else {
+    valueSetter.call(input, newValue);
+  }
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+}
