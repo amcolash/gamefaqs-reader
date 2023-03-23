@@ -48,8 +48,10 @@ export function App() {
     const escapeHandler = (e) => {
       if (e.key === 'Escape') {
         if (guide) setGuide();
-        else if (game) setGame();
-        else window.electronAPI.exit();
+        else if (game) {
+          setGame();
+          setSearch();
+        } else window.electronAPI.exit();
       }
     };
 
@@ -85,7 +87,7 @@ export function App() {
             </h1>
           )}
           {online && <Games setGame={setGame} setSearch={setSearch} />}
-          {(!search || search.length === 0) && recentGuides.length > 0 && (
+          {(!search || search.trim().length === 0) && recentGuides.length > 0 && (
             <Recents setGuide={setGuide} recentGuides={recentGuides} setRecentGuides={setRecentGuides} />
           )}
         </div>
