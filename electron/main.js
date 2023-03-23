@@ -1,4 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import windowStateKeeper from 'electron-window-state';
 import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
@@ -15,6 +16,9 @@ process.env.ELECTRON_ENABLE_LOGGING = true;
 app.whenReady().then(async () => {
   createWindow();
   initIpc();
+
+  // Check for updates on startup
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 function createWindow() {
