@@ -1,6 +1,9 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -31,11 +34,7 @@ jobs:
         with:
           name: ${{ matrix.os }}-artifacts
           path: |
-            dist/*.AppImage
-            dist/*.dmg
-            dist/*.exe
-            dist/*.yml
-            dist/*.blockmap
+            build/dist/release/**/*.AppImage
 
     strategy:
       matrix:
