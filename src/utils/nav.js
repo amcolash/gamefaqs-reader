@@ -11,6 +11,8 @@ const throttledYScroll = throttle((y) => {
   window.scrollBy(0, y);
 }, 30);
 
+const throttledAxisKeyDown = throttle((e) => keyDown(e), 250);
+
 export function initNavigation() {
   window.addEventListener('keydown', keyDown);
 
@@ -48,13 +50,23 @@ export function initNavigation() {
   axisListener = window.joypad.on('axis_move', (e) => {
     if (e.detail.gamepad.index !== 0) return;
 
-    // Right side, horizontal axis
+    // Left stick, horizontal axis
+    if (e.detail.axis === 0 && Math.abs(e.detail.axisMovementValue) > 0.2) {
+      throttledAxisKeyDown({ key: e.detail.axisMovementValue > 0 ? 'ArrowRight' : 'ArrowLeft', preventDefault: () => {} });
+    }
+
+    // Left stick, vertical axis
+    if (e.detail.axis === 1 && Math.abs(e.detail.axisMovementValue) > 0.2) {
+      throttledAxisKeyDown({ key: e.detail.axisMovementValue > 0 ? 'ArrowDown' : 'ArrowUp', preventDefault: () => {} });
+    }
+
+    // Right stick, horizontal axis
     if (e.detail.axis === 2) {
       const scalar = document.querySelector('.guideContent') ? 50 : 20;
       throttledXScroll(e.detail.axisMovementValue * scalar);
     }
 
-    // Right side, vertical axis
+    // Right stick, vertical axis
     if (e.detail.axis === 3) {
       const scalar = document.querySelector('.guideContent') ? 50 : 20;
       throttledYScroll(e.detail.axisMovementValue * scalar);

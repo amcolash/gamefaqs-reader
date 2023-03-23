@@ -1,10 +1,9 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
 import { cookieKey, store } from './store';
 import { getGames, getGuide, getGuides, removeGuide } from './api';
-import { execSync } from 'child_process';
 
 const PROD = app.isPackaged;
 let win;
@@ -72,5 +71,8 @@ function initIpc() {
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
-  ipcMain.handle('quit', (event) => app.quit());
+  ipcMain.handle('quit', async (event) => {
+    const result = await dialog.showMessageBox(win, { message: 'Are you sure you want to exit?', buttons: ['Cancel', 'Ok'] });
+    if (result.response === 1) app.exit();
+  });
 }
