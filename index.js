@@ -3,13 +3,12 @@ const axios = require('axios');
 
 const cors = require('cors');
 const express = require('express');
-const { existsSync, readFileSync } = require('fs');
+const { existsSync, readFileSync, writeFileSync } = require('fs');
 const { JSDOM } = require('jsdom');
 const { join, basename } = require('path');
 
 require('dotenv').config();
 
-const cookie = process.env.COOKIE;
 const PORT = process.env.PORT || 8004;
 
 const CACHE = {};
@@ -36,9 +35,41 @@ if (credentials.cert && credentials.key) {
   server.listen(PORT, '0.0.0.0');
   console.log(`Server running on port ${PORT} (HTTPS)`);
 } else {
-  console.error("Couldn't find TLS certs, this server expects to run on HTTPS");
-  process.exit(1);
+  throw "Couldn't find TLS certs, this server expects to run on HTTPS";
 }
+
+// From https://www.30secondsofcode.org/js/s/parse-cookie
+function parseCookie(str) {
+  return str
+    .split(';')
+    .map((v) => v.split('='))
+    .reduce((acc, v) => {
+      acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+      return acc;
+    }, {});
+}
+
+function getCookie() {
+  axios.get('https://gamefaqs.gamespot.com/').then((res) => {
+    const c = parseCookie(res.headers.get('set-cookie')[0]);
+
+    cookie = c.gf_dvi;
+    writeFileSync(cookiePath, JSON.stringify(c, undefined, 2));
+  });
+}
+
+let cookie;
+const cookiePath = join(__dirname, './cookie.json');
+
+try {
+  const data = JSON.parse(readFileSync(cookiePath));
+  if (Date.now() + 604800000 > new Date(data.expires)) throw 'Refreshing expiring token (less than a week to go)';
+  cookie = data.gf_dvi;
+} catch (err) {
+  getCookie();
+}
+
+if (!cookie) throw 'No cookie was found, or was able to be retrieved';
 
 app.use(cors());
 
@@ -94,11 +125,12 @@ app.get('/guides/:id', async (req, res) => {
       const url = info.querySelector('a.bold').getAttribute('href');
       const id = basename(url);
       const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
+      const html = info.querySelector('.flair')?.textContent?.includes('HTML');
 
       const meta = r.querySelector('.meta.float_r');
       const [version, size, year] = meta.textContent.trim().split(', ');
 
-      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle };
+      const guide = { platform, comment, title, url, id, authors, version, size, year: Number.parseInt(year), gameId, gameTitle, html };
       guides.push(guide);
     });
 
@@ -133,7 +165,7 @@ async function checkCache(url) {
 
   console.log(`Making request for ${url}`);
 
-  const data = await axios.get(url, { headers: { cookie } }).then((res) => res.data);
+  const data = await axios.get(url, { headers: { cookie: `gf_dvi=${cookie}` } }).then((res) => res.data);
   CACHE[url] = data;
 
   return data;
