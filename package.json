@@ -1,6 +1,6 @@
 {
   "name": "gamefaqs-reader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A react app that reads gamefaqs guides",
   "author": "Andrew McOlash",
   "license": "MIT",
