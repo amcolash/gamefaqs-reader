@@ -53,7 +53,9 @@
     "linux": {
       "target": [
         "AppImage"
-      ]
+      ],
+      "icon": "public/256x256.png",
+      "category": "Utility"
     }
   }
 }

@@ -4,11 +4,15 @@ let buttonListener;
 let axisListener;
 
 const throttledXScroll = throttle((x) => {
-  window.scrollBy(x, 0);
+  const intro = document.querySelector('.intro > div');
+  if (intro) intro.scrollBy(x, 0);
+  else window.scrollBy(x, 0);
 }, 30);
 
 const throttledYScroll = throttle((y) => {
-  window.scrollBy(0, y);
+  const intro = document.querySelector('.intro > div');
+  if (intro) intro.scrollBy(0, y);
+  else window.scrollBy(0, y);
 }, 30);
 
 const throttledAxisKeyDown = throttle((e) => keyDown(e), 250);
