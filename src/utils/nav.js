@@ -76,8 +76,12 @@ export function initNavigation() {
 
 export function cleanupNavigation() {
   window.removeEventListener('keydown', keyDown);
+
   buttonListener.unsubscribe();
+  buttonListener = undefined;
+
   axisListener.unsubscribe();
+  axisListener = undefined;
 }
 
 function keyDown(event) {
