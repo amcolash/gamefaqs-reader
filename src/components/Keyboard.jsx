@@ -1,10 +1,11 @@
 import React from 'react';
 import Keys from 'react-simple-keyboard';
+import keyNavigation from 'simple-keyboard-key-navigation';
 import 'react-simple-keyboard/build/css/index.css';
 import { cssRaw } from 'typestyle';
 
-import Backspace from './icons/backspace.svg?raw';
-import KeyboardIcon from './icons/keyboard.svg?raw';
+import Backspace from '../icons/backspace.svg?raw';
+import KeyboardIcon from '../icons/keyboard.svg?raw';
 
 cssRaw(`
 .simple-keyboard {
@@ -46,10 +47,12 @@ cssRaw(`
 export function Keyboard(props) {
   return (
     <div
+      className="keyboard"
       style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
+        zIndex: 1,
         width: 'calc(100% - 2rem)',
         display: 'flex',
         justifyContent: 'center',
@@ -75,6 +78,8 @@ export function Keyboard(props) {
           '{bksp}': Backspace,
           '{close}': KeyboardIcon,
         }}
+        enableKeyNavigation={true}
+        modules={[keyNavigation]}
       />
     </div>
   );

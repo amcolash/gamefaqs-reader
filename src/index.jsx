@@ -1,20 +1,29 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import 'joypad.js';
 
-import { App } from './App';
+import { App } from './components/App';
+
 import { createStyles, createVariables } from './utils/styles';
 
-import { loadServiceWorker } from './utils/util';
+window.joypad.set({
+  axisMovementThreshold: 0.05,
+});
 
-// Load service worker for production only
-if (import.meta.env.PROD) loadServiceWorker();
+async function init() {
+  // Set up core styles
+  createVariables();
+  createStyles();
 
-// Set up core styles
-createVariables();
-createStyles();
+  // Get gamefaqs cookie before rendering
+  await window.electronAPI.cookie();
 
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // Render the application once loaded
+  createRoot(document.getElementById('root')).render(
+    // <React.StrictMode>
+    // </React.StrictMode>
     <App />
-  </React.StrictMode>
-);
+  );
+}
+
+init();

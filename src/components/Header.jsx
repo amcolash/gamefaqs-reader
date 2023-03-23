@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Input } from './Input';
 
-import ArrowBarUp from './icons/arrow-bar-up.svg';
-import ArrowBarDown from './icons/arrow-bar-down.svg';
-import Dash from './icons/dash-lg.svg';
-import Plus from './icons/plus-lg.svg';
-import X from './icons/x-lg.svg';
+import ArrowBarUp from '../icons/arrow-bar-up.svg';
+import ArrowBarDown from '../icons/arrow-bar-down.svg';
+import Dash from '../icons/dash-lg.svg';
+import Plus from '../icons/plus-lg.svg';
+import X from '../icons/x-lg.svg';
 
-import { mod } from './utils/util';
+import { mod } from '../utils/util';
 
 const zoomFactor = 0.2;
 
@@ -28,10 +28,12 @@ export function Header(props) {
         justifyContent: 'center',
       }}
     >
-      <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between' }}>
-        <button onClick={() => props.setGuide()} style={{ padding: '0 1rem' }}>
-          <X className="icon" />
-        </button>
+      <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
+        {window.innerWidth > 1280 && (
+          <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
+            <X className="icon" />
+          </button>
+        )}
 
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}>
           <Input
@@ -47,10 +49,10 @@ export function Header(props) {
               <span style={{ margin: '0.5rem', whiteSpace: 'nowrap' }}>
                 {props.searchIndex + 1} / {props.searchLength}
               </span>
-              <button onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))} style={{ padding: '0 1rem' }}>
+              <button onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))} style={{ padding: '0.6rem' }}>
                 <ArrowBarUp className="icon" />
               </button>
-              <button onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))} style={{ padding: '0 1rem' }}>
+              <button onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))} style={{ padding: '0.6rem' }}>
                 <ArrowBarDown className="icon" />
               </button>
             </>
@@ -62,14 +64,14 @@ export function Header(props) {
           <button
             disabled={props.zoom <= 1}
             onClick={() => props.setZoom(props.zoom - zoomFactor)}
-            style={{ fontWeight: 'bold', padding: '0 1rem' }}
+            style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >
             <Dash className="icon" />
           </button>
           <button
             disabled={props.zoom >= 1.99}
             onClick={() => props.setZoom(props.zoom + zoomFactor)}
-            style={{ fontWeight: 'bold', padding: '0 1rem' }}
+            style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >
             <Plus className="icon" />
           </button>

@@ -58,8 +58,7 @@ function buttons() {
     color: 'var(--primary)',
     background: 'var(--secondary)',
     border: 'none',
-    padding: '0 1.5rem',
-    height: '2.5rem',
+    padding: '0.5rem 1.5rem',
 
     display: 'flex',
     justifyContent: 'center',

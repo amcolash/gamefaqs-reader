@@ -1,23 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import useFetch from 'react-fetch-hook';
 import Highlighter from 'react-highlight-words';
-import { style } from 'typestyle';
+import { classes, style } from 'typestyle';
 
-import { useDebounce, useLocalStorage } from './utils/hooks';
-import { debounce, lastScroll, lastZoom, SERVER } from './utils/util';
+import { useDebounce } from '../hooks/useDebounce';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useApi } from '../hooks/useApi';
+import { debounce, lastScroll, lastZoom, throttle } from '../utils/util';
 
 import { Error } from './Error';
 import { Header } from './Header';
 import { Spinner } from './Spinner';
 
-import ArrowUp from './icons/arrow-up.svg';
+import ArrowUp from '../icons/arrow-up.svg';
 
 export function Guide(props) {
-  const {
-    isLoading,
-    data: guideContent,
-    error,
-  } = useFetch(`${SERVER}/guide/${props.guide.gameId}/${props.guide.id}`, { formatter: (response) => response.text() });
+  const [data, loading, error] = useApi('guide', props.guide.gameId, props.guide.id);
 
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 350);
@@ -49,7 +46,7 @@ export function Guide(props) {
     document.addEventListener('scroll', debouncedScroll);
 
     return () => document.removeEventListener('scroll', debouncedScroll);
-  }, [guideContent]);
+  }, [data]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -85,13 +82,13 @@ export function Guide(props) {
         setZoom={(z) => {
           setZoomHide(true);
           setZoom(z);
-          setTimeout(() => setZoomHide(false), 100);
+          setTimeout(() => setZoomHide(false), 0);
         }}
       />
 
       {scrollTop && (
         <button
-          style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0 1rem' }}
+          style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0.85rem' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <ArrowUp className="icon" />
@@ -100,15 +97,15 @@ export function Guide(props) {
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
         {error && <Error error={error} />}
-        {(isLoading || zoomHide) && <Spinner />}
+        {!error && (loading || zoomHide) && <Spinner />}
 
         {!zoomHide && (
           <Highlighter
-            className={content}
+            className={classes('guideContent', content)}
             searchWords={debouncedSearch.length > 3 ? debouncedSearch.split(' ') : []}
             caseSensitive={false}
             autoEscape={true}
-            textToHighlight={guideContent || ''}
+            textToHighlight={data || ''}
             activeIndex={searchIndex}
             activeStyle={{ background: 'orange' }}
           />

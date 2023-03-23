@@ -1,3 +1,5 @@
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -104,7 +106,6 @@ dist
 .tern-port
 
 dist/
-*.txt
 .cert
 
-cookie.json
+build/
