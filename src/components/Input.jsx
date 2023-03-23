@@ -1,6 +1,6 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { updateInputValue } from '../utils/util';
+import { throttle, updateInputValue } from '../utils/util';
 
 import { Keyboard } from './Keyboard';
 
@@ -49,21 +49,31 @@ export function Input(props) {
           e.preventDefault();
           e.stopPropagation();
         }
-      } else {
-        if (e.key === 'Enter' && document.activeElement === inputRef.current) setShowKeyboard(true);
+      } else if (document.activeElement === inputRef.current) {
+        if (e.key === 'Enter') setShowKeyboard(true);
+        if (e.key === 'Escape' && inputRef.current?.value.length > 0) {
+          setTimeout(() => {
+            updateInputValue(inputRef.current, '');
+            inputRef.current?.setSelectionRange(0, 0);
+            keyboardRef.current?.setCaretPosition(0);
+          });
+        }
       }
     },
     [showKeyboard, keyboardEnabled, keyboardRef, inputRef]
   );
 
+  const throttledAxisKeyDown = useCallback(
+    throttle((e) => handleKeyDown(e), 250),
+    [handleKeyDown]
+  );
+
   useEffect(() => {
-    const listener = window.joypad.on('button_press', (e) => {
+    const buttonListener = window.joypad.on('button_press', (e) => {
       if (e.detail.gamepad.index !== 0) return;
       const button = e.detail.index;
 
       const input = inputRef.current;
-
-      // console.log(button);
 
       switch (button) {
         case 0: // A (B nintendo) - Confirm
@@ -109,8 +119,31 @@ export function Input(props) {
       }
     });
 
+    const axisListener = window.joypad.on('axis_move', (e) => {
+      if (e.detail.gamepad.index !== 0) return;
+
+      // Left stick, horizontal axis
+      if (e.detail.axis === 0 && Math.abs(e.detail.axisMovementValue) > 0.2) {
+        throttledAxisKeyDown({
+          key: e.detail.axisMovementValue > 0 ? 'ArrowRight' : 'ArrowLeft',
+          preventDefault: () => {},
+          stopPropagation: () => {},
+        });
+      }
+
+      // Left stick, vertical axis
+      if (e.detail.axis === 1 && Math.abs(e.detail.axisMovementValue) > 0.2) {
+        throttledAxisKeyDown({
+          key: e.detail.axisMovementValue > 0 ? 'ArrowDown' : 'ArrowUp',
+          preventDefault: () => {},
+          stopPropagation: () => {},
+        });
+      }
+    });
+
     return () => {
-      listener.unsubscribe();
+      buttonListener.unsubscribe();
+      axisListener.unsubscribe();
     };
   }, [handleKeyDown, keyboardRef, inputRef]);
 
@@ -122,7 +155,7 @@ export function Input(props) {
         ref={inputRef}
         onChange={(e) => {
           props.onChange(e);
-          keyboardRef?.current?.setInput(e.target.value);
+          keyboardRef.current?.setInput(e.target.value);
         }}
         // onFocus={(e) => setShowKeyboard(true)}
         // onBlur={(e) => setShowKeyboard(false)}
@@ -132,7 +165,7 @@ export function Input(props) {
         <Keyboard
           keyboardRef={(ref) => {
             keyboardRef.current = ref;
-            keyboardRef.current.setInput(props.value);
+            keyboardRef.current?.setInput(props.value);
           }}
           onChange={(text) => {
             props.onChange({ target: { value: text } });

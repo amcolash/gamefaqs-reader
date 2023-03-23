@@ -46,7 +46,9 @@ export function App() {
     initNavigation();
 
     const escapeHandler = (e) => {
-      if (e.key === 'Escape') {
+      const active = document.activeElement;
+      const input = active?.tagName === 'INPUT';
+      if (e.key === 'Escape' && (!input || active?.value.trim().length === 0)) {
         if (guide) setGuide();
         else if (game) {
           setGame();
