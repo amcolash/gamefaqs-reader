@@ -22,7 +22,7 @@ export function App() {
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
   const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
 
   const containerStyle = style({
     padding: '1rem',
