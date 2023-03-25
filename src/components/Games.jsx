@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 import { useDebounce } from '../hooks/useDebounce';
@@ -12,13 +12,21 @@ export function Games(props) {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 1000);
   const [data, loading, error] = useApi('games', debouncedSearch);
+  const [version, setVersion] = useState();
   const [animationParent] = useAutoAnimate();
+
+  useEffect(() => {
+    window.electronAPI.version().then((v) => setVersion(v));
+  }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
-      <h1 style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
-        <img src="./logo_v13.png" alt="GameFAQS logo" style={{ marginTop: '0.25rem', marginRight: '0.5rem' }} /> Reader
-      </h1>
+      <div>
+        <h1 style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
+          <img src="./logo_v13.png" alt="GameFAQS logo" style={{ marginTop: '0.25rem', marginRight: '0.5rem' }} /> Reader
+        </h1>
+        <div style={{ textAlign: 'right', fontSize: 7, marginTop: '-2.15rem' }}>{version}</div>
+      </div>
 
       <div
         style={{

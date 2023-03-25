@@ -1,6 +1,6 @@
 {
   "name": "gamefaqs-reader",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Read gamefaqs guides easily",
   "author": "Andrew McOlash",
   "license": "MIT",
@@ -42,6 +42,7 @@
   },
   "build": {
     "appId": "com.amcolash.gamefaqs-reader",
+    "artifactName": "${productName}.${ext}",
     "asar": true,
     "directories": {
       "output": "build/release/${version}"
