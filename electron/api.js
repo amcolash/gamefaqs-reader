@@ -44,44 +44,48 @@ export async function getGuides(id) {
 
     const dom = new JSDOM(data);
     const mainGuideSection = dom.window.document.querySelector('.gf_guides');
-    const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
-
-    const gameId = id;
-    const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
 
     const guides = [];
-    results.forEach((r) => {
-      const platform = r.getAttribute('data-platform');
-      const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
 
-      const info = r.querySelector('.float_l:first-child');
-      const title = info.querySelector('a.bold').textContent;
-      const url = info.querySelector('a.bold').getAttribute('href');
-      const id = url.split('/').pop();
-      const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
-      const html = info.querySelector('.flair')?.textContent?.includes('HTML');
+    if (mainGuideSection) {
+      const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
 
-      const meta = r.querySelector('.meta.float_r');
-      const [version, size, year] = meta.textContent.trim().split(', ');
+      const gameId = id;
+      const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
 
-      const parsedYear = Number.parseInt(year);
+      results.forEach((r) => {
+        const platform = r.getAttribute('data-platform');
+        const comment = r.querySelector('.meta.float_l')?.textContent.replace(/\s+/g, ' ').trim();
 
-      const guide = {
-        platform,
-        comment,
-        title,
-        url,
-        id,
-        authors,
-        version,
-        size,
-        year: isNaN(parsedYear) ? year : parsedYear,
-        gameId,
-        gameTitle,
-        html,
-      };
-      guides.push(guide);
-    });
+        const info = r.querySelector('.float_l:first-child');
+        const title = info.querySelector('a.bold').textContent;
+        const url = info.querySelector('a.bold').getAttribute('href');
+        const id = url.split('/').pop();
+        const authors = Array.from(info.querySelectorAll('a:not(.bold)')).map((a) => a.textContent);
+        const html = info.querySelector('.flair')?.textContent?.includes('HTML');
+
+        const meta = r.querySelector('.meta.float_r');
+        const [version, size, year] = meta.textContent.trim().split(', ');
+
+        const parsedYear = Number.parseInt(year);
+
+        const guide = {
+          platform,
+          comment,
+          title,
+          url,
+          id,
+          authors,
+          version,
+          size,
+          year: isNaN(parsedYear) ? year : parsedYear,
+          gameId,
+          gameTitle,
+          html,
+        };
+        guides.push(guide);
+      });
+    }
 
     return { data: guides };
   } catch (err) {

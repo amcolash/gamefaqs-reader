@@ -89,6 +89,28 @@ export function cleanupNavigation() {
 }
 
 function keyDown(event) {
+  const dialog = document.querySelector('.dialog');
+  const key = event.key;
+
+  if (dialog && key.includes('Arrow')) {
+    if (document.activeElement === document.body) {
+      focusToIndex(document, 0);
+    } else {
+      switch (key) {
+        case 'ArrowRight':
+          focusItem(dialog, 1, false);
+          break;
+        case 'ArrowLeft':
+          focusItem(dialog, -1, false);
+          break;
+      }
+    }
+
+    event.preventDefault();
+
+    return;
+  }
+
   if (!document.querySelector('.keyboard')) {
     let handled = true;
     const activeClasses = document.activeElement?.classList;

@@ -14,34 +14,30 @@ export function Input(props) {
 
   const handleKeyDown = useCallback(
     (e) => {
-      let handled = false;
+      let handled = true;
       if (showKeyboard && keyboardEnabled) {
         switch (e.key) {
           case 'ArrowUp':
             keyboardRef.current?.modules.keyNavigation.up();
-            handled = true;
             break;
           case 'ArrowDown':
             keyboardRef.current?.modules.keyNavigation.down();
-            handled = true;
             break;
           case 'ArrowLeft':
             keyboardRef.current?.modules.keyNavigation.left();
-            handled = true;
             break;
           case 'ArrowRight':
             keyboardRef.current?.modules.keyNavigation.right();
-            handled = true;
             break;
           case 'Enter':
             keyboardRef.current?.modules.keyNavigation.press();
-            handled = true;
             break;
           case 'Escape':
             setShowKeyboard(false);
-            handled = true;
             break;
           default:
+            handled = false;
+            setShowKeyboard(false);
             break;
         }
 

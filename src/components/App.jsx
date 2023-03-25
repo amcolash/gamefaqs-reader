@@ -13,6 +13,7 @@ import { introKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
 import OfflineIcon from '../icons/wifi-off.svg';
 import { cleanupNavigation, initNavigation } from '../utils/nav';
 import { Intro } from './Intro';
+import { Dialog } from './Dialog';
 
 export function App() {
   const online = useOnline();
@@ -21,6 +22,7 @@ export function App() {
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
   const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
+  const [showDialog, setShowDialog] = useState(true);
 
   const containerStyle = style({
     padding: '1rem',
@@ -49,11 +51,12 @@ export function App() {
       const active = document.activeElement;
       const input = active?.tagName === 'INPUT';
       if (e.key === 'Escape' && (!input || active?.value.trim().length === 0)) {
-        if (guide) setGuide();
+        if (showDialog) setShowDialog(false);
+        else if (guide) setGuide();
         else if (game) {
           setGame();
           setSearch();
-        } else window.electronAPI.exit();
+        } else setShowDialog(true);
       }
     };
 
@@ -71,10 +74,23 @@ export function App() {
       window.removeEventListener('keydown', escapeHandler);
       exitHandler.unsubscribe();
     };
-  }, [guide, game]);
+  }, [guide, game, showDialog]);
+
+  useEffect(() => {
+    document.body.style.overflow = showDialog ? 'hidden' : 'initial';
+  }, [showDialog]);
 
   return (
     <div className={containerStyle}>
+      {showDialog && (
+        <Dialog
+          title="Are you sure you want to exit?"
+          buttons={[
+            { label: 'Cancel', action: () => setShowDialog(false) },
+            { label: 'Ok', action: () => window.electronAPI.exit() },
+          ]}
+        />
+      )}
       {showIntro ? (
         <Intro setShowIntro={setShowIntro} />
       ) : guide ? (

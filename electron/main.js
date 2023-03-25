@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import windowStateKeeper from 'electron-window-state';
 import { join } from 'path';
@@ -75,8 +75,5 @@ function initIpc() {
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
-  ipcMain.handle('quit', async (event) => {
-    const result = await dialog.showMessageBox(win, { message: 'Are you sure you want to exit?', buttons: ['Cancel', 'Ok'] });
-    if (result.response === 1) app.exit();
-  });
+  ipcMain.handle('quit', (event) => app.exit());
 }
