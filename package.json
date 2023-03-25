@@ -1,6 +1,6 @@
 {
   "name": "gamefaqs-reader",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Read gamefaqs guides easily",
   "author": "Andrew McOlash",
   "license": "MIT",
@@ -56,7 +56,10 @@
         "AppImage"
       ],
       "icon": "public/256x256.png",
-      "category": "Utility"
+      "category": "Utility",
+      "desktop": {
+        "Name": "GameFAQs Reader"
+      }
     }
   }
 }
