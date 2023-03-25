@@ -14,6 +14,8 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 process.env.ELECTRON_ENABLE_LOGGING = true;
 
 app.whenReady().then(async () => {
+  console.log(`GameFAQs Reader, version ${app.getVersion()}`);
+
   createWindow();
   initIpc();
 
@@ -47,7 +49,7 @@ function createWindow() {
   if (PROD) {
     win.loadFile('build/dist/index.html');
   } else {
-    console.log(process.env.VITE_DEV_SERVER_URL);
+    console.log(`Server Url: ${process.env.VITE_DEV_SERVER_URL}`);
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
   }
 }
