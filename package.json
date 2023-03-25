@@ -1,7 +1,7 @@
 {
   "name": "gamefaqs-reader",
   "version": "0.2.0",
-  "description": "A react app that reads gamefaqs guides",
+  "description": "Read gamefaqs guides easily",
   "author": "Andrew McOlash",
   "license": "MIT",
   "main": "build/dist-electron/main.js",
