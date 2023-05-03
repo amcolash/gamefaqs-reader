@@ -1,4 +1,5 @@
 import { cssRaw, cssRule, media } from 'typestyle';
+import { deckSize } from './util';
 
 // Set css variables
 export function createVariables() {
@@ -31,7 +32,7 @@ function base() {
     },
     // Larger UI for steam deck
     media(
-      { maxWidth: 1280 },
+      { maxWidth: deckSize },
       {
         zoom: 1.25,
       }

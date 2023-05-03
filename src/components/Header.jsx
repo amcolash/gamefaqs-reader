@@ -8,11 +8,14 @@ import Dash from '../icons/dash-lg.svg';
 import Plus from '../icons/plus-lg.svg';
 import X from '../icons/x-lg.svg';
 
-import { mod } from '../utils/util';
+import { deckSize, mod } from '../utils/util';
+import { useWindowSize } from '../hooks/useWindowSize';
 
 const zoomFactor = 0.2;
 
 export function Header(props) {
+  const size = useWindowSize();
+
   return (
     <header
       style={{
@@ -29,7 +32,7 @@ export function Header(props) {
       }}
     >
       <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
-        {window.innerWidth > 1280 && (
+        {(size.width || 0) > deckSize && (
           <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
             <X className="icon" />
           </button>

@@ -1,5 +1,7 @@
 export const SERVER = import.meta.env.PROD ? 'https://home.amcolash.com:8004' : 'https://localhost:8004';
 
+export const deckSize = 1280;
+
 const prefix = 'guide-viewer';
 export const lastGame = `${prefix}-game`;
 export const lastGuide = `${prefix}-guide`;

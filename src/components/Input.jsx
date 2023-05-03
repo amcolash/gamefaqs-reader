@@ -1,6 +1,6 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { throttle, updateInputValue } from '../utils/util';
+import { deckSize, throttle, updateInputValue } from '../utils/util';
 
 import { Keyboard } from './Keyboard';
 import { useWindowSize } from '../hooks/useWindowSize';
@@ -12,7 +12,7 @@ export function Input(props) {
   const size = useWindowSize();
 
   const [animationParent] = useAutoAnimate();
-  const keyboardEnabled = (size.width || 0) <= 1280;
+  const keyboardEnabled = (size.width || 0) <= deckSize;
 
   const handleKeyDown = useCallback(
     (e) => {
