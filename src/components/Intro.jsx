@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ArrowRightIcon from '../icons/arrow-right.svg';
+
 export function Intro(props) {
   return (
     <div
@@ -37,8 +39,9 @@ export function Intro(props) {
           </h3>
 
           <h3>
-            This application supports controller input out of the box. I recommend using the default steam controller template ("Templates -
-            {'>'} Gamepad") for the default button mapping.
+            This application supports controller input out of the box. I recommend using the default steam controller template (Templates
+            <ArrowRightIcon style={{ margin: '0 0.5rem' }} />
+            Gamepad) for the default button mapping.
           </h3>
         </div>
 

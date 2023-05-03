@@ -3,14 +3,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { throttle, updateInputValue } from '../utils/util';
 
 import { Keyboard } from './Keyboard';
+import { useWindowSize } from '../hooks/useWindowSize';
 
 export function Input(props) {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef();
   const keyboardRef = useRef();
+  const size = useWindowSize();
 
   const [animationParent] = useAutoAnimate();
-  const keyboardEnabled = window.innerWidth <= 1280;
+  const keyboardEnabled = (size.width || 0) <= 1280;
 
   const handleKeyDown = useCallback(
     (e) => {
@@ -153,8 +155,8 @@ export function Input(props) {
           props.onChange(e);
           keyboardRef.current?.setInput(e.target.value);
         }}
-        // onFocus={(e) => setShowKeyboard(true)}
-        // onBlur={(e) => setShowKeyboard(false)}
+        onFocus={(e) => setShowKeyboard(true)}
+        onBlur={(e) => setShowKeyboard(false)}
         onKeyDown={(e) => handleKeyDown(e)}
       />
       {showKeyboard && keyboardEnabled && (

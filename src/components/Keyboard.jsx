@@ -9,7 +9,7 @@ import KeyboardIcon from '../icons/keyboard.svg?raw';
 
 cssRaw(`
 .simple-keyboard {
-  max-width: min(90vw, var(--max-width));
+  max-width: min(90vw, var(--maxWidth));
 }
 
 .simple-keyboard.myTheme1 {

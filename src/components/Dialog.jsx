@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAutoFocus } from '../hooks/useAutoFocus';
 
 export function Dialog(props) {
   return (
@@ -22,11 +23,15 @@ export function Dialog(props) {
         <h3 style={{ margin: 0, padding: '0.5rem 1.25rem', background: 'var(--header)' }}>{props.title}</h3>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {props.buttons.map((b) => (
-            <button key={b.label} onClick={b.action} style={{ width: '100%', border: '1px solid var(--header)' }}>
-              {b.label}
-            </button>
-          ))}
+          {props.buttons.map((b) => {
+            const focus = b.focus ? useAutoFocus() : () => {};
+
+            return (
+              <button key={b.label} onClick={b.action} style={{ width: '100%', border: '1px solid var(--header)' }} ref={focus}>
+                {b.label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

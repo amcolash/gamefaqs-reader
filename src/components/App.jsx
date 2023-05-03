@@ -49,14 +49,21 @@ export function App() {
 
     const escapeHandler = (e) => {
       const active = document.activeElement;
-      const input = active?.tagName === 'INPUT';
-      if (e.key === 'Escape' && (!input || active?.value.trim().length === 0)) {
+
+      if (e.key === 'Escape' && active && active !== document.body) {
+        active.blur();
+        return;
+      }
+
+      if (e.key === 'Escape' && (!active || active === document.body)) {
         if (showDialog) setShowDialog(false);
         else if (guide) setGuide();
         else if (game) {
           setGame();
           setSearch();
         } else setShowDialog(true);
+
+        return;
       }
     };
 
@@ -87,7 +94,7 @@ export function App() {
           title="Are you sure you want to exit?"
           buttons={[
             { label: 'Cancel', action: () => setShowDialog(false) },
-            { label: 'Ok', action: () => window.electronAPI.exit() },
+            { label: 'Ok', action: () => window.electronAPI.exit(), focus: true },
           ]}
         />
       )}

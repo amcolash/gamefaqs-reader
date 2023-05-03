@@ -116,21 +116,6 @@ function keyDown(event) {
     const activeClasses = document.activeElement?.classList;
 
     switch (event.key) {
-      case 'ArrowDown':
-        if (document.activeElement === document.body) {
-          focusToIndex(document, 0);
-        } else {
-          focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
-        }
-        break;
-      case 'ArrowRight':
-        if (document.activeElement === document.body) {
-          focusToIndex(document, 0);
-        } else if (!activeClasses?.contains('remove')) {
-          focusItem(document, 1);
-        }
-        break;
-
       case 'ArrowUp':
         if (document.activeElement === document.body) {
           focusToIndex(document, 0);
@@ -138,11 +123,28 @@ function keyDown(event) {
           focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? -2 : -1);
         }
         break;
+
+      case 'ArrowDown':
+        if (document.activeElement === document.body) {
+          focusToIndex(document, 0);
+        } else {
+          focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
+        }
+        break;
+
       case 'ArrowLeft':
         if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else if (!activeClasses?.contains('recentGuide')) {
           focusItem(document, -1);
+        }
+        break;
+
+      case 'ArrowRight':
+        if (document.activeElement === document.body) {
+          focusToIndex(document, 0);
+        } else if (!activeClasses?.contains('remove')) {
+          focusItem(document, 1);
         }
         break;
 
@@ -193,8 +195,9 @@ function getFocusableItem(el, dir, shouldWrap, exact) {
 function focusToIndex(el, index) {
   const focusableEls = getFocusable(el);
   index = Math.max(0, Math.min(index, focusableEls.length - 1));
+  const item = focusableEls[index];
 
-  if (focusableEls[index]) focusableEls[index].focus();
+  if (item) item.focus();
 }
 
 function focusItem(el, dir, shouldWrap, exact) {
