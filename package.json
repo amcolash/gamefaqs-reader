@@ -39,27 +39,5 @@
     "presets": [
       "nano-react-app"
     ]
-  },
-  "build": {
-    "appId": "com.amcolash.gamefaqs-reader",
-    "artifactName": "${productName}.${ext}",
-    "asar": true,
-    "icon": "public/icon.svg",
-    "directories": {
-      "output": "build/release/${version}"
-    },
-    "files": [
-      "build/dist",
-      "build/dist-electron"
-    ],
-    "linux": {
-      "target": [
-        "AppImage"
-      ],
-      "category": "Utility",
-      "desktop": {
-        "Name": "GameFAQs Reader"
-      }
-    }
   }
 }

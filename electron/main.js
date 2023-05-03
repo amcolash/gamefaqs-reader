@@ -7,6 +7,7 @@ import { cookieKey, store } from './store';
 import { getGames, getGuide, getGuides, removeGuide } from './api';
 
 const PROD = app.isPackaged;
+const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../public/');
 let win;
 
 // For now disable electron security warnings and turn on logging in console
@@ -40,6 +41,7 @@ function createWindow() {
       preload: join(__dirname, 'preload.js'),
     },
     title: `GameFAQs Reader - ${app.getVersion()}`,
+    icon: join(PUBLIC_DIR, '256x256.png'),
   });
 
   // Keep track of the window state
@@ -47,7 +49,7 @@ function createWindow() {
 
   // Load index page
   if (PROD) {
-    win.loadFile('build/dist/index.html');
+    win.loadFile(join(PUBLIC_DIR, 'index.html'));
   } else {
     console.log(`Server Url: ${process.env.VITE_DEV_SERVER_URL}`);
     win.loadURL(process.env.VITE_DEV_SERVER_URL);

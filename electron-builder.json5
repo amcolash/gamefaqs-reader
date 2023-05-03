@@ -1,0 +1,21 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+
+{
+  appId: 'com.amcolash.gamefaqs-reader',
+  artifactName: '${productName}.${ext}',
+  asar: false,
+  icon: 'public/256x256.png',
+  directories: {
+    output: 'build/release/${version}',
+  },
+  files: ['build/dist', 'build/dist-electron'],
+  linux: {
+    target: ['AppImage'],
+    category: 'Utility',
+    desktop: {
+      Name: 'GameFAQs Reader',
+    },
+  },
+}
