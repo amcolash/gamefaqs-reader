@@ -6,6 +6,7 @@ export function createVariables() {
   createVariable('--background', '#0e131a');
   createVariable('--primary', '#c5c5c5');
   createVariable('--secondary', '#24262e');
+  createVariable('--dark', '#070C13');
   createVariable('--header', '#3d4451');
   createVariable('--error', '#dd3517');
   createVariable('--maxWidth', '950px');

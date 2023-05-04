@@ -1,8 +1,18 @@
 import React from 'react';
 
 export function Footer(props) {
+  const additionalItems = [];
+
+  if (props.guide) {
+    additionalItems.push({ label: 'Page Up', icon: '/gamepad/l2.png', onClick: () => window.scrollBy(0, -window.innerHeight * 0.75) });
+    additionalItems.push({ label: 'Page Down', icon: '/gamepad/r2.png', onClick: () => window.scrollBy(0, window.innerHeight * 0.75) });
+  }
+
   const items = [
     { label: 'Scroll', icon: '/gamepad/right-stick.png' },
+
+    ...additionalItems,
+
     { label: 'Spacer', spacer: true },
     { label: 'Select', icon: '/gamepad/a.png' },
     { label: 'Back', icon: '/gamepad/b.png', onClick: props.escapeHandler },
@@ -37,6 +47,8 @@ export function Footer(props) {
               gap: '0.5rem',
               cursor: item.onClick ? 'pointer' : undefined,
               padding: '0.5rem',
+              whiteSpace: 'nowrap',
+              userSelect: 'none',
             }}
             onClick={item.onClick}
           >

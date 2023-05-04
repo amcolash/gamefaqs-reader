@@ -25,8 +25,7 @@ export function Header(props) {
         zIndex: 1,
         width: 'calc(100% - 2rem)',
         padding: '1rem',
-        background: 'var(--background)',
-        borderBottom: '2px solid #33353d',
+        background: 'var(--dark)',
         display: 'flex',
         justifyContent: 'center',
       }}

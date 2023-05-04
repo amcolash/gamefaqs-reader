@@ -21,8 +21,16 @@ cssRaw(`
   border-bottom-left-radius: 5px;
 }
 
+.hg-theme-default .hg-row:not(:last-child) {
+  margin-bottom: 7px;
+}
+
+.hg-theme-default .hg-row .hg-button-container, .hg-theme-default .hg-row .hg-button:not(:last-child) {
+  margin-right: 7px;
+}
+
 .simple-keyboard.myTheme1 .hg-button {
-  height: 50px;
+  height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,12 +80,11 @@ export function Keyboard(props) {
         bottom: 0,
         left: 0,
         zIndex: 1,
-        width: 'calc(100% - 2rem)',
+        width: 'calc(100% - 0.7rem)',
         display: 'flex',
         justifyContent: 'center',
-        background: 'var(--background)',
-        padding: '1rem',
-        borderTop: '3px solid var(--secondary)',
+        background: 'var(--dark)',
+        padding: '0.35rem',
       }}
     >
       <Keys
