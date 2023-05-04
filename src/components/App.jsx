@@ -51,20 +51,20 @@ export function App() {
     (e) => {
       const active = document.activeElement;
 
-      if (e.key === 'Escape' && active && active !== document.body) {
-        active.blur();
-        return;
-      }
+      if (e.key === 'Escape' || e.key === 'Backspace') {
+        if (active && active !== document.body) {
+          active.blur();
+          return;
+        }
 
-      if (e.key === 'Escape' && (!active || active === document.body)) {
-        if (showDialog) setShowDialog(false);
-        else if (guide) setGuide();
-        else if (game) {
-          setGame();
-          setSearch();
-        } else setShowDialog(true);
-
-        return;
+        if (!active || active === document.body) {
+          if (showDialog) setShowDialog(false);
+          else if (guide) setGuide();
+          else if (game) {
+            setGame();
+            setSearch();
+          } else setShowDialog(true);
+        }
       }
     },
     [showDialog, guide, game]
