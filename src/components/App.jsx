@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { style } from 'typestyle';
 
 import { Guide } from './Guide';
@@ -47,10 +47,8 @@ export function App() {
     }
   }, [guide]);
 
-  useEffect(() => {
-    initNavigation();
-
-    const escapeHandler = (e) => {
+  const escapeHandler = useCallback(
+    (e) => {
       const active = document.activeElement;
 
       if (e.key === 'Escape' && active && active !== document.body) {
@@ -68,7 +66,12 @@ export function App() {
 
         return;
       }
-    };
+    },
+    [showDialog, guide, game]
+  );
+
+  useEffect(() => {
+    initNavigation();
 
     window.addEventListener('keydown', escapeHandler);
 
@@ -121,7 +124,7 @@ export function App() {
         </div>
       )}
 
-      {type === deviceTypes.deck && <Footer />}
+      {type === deviceTypes.deck && <Footer escapeHandler={() => escapeHandler({ key: 'Escape' })} guide={guide} game={game} />}
     </div>
   );
 }
