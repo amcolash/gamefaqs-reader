@@ -45,7 +45,7 @@ export function Intro(props) {
           </h3>
         </div>
 
-        <img src="./gamepad.png" style={{ maxWidth: '100%' }} />
+        <img src="./gamepad/gamepad.png" style={{ maxWidth: '100%' }} />
 
         <button style={{ marginTop: '3rem' }} onClick={() => props.setShowIntro(false)}>
           Get Started
