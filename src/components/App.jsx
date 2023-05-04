@@ -14,9 +14,12 @@ import OfflineIcon from '../icons/wifi-off.svg';
 import { cleanupNavigation, initNavigation } from '../utils/nav';
 import { Intro } from './Intro';
 import { Dialog } from './Dialog';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
+import { Footer } from './Footer';
 
 export function App() {
   const online = useOnline();
+  const type = useDeviceType();
   const [search, setSearch] = useState(); // Keep track of search for ui
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
@@ -117,6 +120,8 @@ export function App() {
           )}
         </div>
       )}
+
+      {type === deviceTypes.deck && <Footer />}
     </div>
   );
 }

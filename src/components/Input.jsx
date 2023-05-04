@@ -1,18 +1,18 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { deckSize, throttle, updateInputValue } from '../utils/util';
+import { throttle, updateInputValue } from '../utils/util';
 
 import { Keyboard } from './Keyboard';
-import { useWindowSize } from '../hooks/useWindowSize';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Input(props) {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef();
   const keyboardRef = useRef();
-  const size = useWindowSize();
+  const type = useDeviceType();
 
   const [animationParent] = useAutoAnimate();
-  const keyboardEnabled = (size.width || 0) <= deckSize;
+  const keyboardEnabled = type === deviceTypes.deck;
 
   const handleKeyDown = useCallback(
     (e) => {
@@ -39,7 +39,7 @@ export function Input(props) {
             break;
           default:
             handled = false;
-            setShowKeyboard(false);
+            // setShowKeyboard(false);
             break;
         }
 
@@ -65,6 +65,20 @@ export function Input(props) {
     throttle((e) => handleKeyDown(e), 250),
     [handleKeyDown]
   );
+
+  const onLeft = useCallback(() => {
+    const input = inputRef.current;
+    const prev = Math.max(0, input.selectionStart - 1);
+    input.setSelectionRange(prev, prev);
+    keyboardRef.current?.setCaretPosition(prev, prev);
+  }, [inputRef, keyboardRef]);
+
+  const onRight = useCallback(() => {
+    const input = inputRef.current;
+    const next = Math.min(input.value.length, input?.selectionStart + 1);
+    input.setSelectionRange(next, next);
+    keyboardRef.current?.setCaretPosition(next, next);
+  }, [inputRef, keyboardRef]);
 
   useEffect(() => {
     const buttonListener = window.joypad.on('button_press', (e) => {
@@ -93,14 +107,10 @@ export function Input(props) {
           keyboardRef.current?.setCaretPosition(last);
           break;
         case 4: // L1 - Cursor Left
-          const prev = Math.max(0, input.selectionStart - 1);
-          input.setSelectionRange(prev, prev);
-          keyboardRef.current?.setCaretPosition(prev);
+          onLeft();
           break;
         case 5: // R1 - Cursor Right
-          const next = Math.min(input.value.length, input?.selectionStart + 1);
-          input.setSelectionRange(next, next);
-          keyboardRef.current?.setCaretPosition(next);
+          onRight();
           break;
         case 12: // Dpad Up
           handleKeyDown({ key: 'ArrowUp', preventDefault: () => {}, stopPropagation: () => {} });
@@ -159,8 +169,10 @@ export function Input(props) {
         onBlur={(e) => setShowKeyboard(false)}
         onKeyDown={(e) => handleKeyDown(e)}
       />
-      {showKeyboard && keyboardEnabled && (
+      {keyboardEnabled && showKeyboard && (
         <Keyboard
+          onLeft={onLeft}
+          onRight={onRight}
           keyboardRef={(ref) => {
             keyboardRef.current = ref;
             keyboardRef.current?.setInput(props.value);

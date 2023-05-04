@@ -7,20 +7,19 @@ import { useApi } from '../hooks/useApi';
 
 import ArrowLeft from '../icons/arrow-left.svg';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { deckSize } from '../utils/util';
-import { useWindowSize } from '../hooks/useWindowSize';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Guides(props) {
   const [data, loading, error] = useApi('guides', props.game.id);
   const [animationParent] = useAutoAnimate();
-  const size = useWindowSize();
+  const deviceType = useDeviceType();
 
   const guideItems = data?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <h1 style={{ display: 'flex', width: '100%', position: 'relative' }}>
-        {(size.width || 0) > deckSize && (
+        {deviceType === deviceTypes.desktop && (
           <button onClick={() => props.setGame()} style={{ position: 'absolute' }}>
             <ArrowLeft className="icon" />
           </button>

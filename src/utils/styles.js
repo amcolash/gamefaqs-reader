@@ -46,10 +46,19 @@ function base() {
     color: 'var(--primary)',
   });
 
-  cssRule('#root', {
-    display: 'flex',
-    justifyContent: 'center',
-  });
+  cssRule(
+    '#root',
+    {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    media(
+      { maxWidth: deckSize },
+      {
+        paddingBottom: '2.5rem',
+      }
+    )
+  );
 }
 
 function buttons() {
