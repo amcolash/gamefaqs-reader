@@ -20,7 +20,7 @@ export function Dialog(props) {
       }}
     >
       <div className="dialog" style={{ border: '1px solid var(--header)' }}>
-        <h3 style={{ margin: 0, padding: '0.5rem 1.25rem', background: 'var(--header)' }}>{props.title}</h3>
+        <h3 style={{ margin: 0, padding: '0.5rem 1.25rem', background: 'var(--header)', whiteSpace: 'pre' }}>{props.title}</h3>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           {props.buttons.map((b) => {

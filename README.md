@@ -22,12 +22,14 @@ I will continue to support it and am happy to accept PRs!
 
 The easiest way to install is to use the installer script [install.sh](install.sh). Take a look if you are interested in what happens.
 
+To use the script, go into desktop mode on the steam deck and open a terminal. Then run the following command:
+
 ```bash
 curl -s https://raw.githubusercontent.com/amcolash/gamefaqs-reader/main/install.sh | bash
 ```
 
 After the installation completes, there should be a new launcher item called "GameFAQS Reader". You can then add that as a "non-steam game"
-for access in game mode.
+for access in game mode (big picture).
 
 ## Icons
 

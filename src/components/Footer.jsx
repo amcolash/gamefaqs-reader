@@ -4,18 +4,18 @@ export function Footer(props) {
   const additionalItems = [];
 
   if (props.guide) {
-    additionalItems.push({ label: 'Page Up', icon: '/gamepad/l2.png', onClick: () => window.scrollBy(0, -window.innerHeight * 0.75) });
-    additionalItems.push({ label: 'Page Down', icon: '/gamepad/r2.png', onClick: () => window.scrollBy(0, window.innerHeight * 0.75) });
+    additionalItems.push({ label: 'Page Up', icon: './gamepad/l2.png', onClick: () => window.scrollBy(0, -window.innerHeight * 0.75) });
+    additionalItems.push({ label: 'Page Down', icon: './gamepad/r2.png', onClick: () => window.scrollBy(0, window.innerHeight * 0.75) });
   }
 
   const items = [
-    { label: 'Scroll', icon: '/gamepad/right-stick.png' },
+    { label: 'Scroll', icon: './gamepad/right-stick.png' },
 
     ...additionalItems,
 
     { label: 'Spacer', spacer: true },
-    { label: 'Select', icon: '/gamepad/a.png' },
-    { label: 'Back', icon: '/gamepad/b.png', onClick: props.escapeHandler },
+    { label: 'Select', icon: './gamepad/a.png' },
+    { label: 'Back', icon: './gamepad/b.png', onClick: props.escapeHandler },
   ];
 
   return (

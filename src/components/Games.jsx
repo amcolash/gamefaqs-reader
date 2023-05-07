@@ -25,7 +25,7 @@ export function Games(props) {
         <h1 style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
           <img src="./logo_v13.png" alt="GameFAQS logo" style={{ marginTop: '0.25rem', marginRight: '0.5rem' }} /> Reader
         </h1>
-        <div style={{ textAlign: 'right', fontSize: 7, marginTop: '-2.15rem' }}>{version}</div>
+        <div style={{ textAlign: 'right', fontSize: 8, marginTop: '-2.15rem' }}>{version}</div>
       </div>
 
       <div

@@ -5,7 +5,7 @@
 {
   appId: 'com.amcolash.gamefaqs-reader',
   artifactName: '${productName}.${ext}',
-  asar: false,
+  asar: true,
   icon: 'public/icon/256x256.png',
   directories: {
     output: 'build/release/${version}',

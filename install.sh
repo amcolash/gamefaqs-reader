@@ -4,7 +4,7 @@
 set -e
 
 # Clean if --clean is passed in
-if [ $1 = "--clean" ]; then
+if [ "$1" = "--clean" ]; then
   echo "Cleaning up"
 
   rm -rf ~/Applications/squashfs-root
@@ -25,14 +25,21 @@ pushd ~/Applications > /dev/null
 rm -f gamefaqs-reader.AppImage
 rm -rf squashfs-root
 
-# Download latest version of the application
-wget https://github.com/amcolash/gamefaqs-reader/releases/latest/download/gamefaqs-reader.AppImage
+# Download specified or latest version of the application
+if [ -z "$VERSION" ]; then
+  VERSION=latest
+fi
+
+echo "Downloading version $VERSION"
+wget  -q --show-progress https://github.com/amcolash/gamefaqs-reader/releases/download/$VERSION/gamefaqs-reader.AppImage
 
 # Extract contents for icon + desktop file
+echo "Extracting files"
 chmod +x ./gamefaqs-reader.AppImage
-./gamefaqs-reader.AppImage --appimage-extract
+./gamefaqs-reader.AppImage --appimage-extract > /dev/null
 
 # Copy files, fix permissions
+echo "Copying files"
 cp squashfs-root/gamefaqs-reader.png ~/.local/share/icons/hicolor/256x256/apps
 cp squashfs-root/gamefaqs-reader.desktop ~/.local/share/applications
 chmod +x ~/.local/share/applications/gamefaqs-reader.desktop
@@ -42,6 +49,7 @@ COMMAND="$HOME/Applications/gamefaqs-reader.AppImage --no-sandbox %U"
 sed -i "s|^Exec=.*|Exec=$COMMAND|" ~/.local/share/applications/gamefaqs-reader.desktop
 
 # Post-Cleanup
+echo "Cleaning up"
 rm -rf squashfs-root
 
 # Go back to previous directory

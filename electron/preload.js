@@ -8,4 +8,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   removeGuide: (gameId, guideId) => ipcRenderer.invoke('removeGuide', gameId, guideId),
   version: () => ipcRenderer.invoke('version'),
   exit: () => ipcRenderer.invoke('quit'),
+  update: () => ipcRenderer.invoke('update'),
+  onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
 });

@@ -11,7 +11,7 @@ export function Intro(props) {
         top: 0,
         left: 0,
         width: 'calc(100% - 4rem)',
-        height: 'calc(100% - 4rem)',
+        height: 'calc(100% - 6rem)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

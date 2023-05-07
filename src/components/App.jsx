@@ -25,13 +25,21 @@ export function App() {
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
   const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
-  const [showDialog, setShowDialog] = useState(false);
+  const [showExitDialog, setShowExitDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
 
   const containerStyle = style({
     padding: '1rem',
     width: guide ? undefined : '85%',
     maxWidth: 'var(--maxWidth)',
   });
+
+  useEffect(() => {
+    window.electronAPI.onUpdateDownloaded((_event, value) => {
+      console.log('renderer: update downloaded', value);
+      setShowUpdateDialog(true);
+    });
+  }, []);
 
   useEffect(() => {
     if (guide) {
@@ -58,16 +66,16 @@ export function App() {
         }
 
         if (!active || active === document.body) {
-          if (showDialog) setShowDialog(false);
+          if (showExitDialog) setShowExitDialog(false);
           else if (guide) setGuide();
           else if (game) {
             setGame();
             setSearch();
-          } else setShowDialog(true);
+          } else setShowExitDialog(true);
         }
       }
     },
-    [showDialog, guide, game]
+    [showExitDialog, guide, game]
   );
 
   useEffect(() => {
@@ -87,23 +95,34 @@ export function App() {
       window.removeEventListener('keydown', escapeHandler);
       exitHandler.unsubscribe();
     };
-  }, [guide, game, showDialog]);
+  }, [guide, game, showExitDialog]);
 
   useEffect(() => {
-    document.body.style.overflow = showDialog ? 'hidden' : 'initial';
-  }, [showDialog]);
+    document.body.style.overflow = showExitDialog ? 'hidden' : 'initial';
+  }, [showExitDialog]);
 
   return (
     <div className={containerStyle}>
-      {showDialog && (
+      {showExitDialog && (
         <Dialog
           title="Are you sure you want to exit?"
           buttons={[
-            { label: 'Cancel', action: () => setShowDialog(false) },
+            { label: 'Cancel', action: () => setShowExitDialog(false) },
             { label: 'Ok', action: () => window.electronAPI.exit(), focus: true },
           ]}
         />
       )}
+
+      {showUpdateDialog && (
+        <Dialog
+          title={`A new update has been downloaded.\nWould you like to restart the app and update now?`}
+          buttons={[
+            { label: 'Update Later', action: () => setShowUpdateDialog(false) },
+            { label: 'Update Now', action: () => window.electronAPI.update(), focus: true },
+          ]}
+        />
+      )}
+
       {showIntro ? (
         <Intro setShowIntro={setShowIntro} />
       ) : guide ? (

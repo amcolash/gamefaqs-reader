@@ -1,27 +1,41 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
+import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import windowStateKeeper from 'electron-window-state';
 import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
 import { cookieKey, store } from './store';
 import { getGames, getGuide, getGuides, removeGuide } from './api';
+import { read, readdirSync, rmSync, stat, statSync } from 'fs';
 
 const PROD = app.isPackaged;
+const LOG_DIR = app.getPath('logs');
 const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../../public/');
-let win;
 
-// For now disable electron security warnings and turn on logging in console
+// Electron logs are sent to a log file
+const time = Date.now();
+log.transports.file.resolvePath = () => join(LOG_DIR, `${time}_node.log`);
+Object.assign(console, log.functions);
+
+// For now disable electron security warnings and turn on logging in console/file
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 process.env.ELECTRON_ENABLE_LOGGING = true;
+process.env.ELECTRON_LOG_FILE = join(LOG_DIR, `${time}_browser.log`);
 
+// Keep track of window
+let win;
+
+// Once app is initialized, create window and set up things
 app.whenReady().then(async () => {
   console.log(`GameFAQs Reader, version ${app.getVersion()}`);
 
   createWindow();
-  initIpc();
 
-  // Check for updates on startup
-  autoUpdater.checkForUpdatesAndNotify();
+  initIpc();
+  initUpdater();
+  initShortcuts();
+
+  cleanLogs();
 });
 
 function createWindow() {
@@ -31,7 +45,7 @@ function createWindow() {
     defaultHeight: 800,
   });
 
-  let prodOptions = { fullscreen: true };
+  let prodOptions = { fullscreen: process.env.FULLSCREEN !== 'false' };
   let devOptions = { x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height };
 
   // Open window in fullscreen in production mode, open maximized in dev
@@ -81,5 +95,35 @@ function initIpc() {
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
   ipcMain.handle('version', (event) => app.getVersion());
-  ipcMain.handle('quit', (event) => app.exit());
+  ipcMain.handle('quit', (event) => app.quit());
+  ipcMain.handle('update', (event) => autoUpdater.quitAndInstall());
+}
+
+function initUpdater() {
+  // Set up auto updater logging
+  autoUpdater.logger = log;
+
+  // Check for updates on startup
+  autoUpdater.checkForUpdatesAndNotify();
+
+  // Notify renderer if update is downloaded
+  autoUpdater.on('update-downloaded', (info) => win.webContents.send('update-downloaded', { version: info.version }));
+}
+
+function initShortcuts() {
+  // Add F12 shortcut to open dev tools
+  globalShortcut.register('F12', () => {
+    win.webContents.toggleDevTools();
+  });
+}
+
+// Remove logs older than a week
+function cleanLogs() {
+  const week = 1000 * 60 * 60 * 24 * 7;
+
+  const files = readdirSync(LOG_DIR);
+  files.forEach((file) => {
+    const stats = statSync(file);
+    if (Date.now() > new Date(stats.ctime).getTime() + week) rmSync(file);
+  });
 }
