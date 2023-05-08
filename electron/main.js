@@ -41,7 +41,11 @@ app.whenReady().then(async () => {
 
   // Move mouse out of the way on start
   setTimeout(() => {
-    execSync('export DISPLAY=:1; xdotool mousemove 1280 800');
+    try {
+      execSync('export DISPLAY=:1; xdotool mousemove 1280 800');
+    } catch (err) {
+      console.error(err);
+    }
   }, 2000);
 });
 

@@ -14,16 +14,45 @@ export function Input(props) {
   const [animationParent] = useAutoAnimate();
   const keyboardEnabled = type === deviceTypes.deck;
 
+  const moveMarkerVertical = useCallback(
+    (dir) => {
+      const pos = keyboardRef.current?.modules.keyNavigation.markerPosition;
+      const rows = document.querySelectorAll('.keyboard .hg-row');
+
+      const curButton = rows[pos.row].querySelectorAll('.hg-button')[pos.button];
+      const middle = curButton.getBoundingClientRect().x + curButton.getBoundingClientRect().width / 2;
+
+      const newRow = dir > 0 ? Math.min(pos.row + 1, rows.length - 1) : Math.max(0, pos.row - 1);
+      const nextButtons = Array.from(rows[newRow].querySelectorAll('.hg-button'));
+
+      let button = -1;
+      let dist = 99999;
+      nextButtons.forEach((b, i) => {
+        const bLeftDist = Math.abs(middle - b.getBoundingClientRect().x);
+        const bRightDist = Math.abs(middle - (b.getBoundingClientRect().x + b.getBoundingClientRect().width));
+
+        const bDist = Math.min(bLeftDist, bRightDist);
+        if (bDist < dist) {
+          dist = bDist;
+          button = i;
+        }
+      });
+
+      if (button >= 0) keyboardRef.current?.modules.keyNavigation.setMarker(newRow, button);
+    },
+    [keyboardRef]
+  );
+
   const handleKeyDown = useCallback(
     (e) => {
       let handled = true;
       if (showKeyboard && keyboardEnabled) {
         switch (e.key) {
           case 'ArrowUp':
-            keyboardRef.current?.modules.keyNavigation.up();
+            moveMarkerVertical(-1);
             break;
           case 'ArrowDown':
-            keyboardRef.current?.modules.keyNavigation.down();
+            moveMarkerVertical(1);
             break;
           case 'ArrowLeft':
             keyboardRef.current?.modules.keyNavigation.left();
