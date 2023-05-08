@@ -9,6 +9,7 @@ import { getGames, getGuide, getGuides, removeGuide } from './api';
 import { readdirSync, rmSync, statSync } from 'fs';
 import { execSync } from 'child_process';
 
+const STEAM_DECK = execSync('lsb_release -i -s').toString().includes('SteamOS');
 const PROD = app.isPackaged;
 const LOG_DIR = app.getPath('logs');
 const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../../public/');
@@ -40,13 +41,15 @@ app.whenReady().then(async () => {
   initShortcuts();
 
   // Move mouse out of the way on start
-  setTimeout(() => {
-    try {
-      execSync('export DISPLAY=:1; xdotool mousemove 1280 800');
-    } catch (err) {
-      console.error(err);
-    }
-  }, 2000);
+  if (STEAM_DECK) {
+    setTimeout(() => {
+      try {
+        execSync('export DISPLAY=:1; xdotool mousemove 1280 800');
+      } catch (err) {
+        console.error(err);
+      }
+    }, 2000);
+  }
 });
 
 function createWindow() {
@@ -108,6 +111,7 @@ function initIpc() {
   ipcMain.handle('version', (event) => app.getVersion());
   ipcMain.handle('quit', (event) => app.exit());
   ipcMain.handle('update', (event) => autoUpdater.quitAndInstall());
+  ipcMain.handle('steamdeck', (event) => process.env.STEAM_DECK || STEAM_DECK);
 }
 
 function initUpdater() {

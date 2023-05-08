@@ -9,5 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   version: () => ipcRenderer.invoke('version'),
   exit: () => ipcRenderer.invoke('quit'),
   update: () => ipcRenderer.invoke('update'),
+  steamdeck: () => ipcRenderer.invoke('steamdeck'),
+
   onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
 });

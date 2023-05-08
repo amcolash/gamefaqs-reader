@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useWindowSize } from './useWindowSize';
-
-import { deckSize } from '../utils/util';
 
 export const deviceTypes = {
   desktop: 'desktop',
@@ -10,12 +7,10 @@ export const deviceTypes = {
 
 export function useDeviceType() {
   const [deviceType, setDeviceType] = useState(deviceTypes.desktop);
-  const size = useWindowSize();
 
   useEffect(() => {
-    const type = (size.width || 0) <= deckSize ? deviceTypes.deck : deviceTypes.desktop;
-    setDeviceType(type);
-  }, [size]);
+    window.electronAPI.steamdeck().then((deck) => (deck ? setDeviceType(deviceTypes.deck) : setDeviceType(deviceTypes.desktop)));
+  }, []);
 
   return deviceType;
 }
