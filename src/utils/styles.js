@@ -30,6 +30,7 @@ function base() {
     'html',
     {
       scrollPaddingTop: '7rem',
+      overflowX: 'hidden',
     },
     // Larger UI for steam deck
     media(

@@ -48,7 +48,7 @@ app.whenReady().then(async () => {
       } catch (err) {
         console.error(err);
       }
-    }, 2000);
+    }, 1000);
   }
 });
 
