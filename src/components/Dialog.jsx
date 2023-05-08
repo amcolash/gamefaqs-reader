@@ -19,7 +19,7 @@ export function Dialog(props) {
         zIndex: 2,
       }}
     >
-      <div className="dialog" style={{ border: '1px solid var(--header)' }}>
+      <div className="dialog" style={{ border: '1px solid var(--header)', maxWidth: '50%' }}>
         <h3 style={{ margin: 0, padding: '0.5rem 1.25rem', background: 'var(--header)', whiteSpace: 'pre' }}>{props.title}</h3>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>

@@ -165,6 +165,7 @@ export function Input(props) {
           props.onChange(e);
           keyboardRef.current?.setInput(e.target.value);
         }}
+        readOnly={keyboardEnabled}
         onFocus={(e) => setShowKeyboard(true)}
         onBlur={(e) => setShowKeyboard(false)}
         onKeyDown={(e) => handleKeyDown(e)}

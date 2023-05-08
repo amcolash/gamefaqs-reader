@@ -1,18 +1,22 @@
-import { throttle } from './util';
+import { setIntervalImmediately, throttle } from './util';
 
-let buttonListener;
+let buttonPressListener;
+let buttonReleaseListener;
 let axisListener;
+let scrollRepeatInterval;
+let scrollAccel = 1;
 
-const throttledXScroll = throttle((x) => {
-  const intro = document.querySelector('.intro > div');
-  if (intro) intro.scrollBy(x, 0);
-  else window.scrollBy(x, 0);
-}, 30);
+const throttledScroll = throttle((x, y) => {
+  if (Math.abs(x) < 0.5 && Math.abs(y) < 0.5) scrollAccel = 1;
+  else scrollAccel = Math.min(10, scrollAccel + 0.15);
 
-const throttledYScroll = throttle((y) => {
+  const scalar = document.querySelector('.guideContent') ? 70 : 30;
+  x *= scrollAccel * scalar;
+  y *= scrollAccel * scalar;
+
   const intro = document.querySelector('.intro > div');
-  if (intro) intro.scrollBy(0, y);
-  else window.scrollBy(0, y);
+  if (intro) intro.scrollBy(x, y);
+  else window.scrollBy(x, y);
 }, 30);
 
 const throttledAxisKeyDown = throttle((e) => keyDown(e), 250);
@@ -20,8 +24,8 @@ const throttledAxisKeyDown = throttle((e) => keyDown(e), 250);
 export function initNavigation() {
   window.addEventListener('keydown', keyDown);
 
-  if (buttonListener) buttonListener.unsubscribe();
-  buttonListener = window.joypad.on('button_press', (e) => {
+  if (buttonPressListener) buttonPressListener.unsubscribe();
+  buttonPressListener = window.joypad.on('button_press', (e) => {
     if (e.detail.gamepad.index !== 0) return;
     const button = e.detail.index;
 
@@ -30,10 +34,20 @@ export function initNavigation() {
         document.activeElement?.click();
         break;
       case 6: // R1
-        window.scrollBy(0, -1000);
+        if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
+        scrollAccel = 0;
+        scrollRepeatInterval = setIntervalImmediately(() => {
+          scrollAccel = Math.min(20, scrollAccel + 1);
+          window.scrollBy(0, -1000 - scrollAccel * 200);
+        }, 150);
         break;
       case 7: // L1
-        window.scrollBy(0, 1000);
+        if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
+        scrollAccel = 0;
+        scrollRepeatInterval = setIntervalImmediately(() => {
+          scrollAccel = Math.min(20, scrollAccel + 1);
+          window.scrollBy(0, 1000 + scrollAccel * 200);
+        }, 150);
         break;
       case 12: // Dpad Up
         keyDown({ key: 'ArrowUp', preventDefault: () => {} });
@@ -46,6 +60,20 @@ export function initNavigation() {
         break;
       case 15: // Dpad Right
         keyDown({ key: 'ArrowRight', preventDefault: () => {} });
+        break;
+    }
+  });
+
+  if (buttonReleaseListener) buttonReleaseListener.unsubscribe();
+  buttonReleaseListener = window.joypad.on('button_release', (e) => {
+    if (e.detail.gamepad.index !== 0) return;
+    const button = e.detail.index;
+
+    switch (button) {
+      case 6: // R1
+      case 7: // L1
+        if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
+        scrollRepeatInterval = undefined;
         break;
     }
   });
@@ -65,24 +93,18 @@ export function initNavigation() {
     }
 
     // Right stick, horizontal axis
-    if (e.detail.axis === 2) {
-      const scalar = document.querySelector('.guideContent') ? 50 : 20;
-      throttledXScroll(e.detail.axisMovementValue * scalar);
-    }
+    if (e.detail.axis === 2) throttledScroll(e.detail.axisMovementValue, 0);
 
     // Right stick, vertical axis
-    if (e.detail.axis === 3) {
-      const scalar = document.querySelector('.guideContent') ? 50 : 20;
-      throttledYScroll(e.detail.axisMovementValue * scalar);
-    }
+    if (e.detail.axis === 3) throttledScroll(0, e.detail.axisMovementValue);
   });
 }
 
 export function cleanupNavigation() {
   window.removeEventListener('keydown', keyDown);
 
-  buttonListener.unsubscribe();
-  buttonListener = undefined;
+  buttonPressListener.unsubscribe();
+  buttonPressListener = undefined;
 
   axisListener.unsubscribe();
   axisListener = undefined;

@@ -115,10 +115,9 @@ export function App() {
 
       {showUpdateDialog && (
         <Dialog
-          title={`A new update has been downloaded.\nWould you like to restart the app and update now?`}
+          title={`A new update has been downloaded and\nwill be installed the next time you start this app.`}
           buttons={[
-            { label: 'Update Later', action: () => setShowUpdateDialog(false) },
-            { label: 'Update Now', action: () => window.electronAPI.update(), focus: true },
+            { label: 'Ok', action: () => setShowUpdateDialog(false), focus: true },
           ]}
         />
       )}

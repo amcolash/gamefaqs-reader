@@ -51,3 +51,8 @@ export function updateInputValue(input, newValue) {
   }
   input.dispatchEvent(new Event('input', { bubbles: true }));
 }
+
+export function setIntervalImmediately(func, interval) {
+  func();
+  return setInterval(func, interval);
+}

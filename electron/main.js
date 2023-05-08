@@ -6,11 +6,15 @@ import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
 import { cookieKey, store } from './store';
 import { getGames, getGuide, getGuides, removeGuide } from './api';
-import { read, readdirSync, rmSync, stat, statSync } from 'fs';
+import { readdirSync, rmSync, statSync } from 'fs';
+import { execSync } from 'child_process';
 
 const PROD = app.isPackaged;
 const LOG_DIR = app.getPath('logs');
 const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../../public/');
+
+// Clean logs before making new ones
+cleanLogs();
 
 // Electron logs are sent to a log file
 const time = Date.now();
@@ -35,7 +39,10 @@ app.whenReady().then(async () => {
   initUpdater();
   initShortcuts();
 
-  cleanLogs();
+  // Move mouse out of the way on start
+  setTimeout(() => {
+    execSync('export DISPLAY=:1; xdotool mousemove 1280 800');
+  }, 2000);
 });
 
 function createWindow() {
@@ -95,7 +102,7 @@ function initIpc() {
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
   ipcMain.handle('version', (event) => app.getVersion());
-  ipcMain.handle('quit', (event) => app.quit());
+  ipcMain.handle('quit', (event) => app.exit());
   ipcMain.handle('update', (event) => autoUpdater.quitAndInstall());
 }
 
@@ -104,7 +111,7 @@ function initUpdater() {
   autoUpdater.logger = log;
 
   // Check for updates on startup
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
 
   // Notify renderer if update is downloaded
   autoUpdater.on('update-downloaded', (info) => win.webContents.send('update-downloaded', { version: info.version }));
@@ -122,7 +129,8 @@ function cleanLogs() {
   const week = 1000 * 60 * 60 * 24 * 7;
 
   const files = readdirSync(LOG_DIR);
-  files.forEach((file) => {
+  files.forEach((f) => {
+    const file = join(LOG_DIR, f);
     const stats = statSync(file);
     if (Date.now() > new Date(stats.ctime).getTime() + week) rmSync(file);
   });
