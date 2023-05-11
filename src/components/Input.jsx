@@ -4,12 +4,14 @@ import { throttle, updateInputValue } from '../utils/util';
 
 import { Keyboard } from './Keyboard';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
+import { useInFocus } from '../hooks/useInFocus';
 
 export function Input(props) {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef();
   const keyboardRef = useRef();
   const type = useDeviceType();
+  const focus = useInFocus();
 
   const [animationParent] = useAutoAnimate();
   const keyboardEnabled = type === deviceTypes.deck;
@@ -45,6 +47,8 @@ export function Input(props) {
 
   const handleKeyDown = useCallback(
     (e) => {
+      if (!focus) return;
+
       let handled = true;
       if (showKeyboard && keyboardEnabled) {
         switch (e.key) {
@@ -111,9 +115,10 @@ export function Input(props) {
 
   useEffect(() => {
     const buttonListener = window.joypad.on('button_press', (e) => {
+      if (!focus) return;
       if (e.detail.gamepad.index !== 0) return;
-      const button = e.detail.index;
 
+      const button = e.detail.index;
       const input = inputRef.current;
 
       switch (button) {
@@ -157,6 +162,7 @@ export function Input(props) {
     });
 
     const axisListener = window.joypad.on('axis_move', (e) => {
+      if (!focus) return;
       if (e.detail.gamepad.index !== 0) return;
 
       // Left stick, horizontal axis

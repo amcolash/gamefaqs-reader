@@ -6,6 +6,10 @@ let axisListener;
 let scrollRepeatInterval;
 let scrollAccel = 1;
 
+let focus = false;
+
+window.electronAPI.onFocusChange((_event, value) => (focus = value));
+
 const throttledScroll = throttle((x, y) => {
   if (Math.abs(x) < 0.5 && Math.abs(y) < 0.5) scrollAccel = 1;
   else scrollAccel = Math.min(10, scrollAccel + 0.15);
@@ -26,7 +30,9 @@ export function initNavigation() {
 
   if (buttonPressListener) buttonPressListener.unsubscribe();
   buttonPressListener = window.joypad.on('button_press', (e) => {
+    if (!focus) return;
     if (e.detail.gamepad.index !== 0) return;
+
     const button = e.detail.index;
 
     switch (button) {
@@ -66,6 +72,7 @@ export function initNavigation() {
 
   if (buttonReleaseListener) buttonReleaseListener.unsubscribe();
   buttonReleaseListener = window.joypad.on('button_release', (e) => {
+    if (!focus) return;
     if (e.detail.gamepad.index !== 0) return;
     const button = e.detail.index;
 
@@ -80,6 +87,7 @@ export function initNavigation() {
 
   if (axisListener) axisListener.unsubscribe();
   axisListener = window.joypad.on('axis_move', (e) => {
+    if (!focus) return;
     if (e.detail.gamepad.index !== 0) return;
 
     // Left stick, horizontal axis
@@ -111,6 +119,8 @@ export function cleanupNavigation() {
 }
 
 function keyDown(event) {
+  if (!focus) return;
+
   const dialog = document.querySelector('.dialog');
   const key = event.key;
 

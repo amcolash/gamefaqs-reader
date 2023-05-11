@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   steamdeck: () => ipcRenderer.invoke('steamdeck'),
 
   onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
+  onFocusChange: (callback) => ipcRenderer.on('focus-change', callback),
 });

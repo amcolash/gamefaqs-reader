@@ -82,6 +82,9 @@ function createWindow() {
     console.log(`Server Url: ${process.env.VITE_DEV_SERVER_URL}`);
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
   }
+
+  win.on('focus', () => win.webContents.send('focus-change', true));
+  win.on('blur', () => win.webContents.send('focus-change', false));
 }
 
 function initIpc() {

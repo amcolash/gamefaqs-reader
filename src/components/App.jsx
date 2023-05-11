@@ -14,12 +14,14 @@ import OfflineIcon from '../icons/wifi-off.svg';
 import { cleanupNavigation, initNavigation } from '../utils/nav';
 import { Intro } from './Intro';
 import { Dialog } from './Dialog';
-import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { Footer } from './Footer';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
+import { useInFocus } from '../hooks/useInFocus';
 
 export function App() {
   const online = useOnline();
   const type = useDeviceType();
+  const focus = useInFocus();
   const [search, setSearch] = useState(); // Keep track of search for ui
   const [game, setGame] = useLocalStorage(lastGame);
   const [guide, setGuide] = useLocalStorage(lastGuide);
@@ -57,6 +59,7 @@ export function App() {
 
   const escapeHandler = useCallback(
     (e) => {
+      if (!focus) return;
       const active = document.activeElement;
 
       if (e.key === 'Escape' || e.key === 'Backspace') {
@@ -84,6 +87,7 @@ export function App() {
     window.addEventListener('keydown', escapeHandler);
 
     const exitHandler = window.joypad.on('button_press', (e) => {
+      if (!focus) return;
       if (e.detail.gamepad.index !== 0) return;
 
       // Button 1: B (A nintendo)
@@ -116,9 +120,7 @@ export function App() {
       {showUpdateDialog && (
         <Dialog
           title={`A new update has been downloaded and\nwill be installed the next time you start this app.`}
-          buttons={[
-            { label: 'Ok', action: () => setShowUpdateDialog(false), focus: true },
-          ]}
+          buttons={[{ label: 'Ok', action: () => setShowUpdateDialog(false), focus: true }]}
         />
       )}
 
