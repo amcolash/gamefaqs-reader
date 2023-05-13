@@ -1,4 +1,5 @@
 import React from 'react';
+import { dialogType } from './Dialog';
 
 export function Footer(props) {
   const additionalItems = [];
@@ -8,7 +9,7 @@ export function Footer(props) {
     additionalItems.push({ label: 'Page Down', icon: './gamepad/r2.png', onClick: () => window.scrollBy(0, window.innerHeight * 0.75) });
   }
 
-  if (!props.dialog) additionalItems.push({ label: 'Scroll', icon: './gamepad/right-stick.png' });
+  if (props.dialog === dialogType.None) additionalItems.push({ label: 'Scroll', icon: './gamepad/right-stick.png' });
 
   const items = [
     ...additionalItems,

@@ -1,6 +1,12 @@
 import React from 'react';
 import { useAutoFocus } from '../hooks/useAutoFocus';
 
+export const dialogType = {
+  None: '',
+  Update: 'update',
+  Exit: 'exit',
+};
+
 export function Dialog(props) {
   return (
     <div

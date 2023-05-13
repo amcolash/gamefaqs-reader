@@ -13,7 +13,7 @@ import { introKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
 import OfflineIcon from '../icons/wifi-off.svg';
 import { cleanupNavigation, initNavigation } from '../utils/nav';
 import { Intro } from './Intro';
-import { Dialog } from './Dialog';
+import { Dialog, dialogType } from './Dialog';
 import { Footer } from './Footer';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
@@ -27,8 +27,7 @@ export function App() {
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
   const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
-  const [showExitDialog, setShowExitDialog] = useState(false);
-  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [dialog, setDialog] = useState(dialogType.None);
 
   const containerStyle = style({
     padding: '1rem',
@@ -39,7 +38,7 @@ export function App() {
   useEffect(() => {
     window.electronAPI.onUpdateDownloaded((_event, value) => {
       console.log('renderer: update downloaded', value);
-      setShowUpdateDialog(true);
+      setDialog(dialogType.Update);
     });
   }, []);
 
@@ -61,12 +60,8 @@ export function App() {
     (e) => {
       if (!focus) return;
 
-      if (showUpdateDialog) {
-        setShowUpdateDialog(false);
-        return;
-      }
-      if (showExitDialog) {
-        setShowExitDialog(false);
+      if (dialog) {
+        setDialog(dialogType.None);
         return;
       }
 
@@ -83,11 +78,11 @@ export function App() {
           else if (game) {
             setGame();
             setSearch();
-          } else setShowExitDialog(true);
+          } else setDialog(dialogType.Exit);
         }
       }
     },
-    [showExitDialog, showUpdateDialog, guide, game, focus]
+    [dialog, guide, game, focus]
   );
 
   useEffect(() => {
@@ -108,30 +103,30 @@ export function App() {
       window.removeEventListener('keydown', escapeHandler);
       exitHandler.unsubscribe();
     };
-  }, [focus, showExitDialog, showUpdateDialog]);
+  }, [focus, dialog]);
 
   useEffect(() => {
-    document.body.style.overflow = showExitDialog || showUpdateDialog ? 'hidden' : 'initial';
-  }, [showExitDialog]);
+    document.body.style.overflow = dialog ? 'hidden' : 'initial';
+  }, [dialog]);
 
   return (
     <div className={containerStyle}>
-      {showExitDialog && (
+      {dialog === dialogType.Exit && (
         <Dialog
           title="Exit"
           message="Are you sure?"
           buttons={[
             { label: 'Confirm', action: () => window.electronAPI.exit(), focus: true },
-            { label: 'Cancel', action: () => setShowExitDialog(false) },
+            { label: 'Cancel', action: () => setDialog(dialogType.None) },
           ]}
         />
       )}
 
-      {showUpdateDialog && (
+      {dialog === dialogType.Update && (
         <Dialog
           title="Update Installed"
           message="A new update has been downloaded and will be installed the next time you start this app."
-          buttons={[{ label: 'Ok', action: () => setShowUpdateDialog(false), focus: true }]}
+          buttons={[{ label: 'Ok', action: () => setDialog(dialogType.None), focus: true }]}
         />
       )}
 
@@ -156,12 +151,7 @@ export function App() {
       )}
 
       {type === deviceTypes.deck && (
-        <Footer
-          escapeHandler={() => escapeHandler({ key: 'Escape' })}
-          guide={guide}
-          game={game}
-          dialog={showExitDialog || showUpdateDialog}
-        />
+        <Footer escapeHandler={() => escapeHandler({ key: 'Escape' })} guide={guide} game={game} dialog={dialog} />
       )}
     </div>
   );
