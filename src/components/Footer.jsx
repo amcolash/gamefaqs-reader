@@ -8,12 +8,13 @@ export function Footer(props) {
     additionalItems.push({ label: 'Page Down', icon: './gamepad/r2.png', onClick: () => window.scrollBy(0, window.innerHeight * 0.75) });
   }
 
-  const items = [
-    { label: 'Scroll', icon: './gamepad/right-stick.png' },
+  if (!props.dialog) additionalItems.push({ label: 'Scroll', icon: './gamepad/right-stick.png' });
 
+  const items = [
     ...additionalItems,
 
     { label: 'Spacer', spacer: true },
+
     { label: 'Select', icon: './gamepad/a.png' },
     { label: 'Back', icon: './gamepad/b.png', onClick: props.escapeHandler },
   ];
@@ -24,6 +25,7 @@ export function Footer(props) {
         position: 'fixed',
         bottom: 0,
         left: 0,
+        zIndex: 3,
         display: 'flex',
         justifyContent: 'flex-end',
         alignContent: 'center',

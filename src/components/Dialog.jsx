@@ -32,7 +32,7 @@ export function Dialog(props) {
         <h3 style={{ fontSize: '2rem', margin: 0, marginBottom: '1.5rem', padding: 0, whiteSpace: 'pre-wrap' }}>{props.title}</h3>
         <div style={{ fontSize: '1.5rem', marginBottom: '2rem', whiteSpace: 'pre-wrap' }}>{props.message}</div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '2.65rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
           {props.buttons.map((b) => {
             const focus = b.focus ? useAutoFocus() : () => {};
 
@@ -41,7 +41,7 @@ export function Dialog(props) {
                 key={b.label}
                 className={b.focus ? 'blue' : undefined}
                 onClick={b.action}
-                style={{ width: '100%', height: '3.75rem' }}
+                style={{ width: '100%', height: '3.5rem' }}
                 ref={focus}
               >
                 {b.label}

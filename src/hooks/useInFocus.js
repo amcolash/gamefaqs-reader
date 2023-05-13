@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export function useInFocus() {
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(true);
 
   useEffect(() => {
     window.electronAPI.onFocusChange((_event, value) => {

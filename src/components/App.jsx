@@ -27,8 +27,8 @@ export function App() {
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
   const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
-  const [showExitDialog, setShowExitDialog] = useState(true);
-  const [showUpdateDialog, setShowUpdateDialog] = useState(true);
+  const [showExitDialog, setShowExitDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
 
   const containerStyle = style({
     padding: '1rem',
@@ -55,11 +55,21 @@ export function App() {
 
       setRecentGuides(recent);
     }
-  }, [guide]);
+  }, [guide, recentGuides]);
 
   const escapeHandler = useCallback(
     (e) => {
       if (!focus) return;
+
+      if (showUpdateDialog) {
+        setShowUpdateDialog(false);
+        return;
+      }
+      if (showExitDialog) {
+        setShowExitDialog(false);
+        return;
+      }
+
       const active = document.activeElement;
 
       if (e.key === 'Escape' || e.key === 'Backspace') {
@@ -69,8 +79,7 @@ export function App() {
         }
 
         if (!active || active === document.body) {
-          if (showExitDialog) setShowExitDialog(false);
-          else if (guide) setGuide();
+          if (guide) setGuide();
           else if (game) {
             setGame();
             setSearch();
@@ -78,7 +87,7 @@ export function App() {
         }
       }
     },
-    [showExitDialog, guide, game]
+    [showExitDialog, showUpdateDialog, guide, game, focus]
   );
 
   useEffect(() => {
@@ -99,10 +108,10 @@ export function App() {
       window.removeEventListener('keydown', escapeHandler);
       exitHandler.unsubscribe();
     };
-  }, [guide, game, showExitDialog]);
+  }, [focus, showExitDialog, showUpdateDialog]);
 
   useEffect(() => {
-    document.body.style.overflow = showExitDialog ? 'hidden' : 'initial';
+    document.body.style.overflow = showExitDialog || showUpdateDialog ? 'hidden' : 'initial';
   }, [showExitDialog]);
 
   return (
@@ -146,7 +155,14 @@ export function App() {
         </div>
       )}
 
-      {type === deviceTypes.deck && <Footer escapeHandler={() => escapeHandler({ key: 'Escape' })} guide={guide} game={game} />}
+      {type === deviceTypes.deck && (
+        <Footer
+          escapeHandler={() => escapeHandler({ key: 'Escape' })}
+          guide={guide}
+          game={game}
+          dialog={showExitDialog || showUpdateDialog}
+        />
+      )}
     </div>
   );
 }

@@ -6,9 +6,11 @@ let axisListener;
 let scrollRepeatInterval;
 let scrollAccel = 1;
 
-let focus = false;
+let focus = true;
 
-window.electronAPI.onFocusChange((_event, value) => (focus = value));
+window.electronAPI.onFocusChange((_event, value) => {
+  focus = value;
+});
 
 const throttledScroll = throttle((x, y) => {
   if (Math.abs(x) < 0.5 && Math.abs(y) < 0.5) scrollAccel = 1;

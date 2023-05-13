@@ -83,6 +83,9 @@ function createWindow() {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
   }
 
+  // win.webContents.openDevTools({ mode: 'right' });
+
+  // When app focus changes, send message to renderer
   win.on('focus', () => win.webContents.send('focus-change', true));
   win.on('blur', () => win.webContents.send('focus-change', false));
 }

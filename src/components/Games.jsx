@@ -7,6 +7,7 @@ import { useApi } from '../hooks/useApi';
 import { Error } from './Error.jsx';
 import { Input } from './Input';
 import { Spinner } from './Spinner';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Games(props) {
   const [search, setSearch] = useState('');
@@ -14,6 +15,7 @@ export function Games(props) {
   const [data, loading, error] = useApi('games', debouncedSearch);
   const [version, setVersion] = useState();
   const [animationParent] = useAutoAnimate();
+  const type = useDeviceType();
 
   useEffect(() => {
     window.electronAPI.version().then((v) => setVersion(v));
@@ -40,7 +42,7 @@ export function Games(props) {
       >
         <label>Game Search</label>
         <Input
-          type="search"
+          type={type === deviceTypes.desktop ? 'search' : 'text'}
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
