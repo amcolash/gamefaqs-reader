@@ -55,7 +55,7 @@ export function Footer(props) {
             }}
             onClick={item.onClick}
           >
-            <img src={item.icon} />
+            <img className="glyph" src={item.icon} />
             <label style={{ cursor: item.onClick ? 'pointer' : undefined }}>{item.label}</label>
           </div>
         )

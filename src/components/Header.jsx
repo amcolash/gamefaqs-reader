@@ -4,9 +4,9 @@ import { Input } from './Input';
 
 import ArrowBarUp from '../icons/arrow-bar-up.svg';
 import ArrowBarDown from '../icons/arrow-bar-down.svg';
-import Dash from '../icons/dash-lg.svg';
-import Plus from '../icons/plus-lg.svg';
 import X from '../icons/x-lg.svg';
+import ZoomIn from '../icons/zoom-in.svg';
+import ZoomOut from '../icons/zoom-out.svg';
 
 import { mod } from '../utils/util';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
@@ -68,14 +68,14 @@ export function Header(props) {
             onClick={() => props.setZoom(props.zoom - zoomFactor)}
             style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >
-            <Dash className="icon" />
+            <ZoomOut className="icon" />
           </button>
           <button
             disabled={props.zoom >= 1.99}
             onClick={() => props.setZoom(props.zoom + zoomFactor)}
             style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >
-            <Plus className="icon" />
+            <ZoomIn className="icon" />
           </button>
         </div>
       </div>

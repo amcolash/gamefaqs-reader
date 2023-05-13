@@ -33,4 +33,4 @@ for access in game mode (big picture).
 
 ## Icons
 
-Icons are from font awesome and feather icons.
+Icons are from [bootstrap icons](https://icons.getbootstrap.com/). Steam controller icons are from `/home/deck/.local/share/Steam/controller_base/images/api/light`.

@@ -12,23 +12,32 @@ window.electronAPI.onFocusChange((_event, value) => {
   focus = value;
 });
 
-const throttledScroll = throttle((x, y) => {
-  if (Math.abs(x) < 0.5 && Math.abs(y) < 0.5) scrollAccel = 1;
+const throttledScroll = throttle((value) => {
+  if (Math.abs(value) < 0.5) scrollAccel = 1;
   else scrollAccel = Math.min(10, scrollAccel + 0.15);
 
   const scalar = document.querySelector('.guideContent') ? 70 : 30;
-  x *= scrollAccel * scalar;
-  y *= scrollAccel * scalar;
+  value *= scrollAccel * scalar;
 
   const intro = document.querySelector('.intro > div');
-  if (intro) intro.scrollBy(x, y);
-  else window.scrollBy(x, y);
+  if (intro) intro.scrollBy(0, value);
+  else window.scrollBy(0, value);
 }, 30);
 
 const throttledAxisKeyDown = throttle((e) => keyDown(e), 250);
 
+function scrollRepeat(amount, accel) {
+  if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
+  scrollAccel = 1;
+  scrollRepeatInterval = setIntervalImmediately(() => {
+    scrollAccel = Math.min(20, scrollAccel + 1);
+    window.scrollBy(0, amount > 0 ? amount + scrollAccel * accel : amount - scrollAccel * accel);
+  }, 150);
+}
+
 export function initNavigation() {
   window.addEventListener('keydown', keyDown);
+  window.addEventListener('keyup', keyUp);
 
   if (buttonPressListener) buttonPressListener.unsubscribe();
   buttonPressListener = window.joypad.on('button_press', (e) => {
@@ -42,20 +51,10 @@ export function initNavigation() {
         document.activeElement?.click();
         break;
       case 6: // R1
-        if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
-        scrollAccel = 0;
-        scrollRepeatInterval = setIntervalImmediately(() => {
-          scrollAccel = Math.min(20, scrollAccel + 1);
-          window.scrollBy(0, -1000 - scrollAccel * 200);
-        }, 150);
+        scrollRepeat(-1000, 200);
         break;
       case 7: // L1
-        if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
-        scrollAccel = 0;
-        scrollRepeatInterval = setIntervalImmediately(() => {
-          scrollAccel = Math.min(20, scrollAccel + 1);
-          window.scrollBy(0, 1000 + scrollAccel * 200);
-        }, 150);
+        scrollRepeat(1000, 200);
         break;
       case 12: // Dpad Up
         keyDown({ key: 'ArrowUp', preventDefault: () => {} });
@@ -79,6 +78,8 @@ export function initNavigation() {
     const button = e.detail.index;
 
     switch (button) {
+      case 12: // Dpad Up
+      case 13: // Dpad Down
       case 6: // R1
       case 7: // L1
         if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
@@ -103,15 +104,16 @@ export function initNavigation() {
     }
 
     // Right stick, horizontal axis
-    if (e.detail.axis === 2) throttledScroll(e.detail.axisMovementValue, 0);
+    // if (e.detail.axis === 2) throttledScroll(e.detail.axisMovementValue, 0);
 
     // Right stick, vertical axis
-    if (e.detail.axis === 3) throttledScroll(0, e.detail.axisMovementValue);
+    if (e.detail.axis === 3) throttledScroll(e.detail.axisMovementValue);
   });
 }
 
 export function cleanupNavigation() {
   window.removeEventListener('keydown', keyDown);
+  window.removeEventListener('keyup', keyUp);
 
   buttonPressListener.unsubscribe();
   buttonPressListener = undefined;
@@ -151,7 +153,9 @@ function keyDown(event) {
 
     switch (event.key) {
       case 'ArrowUp':
-        if (document.activeElement === document.body) {
+        if (document.querySelector('.guideContent')) {
+          scrollRepeat(-20, 10);
+        } else if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else {
           focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? -2 : -1);
@@ -159,7 +163,9 @@ function keyDown(event) {
         break;
 
       case 'ArrowDown':
-        if (document.activeElement === document.body) {
+        if (document.querySelector('.guideContent')) {
+          scrollRepeat(20, 10);
+        } else if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else {
           focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
@@ -188,6 +194,18 @@ function keyDown(event) {
     }
 
     if (handled) event.preventDefault();
+  }
+}
+
+function keyUp(event) {
+  switch (event.key) {
+    case 'ArrowUp':
+    case 'ArrowDown':
+      if (scrollRepeatInterval) clearInterval(scrollRepeatInterval);
+      scrollRepeatInterval = undefined;
+      break;
+    default:
+      break;
   }
 }
 

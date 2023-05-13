@@ -108,11 +108,11 @@ export function Keyboard(props) {
           ],
         }}
         display={{
-          '{space}': '<img src="./gamepad/y.png" />',
-          '{bksp}': `<img src="./gamepad/x.png" style="margin-right: 1rem;" /> ${Backspace}`,
-          '{close}': `<img src="./gamepad/b.png" style="margin-right: 1rem;" /> ${KeyboardIcon}`,
-          '{left}': `<img src="./gamepad/l1.png" style="margin-right: 1rem;" /> ${LeftIcon}`,
-          '{right}': `<img src="./gamepad/r1.png" style="margin-right: 1rem;" /> ${RightIcon}`,
+          '{space}': '<img src="./gamepad/y.png" class="glyph" />',
+          '{bksp}': `<img src="./gamepad/x.png" class="glyph" style="margin-right: 1rem;" /> ${Backspace}`,
+          '{close}': `<img src="./gamepad/b.png" class="glyph" style="margin-right: 1rem;" /> ${KeyboardIcon}`,
+          '{left}': `<img src="./gamepad/l1.png" class="glyph" style="margin-right: 1rem;" /> ${LeftIcon}`,
+          '{right}': `<img src="./gamepad/r1.png" class="glyph" style="margin-right: 1rem;" /> ${RightIcon}`,
         }}
         enableKeyNavigation={true}
         modules={[keyNavigation]}

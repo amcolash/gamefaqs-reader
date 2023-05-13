@@ -103,6 +103,11 @@ function buttons() {
       },
     },
   });
+
+  cssRule('.glyph', {
+    width: 24,
+    height: 24,
+  });
 }
 
 function inputs() {
@@ -130,7 +135,7 @@ function inputs() {
     height: '1em',
     width: '1em',
     borderRadius: '50em',
-    background: `url(./times-circle-solid.svg) no-repeat 50% 50%`,
+    background: `url(./x-circle-fill.svg) no-repeat 50% 50%`,
     backgroundSize: 'contain',
     pointerEvents: 'none',
     opacity: 0,
