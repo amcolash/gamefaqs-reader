@@ -7,7 +7,7 @@ import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
 
 export function Input(props) {
-  const [showKeyboard, setShowKeyboard] = useState(true);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef();
   const keyboardRef = useRef();
   const type = useDeviceType();
