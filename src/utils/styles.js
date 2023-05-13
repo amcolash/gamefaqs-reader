@@ -4,12 +4,13 @@ import { deckSize } from './util';
 // Set css variables
 export function createVariables() {
   createVariable('--background', '#0e131a');
-  createVariable('--primary', '#c5c5c5');
+  createVariable('--primary', '#f5f5f5');
   createVariable('--secondary', '#24262e');
-  createVariable('--dark', '#070C13');
+  createVariable('--dark', '#0d141c');
   createVariable('--header', '#3d4451');
   createVariable('--error', '#dd3517');
   createVariable('--maxWidth', '950px');
+  createVariable('--steamBlue', '#1a9ffe');
 }
 
 function createVariable(name, value) {
@@ -69,7 +70,9 @@ function buttons() {
     fontFamily: "'Motiva Sans', sans-serif",
     color: 'var(--primary)',
     background: 'var(--secondary)',
+    outline: 'none',
     border: 'none',
+    borderRadius: 3,
     padding: '0.5rem 1.5rem',
 
     display: 'flex',
@@ -81,6 +84,11 @@ function buttons() {
         background: 'var(--primary)',
         color: 'var(--secondary)',
       },
+      '&.blue:active:not([disabled]), &.blue:focus:not([disabled]), &.blue:hover:not([disabled])': {
+        background: 'var(--steamBlue)',
+        color: 'var(--primary)',
+      },
+
       '&:disabled': {
         opacity: 0.5,
       },
@@ -104,6 +112,7 @@ function inputs() {
     background: 'var(--secondary)',
     border: 'none',
     color: 'var(--primary)',
+    outline: 'none',
     padding: '0 1.5rem',
     height: '2.5rem',
 

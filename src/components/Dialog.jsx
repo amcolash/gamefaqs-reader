@@ -14,20 +14,36 @@ export function Dialog(props) {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        textAlign: 'center',
-        background: 'rgba(0, 0, 0, 0.75)',
         zIndex: 2,
+        backdropFilter: 'blur(3px)',
       }}
     >
-      <div className="dialog" style={{ border: '1px solid var(--header)', maxWidth: '50%' }}>
-        <h3 style={{ margin: 0, padding: '0.5rem 1.25rem', background: 'var(--header)', whiteSpace: 'pre' }}>{props.title}</h3>
+      <div
+        className="dialog"
+        style={{
+          background: 'var(--dark)',
+          border: '3px solid var(--header)',
+          borderRadius: 3,
+          width: props.buttons.length === 1 ? 750 : 980,
+          maxWidth: 'calc(85% - 4rem)',
+          padding: '2rem',
+        }}
+      >
+        <h3 style={{ fontSize: '2rem', margin: 0, marginBottom: '1.5rem', padding: 0, whiteSpace: 'pre-wrap' }}>{props.title}</h3>
+        <div style={{ fontSize: '1.5rem', marginBottom: '2rem', whiteSpace: 'pre-wrap' }}>{props.message}</div>
 
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '2.65rem' }}>
           {props.buttons.map((b) => {
             const focus = b.focus ? useAutoFocus() : () => {};
 
             return (
-              <button key={b.label} onClick={b.action} style={{ width: '100%', border: '1px solid var(--header)' }} ref={focus}>
+              <button
+                key={b.label}
+                className={b.focus ? 'blue' : undefined}
+                onClick={b.action}
+                style={{ width: '100%', height: '3.75rem' }}
+                ref={focus}
+              >
                 {b.label}
               </button>
             );

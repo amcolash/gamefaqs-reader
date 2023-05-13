@@ -27,8 +27,8 @@ export function App() {
   const [guide, setGuide] = useLocalStorage(lastGuide);
   const [recentGuides, setRecentGuides] = useLocalStorage(recentGuideKey, []);
   const [showIntro, setShowIntro] = useLocalStorage(introKey, true);
-  const [showExitDialog, setShowExitDialog] = useState(false);
-  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [showExitDialog, setShowExitDialog] = useState(true);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(true);
 
   const containerStyle = style({
     padding: '1rem',
@@ -109,17 +109,19 @@ export function App() {
     <div className={containerStyle}>
       {showExitDialog && (
         <Dialog
-          title="Are you sure you want to exit?"
+          title="Exit"
+          message="Are you sure?"
           buttons={[
+            { label: 'Confirm', action: () => window.electronAPI.exit(), focus: true },
             { label: 'Cancel', action: () => setShowExitDialog(false) },
-            { label: 'Ok', action: () => window.electronAPI.exit(), focus: true },
           ]}
         />
       )}
 
       {showUpdateDialog && (
         <Dialog
-          title={`A new update has been downloaded and\nwill be installed the next time you start this app.`}
+          title="Update Installed"
+          message="A new update has been downloaded and will be installed the next time you start this app."
           buttons={[{ label: 'Ok', action: () => setShowUpdateDialog(false), focus: true }]}
         />
       )}
