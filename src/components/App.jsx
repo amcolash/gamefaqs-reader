@@ -103,7 +103,7 @@ export function App() {
       window.removeEventListener('keydown', escapeHandler);
       exitHandler.unsubscribe();
     };
-  }, [focus, dialog]);
+  }, [dialog, guide, game, focus]);
 
   useEffect(() => {
     document.body.style.overflow = dialog ? 'hidden' : 'initial';

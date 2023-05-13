@@ -20,7 +20,7 @@ export function Dialog(props) {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 2,
+        zIndex: 1,
         backdropFilter: 'blur(3px)',
       }}
     >

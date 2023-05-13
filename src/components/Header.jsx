@@ -22,7 +22,7 @@ export function Header(props) {
         position: 'fixed',
         top: 0,
         left: 0,
-        zIndex: 1,
+        zIndex: 3,
         width: 'calc(100% - 2rem)',
         padding: '1rem',
         background: 'var(--dark)',

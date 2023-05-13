@@ -26,7 +26,7 @@ export function Footer(props) {
         position: 'fixed',
         bottom: 0,
         left: 0,
-        zIndex: 3,
+        zIndex: 2,
         display: 'flex',
         justifyContent: 'flex-end',
         alignContent: 'center',

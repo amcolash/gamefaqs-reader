@@ -12,8 +12,11 @@ import { Header } from './Header';
 import { Spinner } from './Spinner';
 
 import ArrowUp from '../icons/arrow-up.svg';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Guide(props) {
+  const type = useDeviceType();
+
   const [data, loading, error] = useApi('guide', props.guide.gameId, props.guide.id);
 
   const [search, setSearch] = useState('');
@@ -88,7 +91,7 @@ export function Guide(props) {
 
       {scrollTop && (
         <button
-          style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '0.85rem' }}
+          style={{ position: 'fixed', bottom: type === deviceTypes.deck ? '4.5rem' : '1rem', right: '1rem', padding: '0.85rem' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <ArrowUp className="icon" />
