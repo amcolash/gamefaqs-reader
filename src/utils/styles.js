@@ -113,8 +113,9 @@ function inputs() {
     border: 'none',
     color: 'var(--primary)',
     outline: 'none',
-    padding: '0 1.5rem',
+    width: 'calc(100% - 3rem)',
     height: '2.5rem',
+    padding: '0 1.5rem',
 
     $nest: {
       '&:focus, &:hover': {

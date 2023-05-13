@@ -7,7 +7,7 @@ import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
 
 export function Input(props) {
-  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(true);
   const inputRef = useRef();
   const keyboardRef = useRef();
   const type = useDeviceType();
@@ -194,7 +194,7 @@ export function Input(props) {
     <div ref={animationParent} style={{ width: '100%' }}>
       <input
         {...props}
-        style={{ width: '100%', ...props.style }}
+        style={props.style}
         ref={inputRef}
         onChange={(e) => {
           props.onChange(e);

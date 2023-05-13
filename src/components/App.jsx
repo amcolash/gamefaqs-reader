@@ -60,14 +60,14 @@ export function App() {
     (e) => {
       if (!focus) return;
 
-      if (dialog) {
-        setDialog(dialogType.None);
-        return;
-      }
-
       const active = document.activeElement;
 
       if (e.key === 'Escape' || e.key === 'Backspace') {
+        if (dialog) {
+          setDialog(dialogType.None);
+          return;
+        }
+
         if (active && active !== document.body) {
           active.blur();
           return;

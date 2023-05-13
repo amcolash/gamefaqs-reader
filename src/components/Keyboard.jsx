@@ -79,7 +79,7 @@ export function Keyboard(props) {
         position: 'fixed',
         bottom: 0,
         left: 0,
-        zIndex: 1,
+        zIndex: 4,
         width: 'calc(100% - 0.7rem)',
         display: 'flex',
         justifyContent: 'center',

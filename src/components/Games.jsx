@@ -37,7 +37,6 @@ export function Games(props) {
           flexDirection: 'column',
           background: 'var(--background)',
           position: 'relative',
-          zIndex: 1,
         }}
       >
         <label>Game Search</label>
@@ -49,7 +48,7 @@ export function Games(props) {
             props.setSearch(e.target.value);
           }}
           placeholder="Search Games"
-          style={{ width: '100%', marginTop: '0.5rem', marginBottom: '1.5rem' }}
+          style={{ marginTop: '0.5rem', marginBottom: '1.5rem' }}
         />
       </div>
 
