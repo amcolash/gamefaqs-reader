@@ -49,8 +49,9 @@ export function Input(props) {
     (e) => {
       if (!focus) return;
 
-      let handled = true;
       if (showKeyboard && keyboardEnabled) {
+        let handled = true;
+
         switch (e.key) {
           case 'ArrowUp':
             moveMarkerVertical(-1);
@@ -72,7 +73,14 @@ export function Input(props) {
             break;
           default:
             handled = false;
-            // setShowKeyboard(false);
+
+            // This small hack allows for typing on steam deck via native keyboards
+            if (props.updateValue) {
+              const ascii = e.keyCode.length === 1 ? e.keyCode.charCodeAt(0) : -1;
+              console.log(ascii);
+              if (ascii >= 32 && ascii <= 126) props.updateValue(inputRef.current?.value + e.key);
+            }
+
             break;
         }
 
@@ -190,10 +198,12 @@ export function Input(props) {
     };
   }, [handleKeyDown, keyboardRef, inputRef]);
 
+  const { updateValue, ...updatedProps } = props;
+
   return (
     <div ref={animationParent} style={{ width: '100%' }}>
       <input
-        {...props}
+        {...updatedProps}
         style={props.style}
         ref={inputRef}
         onChange={(e) => {

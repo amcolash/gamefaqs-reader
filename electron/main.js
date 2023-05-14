@@ -9,7 +9,7 @@ import { getGames, getGuide, getGuides, removeGuide } from './api';
 import { readdirSync, rmSync, statSync } from 'fs';
 import { execSync } from 'child_process';
 
-const STEAM_DECK = execSync('lsb_release -i -s').toString().includes('SteamOS');
+const STEAM_DECK = execSync('lsb_release -i -s').toString().includes('SteamOS') || true;
 const PROD = app.isPackaged;
 const LOG_DIR = app.getPath('logs');
 const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../../public/');

@@ -44,6 +44,7 @@ export function Header(props) {
             onChange={(e) => props.setSearch(e.target.value)}
             placeholder="Search Guide"
             style={{ flex: 1, minWidth: '7rem' }}
+            updateValue={(value) => props.setSearch(value)}
           />
 
           {props.searchLength > 0 && (

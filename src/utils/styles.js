@@ -32,6 +32,7 @@ function base() {
     {
       scrollPaddingTop: '7rem',
       overflowX: 'hidden',
+      userSelect: 'none',
     },
     // Larger UI for steam deck
     media(
@@ -49,19 +50,10 @@ function base() {
     color: 'var(--primary)',
   });
 
-  cssRule(
-    '#root',
-    {
-      display: 'flex',
-      justifyContent: 'center',
-    },
-    media(
-      { maxWidth: deckSize },
-      {
-        paddingBottom: '2.5rem',
-      }
-    )
-  );
+  cssRule('#root', {
+    display: 'flex',
+    justifyContent: 'center',
+  });
 }
 
 function buttons() {
@@ -158,8 +150,8 @@ function icons() {
 function scrollbars() {
   cssRaw(`
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
 }
 ::-webkit-scrollbar-button {
   width: 0px;

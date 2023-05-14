@@ -49,6 +49,10 @@ export function Games(props) {
           }}
           placeholder="Search Games"
           style={{ marginTop: '0.5rem', marginBottom: '1.5rem' }}
+          updateValue={(value) => {
+            setSearch(value);
+            props.setSearch(value);
+          }}
         />
       </div>
 

@@ -17,6 +17,7 @@ import { Dialog, dialogType } from './Dialog';
 import { Footer } from './Footer';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
+import { cleanupTouchScrolling, initTouchScrolling } from '../utils/touch';
 
 export function App() {
   const online = useOnline();
@@ -42,6 +43,12 @@ export function App() {
     });
   }, []);
 
+  // Add in touch scrolling for steam deck (since it doesn't seem like touch events are happening properly)
+  useEffect(() => {
+    if (type === deviceTypes.deck) initTouchScrolling();
+    return () => cleanupTouchScrolling();
+  }, [type]);
+
   useEffect(() => {
     if (guide) {
       let recent = [...recentGuides];
@@ -54,7 +61,7 @@ export function App() {
 
       setRecentGuides(recent);
     }
-  }, [guide, recentGuides]);
+  }, [guide]);
 
   const escapeHandler = useCallback(
     (e) => {
@@ -110,7 +117,7 @@ export function App() {
   }, [dialog]);
 
   return (
-    <div className={containerStyle}>
+    <div className={containerStyle} style={{ paddingBottom: type === deviceTypes.deck ? '5rem' : undefined }}>
       {dialog === dialogType.Exit && (
         <Dialog
           title="Exit"
