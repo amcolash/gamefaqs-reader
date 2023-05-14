@@ -9,7 +9,7 @@ import { getGames, getGuide, getGuides, removeGuide } from './api';
 import { readdirSync, rmSync, statSync } from 'fs';
 import { execSync } from 'child_process';
 
-const STEAM_DECK = execSync('lsb_release -i -s').toString().includes('SteamOS') || true;
+const STEAM_DECK = process.env.STEAM_DECK === 'true' || execSync('lsb_release -i -s').toString().includes('SteamOS');
 const PROD = app.isPackaged;
 const LOG_DIR = app.getPath('logs');
 const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../../public/');
@@ -40,8 +40,8 @@ app.whenReady().then(async () => {
   initUpdater();
   initShortcuts();
 
-  // Move mouse out of the way on start
-  if (STEAM_DECK) {
+  // Move mouse out of the way on start. Actually check if SteamOS, since STEAM_DECK can be overridden
+  if (execSync('lsb_release -i -s').toString().includes('SteamOS')) {
     setTimeout(() => {
       try {
         execSync('export DISPLAY=:1; xdotool mousemove 1280 800');

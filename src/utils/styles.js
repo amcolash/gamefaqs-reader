@@ -110,9 +110,10 @@ function inputs() {
     border: 'none',
     color: 'var(--primary)',
     outline: 'none',
-    width: 'calc(100% - 3rem)',
+    width: '100%',
     height: '2.5rem',
     padding: '0 1.5rem',
+    boxSizing: 'border-box',
 
     $nest: {
       '&:focus, &:hover': {

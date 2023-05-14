@@ -39,7 +39,7 @@ export function Header(props) {
 
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}>
           <Input
-            type="search"
+            type={type === deviceTypes.desktop ? 'search' : 'text'}
             value={props.search}
             onChange={(e) => props.setSearch(e.target.value)}
             placeholder="Search Guide"

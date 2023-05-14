@@ -76,8 +76,7 @@ export function Input(props) {
 
             // This small hack allows for typing on steam deck via native keyboards
             if (props.updateValue) {
-              const ascii = e.keyCode.length === 1 ? e.keyCode.charCodeAt(0) : -1;
-              console.log(ascii);
+              const ascii = e.key.length === 1 ? e.key.charCodeAt(0) : -1;
               if (ascii >= 32 && ascii <= 126) props.updateValue(inputRef.current?.value + e.key);
             }
 
