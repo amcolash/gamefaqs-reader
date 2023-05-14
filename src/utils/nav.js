@@ -42,7 +42,6 @@ export function initNavigation() {
   if (buttonPressListener) buttonPressListener.unsubscribe();
   buttonPressListener = window.joypad.on('button_press', (e) => {
     if (!focus) return;
-    if (e.detail.gamepad.index !== 0) return;
 
     const button = e.detail.index;
 
@@ -74,7 +73,6 @@ export function initNavigation() {
   if (buttonReleaseListener) buttonReleaseListener.unsubscribe();
   buttonReleaseListener = window.joypad.on('button_release', (e) => {
     if (!focus) return;
-    if (e.detail.gamepad.index !== 0) return;
     const button = e.detail.index;
 
     switch (button) {
@@ -91,7 +89,6 @@ export function initNavigation() {
   if (axisListener) axisListener.unsubscribe();
   axisListener = window.joypad.on('axis_move', (e) => {
     if (!focus) return;
-    if (e.detail.gamepad.index !== 0) return;
 
     // Left stick, horizontal axis
     if (e.detail.axis === 0 && Math.abs(e.detail.axisMovementValue) > 0.2) {

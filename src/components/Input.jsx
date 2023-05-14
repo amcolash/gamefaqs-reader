@@ -123,7 +123,6 @@ export function Input(props) {
   useEffect(() => {
     const buttonListener = window.joypad.on('button_press', (e) => {
       if (!focus) return;
-      if (e.detail.gamepad.index !== 0) return;
 
       const button = e.detail.index;
       const input = inputRef.current;
@@ -170,7 +169,6 @@ export function Input(props) {
 
     const axisListener = window.joypad.on('axis_move', (e) => {
       if (!focus) return;
-      if (e.detail.gamepad.index !== 0) return;
 
       // Left stick, horizontal axis
       if (e.detail.axis === 0 && Math.abs(e.detail.axisMovementValue) > 0.2) {

@@ -99,7 +99,6 @@ export function App() {
 
     const exitHandler = window.joypad.on('button_press', (e) => {
       if (!focus) return;
-      if (e.detail.gamepad.index !== 0) return;
 
       // Button 1: B (A nintendo)
       if (e.detail.index === 1 && !document.querySelector('.keyboard')) escapeHandler({ key: 'Escape' });
