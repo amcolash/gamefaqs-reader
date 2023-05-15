@@ -209,7 +209,19 @@ export function Input(props) {
         }}
         readOnly={keyboardEnabled}
         onFocus={(e) => setShowKeyboard(true)}
-        onBlur={(e) => setShowKeyboard(false)}
+        onBlur={(e) => {
+          // If a key is clicked, don't hide the keyboard
+          if (keyboardRef.current?.keyboardDOM.contains(e.relatedTarget)) {
+            // Remove key highlight when keys are clicked
+            const module = keyboardRef.current?.modules.keyNavigation;
+            if (module.markedBtn) module.markedBtn.classList.remove('hg-keyMarker');
+
+            return;
+          }
+
+          // Otherwise, hide the keyboard on blur
+          setShowKeyboard(false);
+        }}
         onKeyDown={(e) => handleKeyDown(e)}
       />
       {keyboardEnabled && showKeyboard && (
