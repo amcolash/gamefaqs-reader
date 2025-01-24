@@ -1,20 +1,19 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React from 'react';
 
+import { useApi } from '../hooks/useApi';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
+import ArrowLeft from '../icons/arrow-left.svg';
 import { Error } from './Error';
 import { Spinner } from './Spinner';
-
-import { useApi } from '../hooks/useApi';
-
-import ArrowLeft from '../icons/arrow-left.svg';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Guides(props) {
   const [data, loading, error] = useApi('guides', props.game.id);
   const [animationParent] = useAutoAnimate();
   const deviceType = useDeviceType();
 
-  const guideItems = data?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
+  const guideItems =
+    data?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
@@ -44,7 +43,13 @@ export function GuideItem(props) {
       <button
         className={props.className || 'guide'}
         key={guide.id}
-        style={{ justifyContent: 'space-between', padding: '0.5rem 4rem', overflow: 'hidden', width: '100%', ...props.style }}
+        style={{
+          justifyContent: 'space-between',
+          padding: '0.5rem 4rem',
+          overflow: 'hidden',
+          width: '100%',
+          ...props.style,
+        }}
         onClick={() => props.setGuide(guide)}
       >
         <div style={{ textAlign: 'left' }}>

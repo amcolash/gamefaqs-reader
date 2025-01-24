@@ -1,12 +1,21 @@
 import React from 'react';
+
 import { dialogType } from './Dialog';
 
 export function Footer(props) {
   const additionalItems = [];
 
   if (props.guide) {
-    additionalItems.push({ label: 'Page Up', icon: './gamepad/l2.png', onClick: () => window.scrollBy(0, -window.innerHeight * 0.75) });
-    additionalItems.push({ label: 'Page Down', icon: './gamepad/r2.png', onClick: () => window.scrollBy(0, window.innerHeight * 0.75) });
+    additionalItems.push({
+      label: 'Page Up',
+      icon: './gamepad/l2.png',
+      onClick: () => window.scrollBy(0, -window.innerHeight * 0.75),
+    });
+    additionalItems.push({
+      label: 'Page Down',
+      icon: './gamepad/r2.png',
+      onClick: () => window.scrollBy(0, window.innerHeight * 0.75),
+    });
   }
 
   if (props.dialog === dialogType.None) additionalItems.push({ label: 'Scroll', icon: './gamepad/right-stick.png' });

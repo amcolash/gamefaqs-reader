@@ -1,15 +1,23 @@
-import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
+import { execSync } from 'child_process';
+import { BrowserWindow, app, globalShortcut, ipcMain } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import windowStateKeeper from 'electron-window-state';
+import { readdirSync, rmSync, statSync } from 'fs';
 import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
-import { cookieKey, store } from './store';
-import { getGames, getGuide, getGuides, removeGuide } from './api';
-import { readdirSync, rmSync, statSync } from 'fs';
-import { execSync } from 'child_process';
 
-const STEAM_DECK = process.env.STEAM_DECK === 'true' || execSync('lsb_release -i -s').toString().includes('SteamOS');
+import { getGames, getGuide, getGuides, removeGuide } from './api';
+import { cookieKey, store } from './store';
+
+let STEAM_DECK = false;
+
+try {
+  STEAM_DECK = process.env.STEAM_DECK === 'true' || execSync('lsb_release -i -s').toString().includes('SteamOS');
+} catch (err) {
+  // Likely not linux system, so ignore
+}
+
 const PROD = app.isPackaged;
 const LOG_DIR = app.getPath('logs');
 const PUBLIC_DIR = PROD ? join(__dirname, '../dist/') : join(__dirname, '../../public/');
@@ -41,7 +49,7 @@ app.whenReady().then(async () => {
   initShortcuts();
 
   // Move mouse out of the way on start. Actually check if SteamOS, since STEAM_DECK can be overridden
-  if (execSync('lsb_release -i -s').toString().includes('SteamOS')) {
+  if (STEAM_DECK) {
     setTimeout(() => {
       try {
         execSync('export DISPLAY=:1; xdotool mousemove 1280 800');
@@ -60,7 +68,12 @@ function createWindow() {
   });
 
   let prodOptions = { fullscreen: process.env.FULLSCREEN !== 'false' };
-  let devOptions = { x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height };
+  let devOptions = {
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+  };
 
   // Open window in fullscreen in production mode, open maximized in dev
   win = new BrowserWindow({

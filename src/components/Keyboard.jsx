@@ -1,13 +1,13 @@
 import React from 'react';
 import Keys from 'react-simple-keyboard';
-import keyNavigation from 'simple-keyboard-key-navigation';
 import 'react-simple-keyboard/build/css/index.css';
+import keyNavigation from 'simple-keyboard-key-navigation';
 import { cssRaw } from 'typestyle';
 
 import Backspace from '../icons/backspace.svg?raw';
-import KeyboardIcon from '../icons/keyboard.svg?raw';
 import LeftIcon from '../icons/caret-left-fill.svg?raw';
 import RightIcon from '../icons/caret-right-fill.svg?raw';
+import KeyboardIcon from '../icons/keyboard.svg?raw';
 
 cssRaw(`
 .simple-keyboard {

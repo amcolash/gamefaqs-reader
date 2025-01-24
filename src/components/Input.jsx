@@ -1,10 +1,10 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { throttle, updateInputValue } from '../utils/util';
 
-import { Keyboard } from './Keyboard';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
+import { throttle, updateInputValue } from '../utils/util';
+import { Keyboard } from './Keyboard';
 
 export function Input(props) {
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -139,7 +139,9 @@ export function Input(props) {
           const last = Math.max(0, input.selectionStart - 1);
 
           // Remove character from input
-          const newValue = input.value.slice(0, input.selectionStart - 1) + input.value.slice(input.selectionStart, input.value.length);
+          const newValue =
+            input.value.slice(0, input.selectionStart - 1) +
+            input.value.slice(input.selectionStart, input.value.length);
           updateInputValue(input, newValue);
 
           // Move cursor accordingly

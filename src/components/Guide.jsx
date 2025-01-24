@@ -2,17 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { classes, style } from 'typestyle';
 
-import { useDebounce } from '../hooks/useDebounce';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useApi } from '../hooks/useApi';
+import { useDebounce } from '../hooks/useDebounce';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import ArrowUp from '../icons/arrow-up.svg';
 import { debounce, lastScroll, lastZoom, throttle } from '../utils/util';
-
 import { Error } from './Error';
 import { Header } from './Header';
 import { Spinner } from './Spinner';
-
-import ArrowUp from '../icons/arrow-up.svg';
-import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Guide(props) {
   const type = useDeviceType();
@@ -91,7 +89,12 @@ export function Guide(props) {
 
       {scrollTop && (
         <button
-          style={{ position: 'fixed', bottom: type === deviceTypes.deck ? '4.5rem' : '1rem', right: '1rem', padding: '0.85rem' }}
+          style={{
+            position: 'fixed',
+            bottom: type === deviceTypes.deck ? '4.5rem' : '1rem',
+            right: '1rem',
+            padding: '0.85rem',
+          }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <ArrowUp className="icon" />

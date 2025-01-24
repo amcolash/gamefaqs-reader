@@ -92,7 +92,10 @@ export function initNavigation() {
 
     // Left stick, horizontal axis
     if (e.detail.axis === 0 && Math.abs(e.detail.axisMovementValue) > 0.2) {
-      throttledAxisKeyDown({ key: e.detail.axisMovementValue > 0 ? 'ArrowRight' : 'ArrowLeft', preventDefault: () => {} });
+      throttledAxisKeyDown({
+        key: e.detail.axisMovementValue > 0 ? 'ArrowRight' : 'ArrowLeft',
+        preventDefault: () => {},
+      });
     }
 
     // Left stick, vertical axis
@@ -165,7 +168,12 @@ function keyDown(event) {
         } else if (document.activeElement === document.body) {
           focusToIndex(document, 0);
         } else {
-          focusItem(document, activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? 2 : 1, false, true);
+          focusItem(
+            document,
+            activeClasses?.contains('recentGuide') || activeClasses?.contains('remove') ? 2 : 1,
+            false,
+            true
+          );
         }
         break;
 

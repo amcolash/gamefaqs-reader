@@ -1,9 +1,8 @@
+import 'joypad.js';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import 'joypad.js';
 
 import { App } from './components/App';
-
 import { createStyles, createVariables } from './utils/styles';
 
 window.joypad.set({
