@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { GuideItem } from './Guides';
-
 import X from '../icons/x-lg.svg';
+import { GuideItem } from './Guides';
 
 export function Recents(props) {
   return (
@@ -10,8 +9,17 @@ export function Recents(props) {
       <h1>Recent Guides</h1>
 
       {props.recentGuides.map((g) => (
-        <div key={g.id} style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', width: '100%', wordBreak: 'break-word' }}>
-          <GuideItem className="recentGuide" guide={g} setGuide={props.setGuide} showGame={true} style={{ width: '100%' }} />
+        <div
+          key={g.id}
+          style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', width: '100%', wordBreak: 'break-word' }}
+        >
+          <GuideItem
+            className="recentGuide"
+            guide={g}
+            setGuide={props.setGuide}
+            showGame={true}
+            style={{ width: '100%' }}
+          />
 
           <button
             className="error remove"

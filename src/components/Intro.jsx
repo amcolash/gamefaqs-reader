@@ -34,12 +34,13 @@ export function Intro(props) {
         <div style={{ maxWidth: '485px', marginBottom: '3rem' }}>
           <h1>Welcome to GameFAQs Reader!</h1>
           <h3>
-            This application lets you read game guides and automatically saves them for offline use on the go. To get started, just search
-            for a game and select a guide.
+            This application lets you read game guides and automatically saves them for offline use on the go. To get
+            started, just search for a game and select a guide.
           </h3>
 
           <h3>
-            This application supports controller input out of the box. I recommend using the default steam controller template (Templates
+            This application supports controller input out of the box. I recommend using the default steam controller
+            template (Templates
             <ArrowRightIcon style={{ margin: '0 0.5rem' }} />
             Gamepad) for the default button mapping.
           </h3>

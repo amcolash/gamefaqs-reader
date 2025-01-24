@@ -1,15 +1,13 @@
 import React from 'react';
 
-import { Input } from './Input';
-
-import ArrowBarUp from '../icons/arrow-bar-up.svg';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import ArrowBarDown from '../icons/arrow-bar-down.svg';
+import ArrowBarUp from '../icons/arrow-bar-up.svg';
 import X from '../icons/x-lg.svg';
 import ZoomIn from '../icons/zoom-in.svg';
 import ZoomOut from '../icons/zoom-out.svg';
-
 import { mod } from '../utils/util';
-import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
+import { Input } from './Input';
 
 const zoomFactor = 0.2;
 
@@ -30,14 +28,24 @@ export function Header(props) {
         justifyContent: 'center',
       }}
     >
-      <div style={{ display: 'flex', width: '100%', maxWidth: 'var(--maxWidth)', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          maxWidth: 'var(--maxWidth)',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         {type === deviceTypes.desktop && (
           <button onClick={() => props.setGuide()} style={{ padding: '0.6rem' }}>
             <X className="icon" />
           </button>
         )}
 
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}>
+        <div
+          style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}
+        >
           <Input
             type={type === deviceTypes.desktop ? 'search' : 'text'}
             value={props.search}
@@ -52,10 +60,16 @@ export function Header(props) {
               <span style={{ margin: '0.5rem', whiteSpace: 'nowrap' }}>
                 {props.searchIndex + 1} / {props.searchLength}
               </span>
-              <button onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))} style={{ padding: '0.6rem' }}>
+              <button
+                onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))}
+                style={{ padding: '0.6rem' }}
+              >
                 <ArrowBarUp className="icon" />
               </button>
-              <button onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))} style={{ padding: '0.6rem' }}>
+              <button
+                onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))}
+                style={{ padding: '0.6rem' }}
+              >
                 <ArrowBarDown className="icon" />
               </button>
             </>

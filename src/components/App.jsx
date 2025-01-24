@@ -1,23 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { style } from 'typestyle';
 
-import { Guide } from './Guide';
-import { Games } from './Games';
-import { Guides } from './Guides';
-import { Recents } from './Recents';
-
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useOnline } from '../hooks/useOnline';
-import { introKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
-
-import OfflineIcon from '../icons/wifi-off.svg';
-import { cleanupNavigation, initNavigation } from '../utils/nav';
-import { Intro } from './Intro';
-import { Dialog, dialogType } from './Dialog';
-import { Footer } from './Footer';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useOnline } from '../hooks/useOnline';
+import OfflineIcon from '../icons/wifi-off.svg';
+import { cleanupNavigation, initNavigation } from '../utils/nav';
 import { cleanupTouchScrolling, initTouchScrolling } from '../utils/touch';
+import { introKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
+import { Dialog, dialogType } from './Dialog';
+import { Footer } from './Footer';
+import { Games } from './Games';
+import { Guide } from './Guide';
+import { Guides } from './Guides';
+import { Intro } from './Intro';
+import { Recents } from './Recents';
 
 export function App() {
   const online = useOnline();

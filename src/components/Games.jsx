@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import React, { useEffect, useState } from 'react';
 
-import { useDebounce } from '../hooks/useDebounce';
 import { useApi } from '../hooks/useApi';
-
+import { useDebounce } from '../hooks/useDebounce';
+import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { Error } from './Error.jsx';
 import { Input } from './Input';
 import { Spinner } from './Spinner';
-import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 
 export function Games(props) {
   const [search, setSearch] = useState('');
@@ -25,7 +24,8 @@ export function Games(props) {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
       <div>
         <h1 style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
-          <img src="./logo_v13.png" alt="GameFAQS logo" style={{ marginTop: '0.25rem', marginRight: '0.5rem' }} /> Reader
+          <img src="./logo_v13.png" alt="GameFAQS logo" style={{ marginTop: '0.25rem', marginRight: '0.5rem' }} />{' '}
+          Reader
         </h1>
         <div style={{ textAlign: 'right', fontSize: 8, marginTop: '-2.15rem' }}>{version}</div>
       </div>
@@ -59,7 +59,10 @@ export function Games(props) {
       {error && <Error error={error} />}
       {loading && <Spinner />}
       <div ref={animationParent} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        {debouncedSearch.length > 0 && !error && data && data.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
+        {debouncedSearch.length > 0 &&
+          !error &&
+          data &&
+          data.map((g) => <GameItem key={g.id} game={g} setGame={props.setGame} />)}
       </div>
     </div>
   );
