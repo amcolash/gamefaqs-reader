@@ -61,7 +61,16 @@ export function GuideItem(props) {
           {guide.year && <span>({guide.year})</span>}
           <br />
           {guide.html && (
-            <span style={{ background: 'var(--steamBlue)', padding: '0.15rem', margin: '0.25rem' }}>[HTML]</span>
+            <span
+              style={{
+                background: 'var(--background)',
+                color: 'var(--primary)',
+                padding: '0.15rem 0.5rem',
+                margin: '0.25rem',
+              }}
+            >
+              [HTML]
+            </span>
           )}
           {guide.version}
         </div>
