@@ -83,7 +83,7 @@ export function Header(props) {
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           {props.zoom.toFixed(1)}x
           <button
-            disabled={props.zoom <= 1}
+            disabled={props.zoom <= 0.811}
             onClick={() => props.setZoom(props.zoom - zoomFactor)}
             style={{ fontWeight: 'bold', padding: '0.6rem' }}
           >

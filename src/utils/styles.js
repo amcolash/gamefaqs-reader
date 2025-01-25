@@ -10,7 +10,7 @@ export function createVariables() {
   createVariable('--dark', '#0d141c');
   createVariable('--header', '#3d4451');
   createVariable('--error', '#dd3517');
-  createVariable('--maxWidth', '950px');
+  createVariable('--maxWidth', window.innerWidth > deckSize ? '1280px' : '950px');
   createVariable('--steamBlue', '#1a9ffe');
   createVariable('--table', '#3d4451');
 }

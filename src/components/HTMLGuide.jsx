@@ -21,6 +21,7 @@ export function HTMLGuide(props) {
 
   const guide = style({
     overflow: 'auto',
+    zoom,
 
     $nest: {
       '& button': {
