@@ -12,8 +12,7 @@ export function Guides(props) {
   const [animationParent] = useAutoAnimate();
   const deviceType = useDeviceType();
 
-  const guideItems =
-    data?.filter((g) => !g.html).map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
+  const guideItems = data?.map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
@@ -61,6 +60,9 @@ export function GuideItem(props) {
         <div style={{ textAlign: 'right' }}>
           {guide.year && <span>({guide.year})</span>}
           <br />
+          {guide.html && (
+            <span style={{ background: 'var(--steamBlue)', padding: '0.15rem', margin: '0.25rem' }}>[HTML]</span>
+          )}
           {guide.version}
         </div>
       </button>

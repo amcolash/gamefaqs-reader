@@ -46,32 +46,36 @@ export function Header(props) {
         <div
           style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', maxWidth: 'min(60%, 40vw)', width: '100%' }}
         >
-          <Input
-            type={type === deviceTypes.desktop ? 'search' : 'text'}
-            value={props.search}
-            onChange={(e) => props.setSearch(e.target.value)}
-            placeholder="Search Guide"
-            style={{ flex: 1, minWidth: '7rem' }}
-            updateValue={(value) => props.setSearch(value)}
-          />
-
-          {props.searchLength > 0 && (
+          {!props.hideSearch && (
             <>
-              <span style={{ margin: '0.5rem', whiteSpace: 'nowrap' }}>
-                {props.searchIndex + 1} / {props.searchLength}
-              </span>
-              <button
-                onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))}
-                style={{ padding: '0.6rem' }}
-              >
-                <ArrowBarUp className="icon" />
-              </button>
-              <button
-                onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))}
-                style={{ padding: '0.6rem' }}
-              >
-                <ArrowBarDown className="icon" />
-              </button>
+              <Input
+                type={type === deviceTypes.desktop ? 'search' : 'text'}
+                value={props.search}
+                onChange={(e) => props.setSearch(e.target.value)}
+                placeholder="Search Guide"
+                style={{ flex: 1, minWidth: '7rem' }}
+                updateValue={(value) => props.setSearch(value)}
+              />
+
+              {props.searchLength > 0 && (
+                <>
+                  <span style={{ margin: '0.5rem', whiteSpace: 'nowrap' }}>
+                    {props.searchIndex + 1} / {props.searchLength}
+                  </span>
+                  <button
+                    onClick={() => props.setSearchIndex(mod(props.searchIndex - 1, props.searchLength))}
+                    style={{ padding: '0.6rem' }}
+                  >
+                    <ArrowBarUp className="icon" />
+                  </button>
+                  <button
+                    onClick={() => props.setSearchIndex(mod(props.searchIndex + 1, props.searchLength))}
+                    style={{ padding: '0.6rem' }}
+                  >
+                    <ArrowBarDown className="icon" />
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>

@@ -12,6 +12,7 @@ export function createVariables() {
   createVariable('--error', '#dd3517');
   createVariable('--maxWidth', '950px');
   createVariable('--steamBlue', '#1a9ffe');
+  createVariable('--table', '#3d4451');
 }
 
 function createVariable(name, value) {

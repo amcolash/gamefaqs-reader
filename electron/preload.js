@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   games: (search) => ipcRenderer.invoke('games', search),
   guides: (id) => ipcRenderer.invoke('guides', id),
   guide: (gameId, guideId) => ipcRenderer.invoke('guide', gameId, guideId),
+  htmlGuide: (gameId, guideId, guidePage) => ipcRenderer.invoke('htmlGuide', gameId, guideId, guidePage),
   removeGuide: (gameId, guideId) => ipcRenderer.invoke('removeGuide', gameId, guideId),
   version: () => ipcRenderer.invoke('version'),
   exit: () => ipcRenderer.invoke('quit'),

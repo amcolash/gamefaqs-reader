@@ -7,7 +7,7 @@ import { useDebounce } from '../hooks/useDebounce';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import ArrowUp from '../icons/arrow-up.svg';
-import { debounce, lastScroll, lastZoom, throttle } from '../utils/util';
+import { debounce, lastScroll, lastZoom } from '../utils/util';
 import { Error } from './Error';
 import { Header } from './Header';
 import { Spinner } from './Spinner';
@@ -101,7 +101,7 @@ export function Guide(props) {
         </button>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '6rem 2rem' }}>
+      <div style={{ display: 'grid', justifyContent: 'center', padding: '6rem 2rem' }}>
         {error && <Error error={error} />}
         {!error && (loading || zoomHide) && <Spinner />}
 

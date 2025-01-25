@@ -7,7 +7,7 @@ import { readdirSync, rmSync, statSync } from 'fs';
 import { join } from 'path';
 import { parse as parseCookie, splitCookiesString } from 'set-cookie-parser';
 
-import { getGames, getGuide, getGuides, removeGuide } from './api';
+import { getGames, getGuide, getGuides, getHTMLGuide, removeGuide } from './api';
 import { cookieKey, store } from './store';
 
 let STEAM_DECK = false;
@@ -126,6 +126,7 @@ function initIpc() {
   ipcMain.handle('games', (event, search) => getGames(search));
   ipcMain.handle('guides', (event, id) => getGuides(id));
   ipcMain.handle('guide', (event, gameId, guideId) => getGuide(gameId, guideId));
+  ipcMain.handle('htmlGuide', (event, gameId, guideId, guidePage) => getHTMLGuide(gameId, guideId, guidePage));
   ipcMain.handle('removeGuide', (event, gameId, guideId) => removeGuide(gameId, guideId));
   ipcMain.handle('version', (event) => app.getVersion());
   ipcMain.handle('quit', (event) => app.exit());

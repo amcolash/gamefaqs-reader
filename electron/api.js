@@ -51,7 +51,10 @@ export async function getGuides(id) {
       const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
 
       const gameId = id;
-      const gameTitle = dom.window.document.querySelector('.page-title').textContent.replace(' – Guides and FAQs', '').trim();
+      const gameTitle = dom.window.document
+        .querySelector('.page-title')
+        .textContent.replace(' – Guides and FAQs', '')
+        .trim();
 
       results.forEach((r) => {
         const platform = r.getAttribute('data-platform');
@@ -110,6 +113,28 @@ export async function getGuide(gameId, guideId) {
   }
 }
 
+export async function getHTMLGuide(gameId, guideId, guidePage) {
+  const url = `https://gamefaqs.gamespot.com/pc/${gameId}/faqs/${guideId}`;
+
+  try {
+    const data = await checkCache(url);
+    const dom = new JSDOM(data);
+
+    let htmlGuide = dom.window.document.querySelector('#faqwrap')?.innerHTML || '';
+    htmlGuide = htmlGuide.replaceAll(/\/a\/faqs\//g, 'https://gamefaqs.gamespot.com/a/faqs/');
+
+    htmlGuide = htmlGuide.replace(/<a id=".+?"><\/a>/g, '');
+
+    htmlGuide = htmlGuide.replace(/<a/g, '<button onclick="window.setGuidePage(this.getAttribute(\'href\'))"');
+    htmlGuide = htmlGuide.replace(/<\/a>/g, '</button>');
+
+    return { data: htmlGuide };
+  } catch (err) {
+    console.error(err);
+    return { error: err };
+  }
+}
+
 export function removeGuide(gameId, guideId) {
   const url = `https://gamefaqs.gamespot.com/pc/${gameId}/faqs/${guideId}`;
 
@@ -130,7 +155,9 @@ async function checkCache(url, isGuide) {
 
   console.log(`Fetching ${url}`);
   const cookie = store.get(cookieKey);
-  const data = await fetch(url, { headers: { cookie: `gf_dvi=${cookie.value}`, 'User-Agent': '' } }).then((res) => res.text());
+  const data = await fetch(url, { headers: { cookie: `gf_dvi=${cookie.value}`, 'User-Agent': '' } }).then((res) =>
+    res.text()
+  );
 
   if (isGuide) guideCache.set(url, { date: Date.now(), data: data });
   else CACHE[url] = data;

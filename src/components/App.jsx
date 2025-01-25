@@ -14,6 +14,7 @@ import { Footer } from './Footer';
 import { Games } from './Games';
 import { Guide } from './Guide';
 import { Guides } from './Guides';
+import { HTMLGuide } from './HTMLGuide';
 import { Intro } from './Intro';
 import { Recents } from './Recents';
 
@@ -137,7 +138,11 @@ export function App() {
       {showIntro ? (
         <Intro setShowIntro={setShowIntro} />
       ) : guide ? (
-        <Guide guide={guide} setGuide={setGuide} />
+        guide.html ? (
+          <HTMLGuide guide={guide} setGuide={setGuide} />
+        ) : (
+          <Guide guide={guide} setGuide={setGuide} />
+        )
       ) : !guide && game && online ? (
         <Guides game={game} setGuide={setGuide} setGame={setGame} />
       ) : (
