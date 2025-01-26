@@ -61,6 +61,8 @@ app.whenReady().then(async () => {
 });
 
 function createWindow() {
+  const prodDeck = PROD && STEAM_DECK;
+
   // Init window state manager
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1000,
@@ -77,7 +79,7 @@ function createWindow() {
 
   // Open window in fullscreen in production mode, open maximized in dev
   win = new BrowserWindow({
-    ...(PROD ? prodOptions : devOptions),
+    ...(prodDeck ? prodOptions : devOptions),
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
     },
@@ -86,7 +88,7 @@ function createWindow() {
   });
 
   // Keep track of the window state
-  if (!PROD) mainWindowState.manage(win);
+  if (!prodDeck) mainWindowState.manage(win);
 
   // Load index page
   if (PROD) {
