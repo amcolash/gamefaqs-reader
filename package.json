@@ -1,6 +1,6 @@
 {
   "name": "gamefaqs-reader",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Read gamefaqs guides easily",
   "author": "Andrew McOlash",
   "license": "MIT",
@@ -15,28 +15,28 @@
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.6",
     "electron-fetch": "^1.9.1",
-    "electron-log": "^5.2.4",
-    "electron-updater": "^6.3.9",
+    "electron-log": "^5.4.1",
+    "electron-updater": "^6.6.2",
     "electron-window-state": "^5.0.3",
     "joypad.js": "^2.3.5",
-    "jsdom": "^26.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "jsdom": "^26.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-highlight-words": "^0.21.0",
-    "react-simple-keyboard": "^3.8.39",
+    "react-simple-keyboard": "^3.8.87",
     "set-cookie-parser": "^2.7.1",
     "simple-keyboard-key-navigation": "^2.4.246",
     "typestyle": "^2.4.0"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^5.2.1",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "babel-preset-nano-react-app": "^0.1.0",
     "electron": "^24.3.0",
-    "electron-builder": "^25.1.8",
-    "prettier": "^3.4.2",
-    "vite": "^4.3.5",
+    "electron-builder": "^26.0.12",
+    "prettier": "^3.6.1",
+    "vite": "^7.0.0",
     "vite-electron-plugin": "^0.8.3",
-    "vite-plugin-svgr": "^3.2.0"
+    "vite-plugin-svgr": "^4.3.0"
   },
   "babel": {
     "presets": [

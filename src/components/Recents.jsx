@@ -1,6 +1,6 @@
 import React from 'react';
 
-import X from '../icons/x-lg.svg';
+import X from '../icons/x-lg.svg?react';
 import { GuideItem } from './Guides';
 
 export function Recents(props) {

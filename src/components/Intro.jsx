@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ArrowRightIcon from '../icons/arrow-right.svg';
+import ArrowRightIcon from '../icons/arrow-right.svg?react';
 
 export function Intro(props) {
   return (

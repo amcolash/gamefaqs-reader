@@ -5,7 +5,7 @@ import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useInFocus } from '../hooks/useInFocus';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useOnline } from '../hooks/useOnline';
-import OfflineIcon from '../icons/wifi-off.svg';
+import OfflineIcon from '../icons/wifi-off.svg?react';
 import { cleanupNavigation, initNavigation } from '../utils/nav';
 import { cleanupTouchScrolling, initTouchScrolling } from '../utils/touch';
 import { introKey, lastGame, lastGuide, recentGuideKey } from '../utils/util';
@@ -67,6 +67,10 @@ export function App() {
       if (!focus) return;
 
       const active = document.activeElement;
+
+      if (type === deviceTypes.desktop && e.key === 'Backspace' && active) {
+        if (active instanceof HTMLInputElement || active instanceof HTMLTextAreaElement) return;
+      }
 
       if (e.key === 'Escape' || e.key === 'Backspace') {
         if (dialog) {

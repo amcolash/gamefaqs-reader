@@ -6,7 +6,7 @@ import { useApi } from '../hooks/useApi';
 import { useDebounce } from '../hooks/useDebounce';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import ArrowUp from '../icons/arrow-up.svg';
+import ArrowUp from '../icons/arrow-up.svg?react';
 import { debounce, lastScroll, lastZoom } from '../utils/util';
 import { Error } from './Error';
 import { Header } from './Header';

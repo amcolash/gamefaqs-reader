@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
-import ArrowBarDown from '../icons/arrow-bar-down.svg';
-import ArrowBarUp from '../icons/arrow-bar-up.svg';
-import X from '../icons/x-lg.svg';
-import ZoomIn from '../icons/zoom-in.svg';
-import ZoomOut from '../icons/zoom-out.svg';
+import ArrowBarDown from '../icons/arrow-bar-down.svg?react';
+import ArrowBarUp from '../icons/arrow-bar-up.svg?react';
+import X from '../icons/x-lg.svg?react';
+import ZoomIn from '../icons/zoom-in.svg?react';
+import ZoomOut from '../icons/zoom-out.svg?react';
 import { mod } from '../utils/util';
 import { Input } from './Input';
 

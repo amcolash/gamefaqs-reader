@@ -3,9 +3,10 @@ import React from 'react';
 
 import { useApi } from '../hooks/useApi';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
-import ArrowLeft from '../icons/arrow-left.svg';
+import ArrowLeft from '../icons/arrow-left.svg?react';
 import { Error } from './Error';
 import { Spinner } from './Spinner';
+import { Tag } from './Tag';
 
 export function Guides(props) {
   const [data, loading, error] = useApi('guides', props.game.id);
@@ -53,7 +54,8 @@ export function GuideItem(props) {
       >
         <div style={{ textAlign: 'left' }}>
           {props.showGame && props.guide.gameTitle}
-          {!props.showGame && guide.title} [{guide.platform}]
+          {!props.showGame && guide.title}
+          <Tag>{guide.platform}</Tag>
           <br />
           By: {guide.authors}
         </div>
