@@ -1,5 +1,5 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useApi } from '../hooks/useApi';
 import { deviceTypes, useDeviceType } from '../hooks/useDeviceType';
@@ -10,10 +10,15 @@ import { Tag } from './Tag';
 
 export function Guides(props) {
   const [data, loading, error] = useApi('guides', props.game.id);
+  const [platform, setPlatform] = useState('All');
   const [animationParent] = useAutoAnimate();
   const deviceType = useDeviceType();
 
-  const guideItems = data?.map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
+  const platforms = Array.from(['All', ...new Set(data?.map((g) => g.platform) || [])]).sort();
+  const guideItems =
+    data
+      ?.filter((g) => platform === 'All' || g.platform === platform)
+      .map((g) => <GuideItem key={g.id} guide={g} setGuide={props.setGuide} />) || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
@@ -23,13 +28,27 @@ export function Guides(props) {
             <ArrowLeft className="icon" />
           </button>
         )}
-        <div style={{ width: '100%', textAlign: 'center' }}>Guides for {props.game.title}</div>
+        <div style={{ width: '100%', textAlign: 'center', paddingLeft: '4.5rem' }}>Guides for {props.game.title}</div>
+        {platforms.length > 1 && (
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem' }}>
+            <label style={{ fontSize: '1.5rem' }}>Platform</label>
+            <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
+              {platforms.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </h1>
 
       {error && <Error error={error} />}
       {loading && <Spinner />}
       <div ref={animationParent} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        {!loading && !error && (guideItems.length > 0 ? guideItems : <h2>No Guides Found</h2>)}
+        {!loading &&
+          !error &&
+          (guideItems.length > 0 ? guideItems : <h2 style={{ textAlign: 'center' }}>No Guides Found</h2>)}
       </div>
     </div>
   );
@@ -53,27 +72,18 @@ export function GuideItem(props) {
         onClick={() => props.setGuide(guide)}
       >
         <div style={{ textAlign: 'left' }}>
-          {props.showGame && props.guide.gameTitle}
-          {!props.showGame && guide.title}
-          <Tag>{guide.platform}</Tag>
+          <div style={{ display: 'inline-flex', gap: '0.5rem', alignItems: 'center' }}>
+            {props.showGame && props.guide.gameTitle}
+            {!props.showGame && guide.title}
+            <Tag>{guide.platform}</Tag>
+            {guide.html && <Tag>HTML</Tag>}
+          </div>
           <br />
           By: {guide.authors}
         </div>
         <div style={{ textAlign: 'right' }}>
           {guide.year && <span>({guide.year})</span>}
           <br />
-          {guide.html && (
-            <span
-              style={{
-                background: 'var(--background)',
-                color: 'var(--primary)',
-                padding: '0.15rem 0.5rem',
-                margin: '0.25rem',
-              }}
-            >
-              [HTML]
-            </span>
-          )}
           {guide.version}
         </div>
       </button>

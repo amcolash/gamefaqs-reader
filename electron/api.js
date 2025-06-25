@@ -41,15 +41,12 @@ export async function getGuides(id) {
 
   try {
     const data = await checkCache(url);
-
     const dom = new JSDOM(data);
-    const mainGuideSection = dom.window.document.querySelector('.gf_guides');
+
+    const results = Array.from(dom.window.document.querySelectorAll('.gf_guides li'));
 
     const guides = [];
-
-    if (mainGuideSection) {
-      const results = Array.from(mainGuideSection.querySelectorAll('.gf_guides li'));
-
+    if (results.length > 0) {
       const gameId = id;
       const gameTitle = dom.window.document
         .querySelector('.page-title')

@@ -6,8 +6,8 @@ export function Tag(props) {
       style={{
         border: '2px solid var(--header)',
         borderRadius: '0.25rem',
-        margin: '0 0.5rem',
-        padding: '0.15rem 0.25rem',
+        padding: '0.1rem 0.25rem',
+        ...props.style,
       }}
     >
       {props.children}

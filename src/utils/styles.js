@@ -24,6 +24,7 @@ export function createStyles() {
   base();
   buttons();
   inputs();
+  select();
   icons();
   scrollbars();
 }
@@ -58,36 +59,38 @@ function base() {
   });
 }
 
-function buttons() {
-  cssRule('button', {
-    fontSize: '1.25rem',
-    fontFamily: "'Motiva Sans', sans-serif",
-    color: 'var(--primary)',
-    background: 'var(--secondary)',
-    outline: 'none',
-    border: 'none',
-    borderRadius: 3,
-    padding: '0.5rem 1.5rem',
+const buttonStyle = {
+  fontSize: '1.25rem',
+  fontFamily: "'Motiva Sans', sans-serif",
+  color: 'var(--primary)',
+  background: 'var(--secondary)',
+  outline: 'none',
+  border: 'none',
+  borderRadius: 3,
+  padding: '0.5rem 1.5rem',
 
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 
-    $nest: {
-      '&:active:not([disabled]), &:focus:not([disabled]), &:hover:not([disabled])': {
-        background: 'var(--primary)',
-        color: 'var(--secondary)',
-      },
-      '&.blue:active:not([disabled]), &.blue:focus:not([disabled]), &.blue:hover:not([disabled])': {
-        background: 'var(--steamBlue)',
-        color: 'var(--primary)',
-      },
-
-      '&:disabled': {
-        opacity: 0.5,
-      },
+  $nest: {
+    '&:active:not([disabled]), &:focus:not([disabled]), &:hover:not([disabled])': {
+      background: 'var(--primary)',
+      color: 'var(--secondary)',
     },
-  });
+    '&.blue:active:not([disabled]), &.blue:focus:not([disabled]), &.blue:hover:not([disabled])': {
+      background: 'var(--steamBlue)',
+      color: 'var(--primary)',
+    },
+
+    '&:disabled': {
+      opacity: 0.5,
+    },
+  },
+};
+
+function buttons() {
+  cssRule('button', buttonStyle);
 
   cssRule('button.error', {
     $nest: {
@@ -101,6 +104,16 @@ function buttons() {
   cssRule('.glyph', {
     width: 24,
     height: 24,
+  });
+}
+
+function select() {
+  cssRule('select', {
+    ...buttonStyle,
+
+    // add right side padding to arrow
+    paddingRight: '0',
+    borderRight: '1.5rem solid transparent',
   });
 }
 
