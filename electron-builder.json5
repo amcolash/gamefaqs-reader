@@ -6,9 +6,12 @@
   appId: 'com.amcolash.gamefaqs-reader',
   artifactName: '${productName}.${ext}',
   asar: true,
-  icon: 'public/icon/256x256.png',
+  icon: 'public/icon/512x512.png',
   directories: {
     output: 'build/release/${version}',
+  },
+  extraMetadata: {
+    name: 'GameFAQs Reader',
   },
   files: ['build/dist', 'build/dist-electron'],
   linux: {
@@ -17,5 +20,8 @@
   },
   win: {
     target: ['portable'],
+  },
+  mac: {
+    target: ['dmg'],
   },
 }
