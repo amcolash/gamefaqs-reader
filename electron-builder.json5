@@ -3,22 +3,19 @@
  */
 
 {
-  appId: "com.amcolash.gamefaqs-reader",
-  artifactName: "${productName}.${ext}",
+  appId: 'com.amcolash.gamefaqs-reader',
+  artifactName: '${productName}.${ext}',
   asar: true,
-  icon: "public/icon/256x256.png",
+  icon: 'public/icon/256x256.png',
   directories: {
-    output: "build/release/${version}",
+    output: 'build/release/${version}',
   },
-  files: ["build/dist", "build/dist-electron"],
+  files: ['build/dist', 'build/dist-electron'],
   linux: {
-    target: ["AppImage"],
-    category: "Utility",
-    desktop: {
-      Name: "GameFAQs Reader",
-    },
+    target: ['AppImage'],
+    category: 'Utility',
   },
   win: {
-    target: ["portable"],
+    target: ['portable'],
   },
 }
